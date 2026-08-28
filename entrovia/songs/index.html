@@ -1,0 +1,2990 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>安特羅迦 － 網頁音樂播放器</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght=400;700&display=swap" rel="stylesheet">
+  <link class="icon" rel="icon" href="icon.png" type="image/png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#333333">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="安特羅迦">
+  <link rel="apple-touch-icon" href="icon.png">
+  <style>
+    :root {
+      --primary: #333;
+      --card: rgba(255, 255, 255, 0.88); 
+      --border: rgba(224, 224, 224, 0.6);
+      --text-main: #222;
+      --text-sub: #666;
+      --text-light: #aaa;
+      --accent: #555;
+      --bg-overlay: rgba(244, 246, 248, 0.85);
+      --bg-overlay-2: rgba(244, 246, 248, 0.85);
+      --table-head: rgba(241, 241, 241, 0.8);
+      --table-border: rgba(240, 240, 240, 0.8);
+      --row-current: rgba(0, 0, 0, 0.03);
+      --hover-bg: rgba(0,0,0,0.04);
+      --hover-strong: rgba(0,0,0,0.05);
+      --btn-bg: #f1f1f1;
+      --btn-bg-strong: #e0e0e0;
+      --btn-border: #ddd;
+      --input-bg: white;
+      --modal-bg: white;
+      --modal-item-hover: #fafafa;
+      --footer-bg: rgba(255, 255, 255, 0.7);
+      --player-bg: rgba(255, 255, 255, 0.92);
+      --shadow-color: rgba(0,0,0,0.05);
+      --shadow-strong: rgba(0,0,0,0.1);
+      --player-icon: #555;
+      --dashed-border: #eee;
+      --nav-inactive: #aaa;
+      --primary-text-inv: white;
+      --badge-bg: rgba(0, 0, 0, 0.06);
+      --badge-text: #444;
+      --dd-menu-bg: white;
+      --dd-menu-hover: #f5f5f5;
+      --nav-bg: #333;
+      --nav-text-active: white;
+    }
+    [data-theme="dark"] {
+      --primary: #e0e0e0;
+      --card: rgba(36, 38, 44, 0.85);
+      --border: rgba(80, 80, 90, 0.5);
+      --text-main: #e8e8e8;
+      --text-sub: #aaa;
+      --text-light: #777;
+      --accent: #bbb;
+      --bg-overlay: rgba(18, 20, 26, 0.88);
+      --bg-overlay-2: rgba(18, 20, 26, 0.88);
+      --table-head: rgba(50, 52, 58, 0.85);
+      --table-border: rgba(60, 62, 68, 0.6);
+      --row-current: rgba(255, 255, 255, 0.05);
+      --hover-bg: rgba(255,255,255,0.06);
+      --hover-strong: rgba(255,255,255,0.08);
+      --btn-bg: #3a3d44;
+      --btn-bg-strong: #4a4d54;
+      --btn-border: #4d5058;
+      --input-bg: #2c2f36;
+      --modal-bg: #25282e;
+      --modal-item-hover: #2f3239;
+      --footer-bg: rgba(25, 28, 34, 0.8);
+      --player-bg: rgba(22, 24, 30, 0.95);
+      --shadow-color: rgba(0,0,0,0.4);
+      --shadow-strong: rgba(0,0,0,0.6);
+      --player-icon: #ccc;
+      --dashed-border: #3a3d44;
+      --nav-inactive: #888;
+      --primary-text-inv: #1a1c20;
+      --badge-bg: rgba(255, 255, 255, 0.1);
+      --badge-text: #ddd;
+      --dd-menu-bg: #2c2f36;
+      --dd-menu-hover: #3a3d44;
+      --nav-bg: #1a1c20;
+      --nav-text-active: #fff;
+    }
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      margin: 0;
+      color: var(--text-main);
+      line-height: 1.6;
+      background-image: 
+        linear-gradient(var(--bg-overlay), var(--bg-overlay-2)),
+        url("bg.jpg"); 
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      padding-bottom: 110px;
+      transition: color 0.3s ease;
+    }
+    nav {
+      background: var(--nav-bg);
+      padding: 5px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .nav-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      background: none;
+      border: none;
+      color: var(--nav-inactive);
+      padding: 15px 20px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .nav-btn.active {
+      color: var(--nav-text-active);
+      border-bottom: 3px solid var(--nav-text-active);
+    }
+    .main-content {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 0 20px;
+      min-height: calc(100vh - 280px);
+    }
+    .view-section {
+      display: none;
+    }
+    .view-section.active {
+      display: block;
+      animation: fadeIn 0.4s ease-in-out;
+    }
+    .search-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      background: var(--card);
+      padding: 10px;
+      border-radius: 50px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      backdrop-filter: blur(5px);
+    }
+    .search-bar input {
+      flex: 1;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      outline: none;
+      background: transparent;
+      color: var(--text-main);
+    }
+    .search-bar input::placeholder {
+      color: var(--text-sub);
+      opacity: 0.7;
+    }
+    .filter-controls input::placeholder {
+      color: var(--text-sub);
+      opacity: 0.7;
+    }
+    .btn-search {
+      background: var(--primary);
+      color: var(--primary-text-inv);
+      border: none;
+      padding: 12px 30px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+    .btn-search:hover {
+      background: var(--accent);
+    }
+    .filter-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 25px;
+      background: var(--card);
+      padding: 15px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      backdrop-filter: blur(5px);
+      align-items: center;
+      justify-content: space-between;
+    }
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .control-group label {
+      font-size: 14px;
+      font-weight: bold;
+      color: var(--text-sub);
+    }
+    .filter-controls select, .filter-controls input {
+      padding: 8px 15px;
+      border: 1px solid var(--btn-border);
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      background: var(--input-bg);
+      color: var(--text-main);
+    }
+    .filter-controls input {
+      width: 200px;
+    }
+    .btn-action-global {
+      background: var(--btn-bg);
+      color: var(--text-main);
+      border: 1px solid var(--btn-border);
+      padding: 8px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      transition: 0.2s;
+    }
+    .btn-action-global:hover {
+      background: var(--primary);
+      color: var(--primary-text-inv);
+    }
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      backdrop-filter: blur(5px);
+    }
+    .results-table th { background: var(--table-head); padding: 15px; text-align: left; font-size: 14px; color: var(--text-sub); }
+    .results-table td { padding: 15px; border-bottom: 1px solid var(--table-border); font-size: 14px; }
+    .results-table tr.playing-row {
+      background: var(--row-current);
+      box-shadow: inset 4px 0 0 var(--primary);
+    }
+    .btn-table-play {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      padding: 5px;
+      color: var(--text-main);
+    }
+    .btn-table-more {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-sub);
+      font-size: 16px;
+      padding: 5px;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .song-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 20px;
+      transition: 0.3s;
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: blur(5px);
+      position: relative;
+    }
+    .song-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px var(--shadow-strong);
+      border-color: var(--accent);
+    }
+    .song-card.playing-card {
+      border-color: var(--primary);
+      box-shadow: 0 0 12px var(--shadow-strong);
+    }
+    .badge-wrapper {
+      display: flex;
+      justify-content: flex-start;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .badge {
+      background: var(--badge-bg);
+      color: var(--badge-text);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+    .badge-shorts { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
+    .badge-video { background: #eceff1; color: #37474f; border: 1px solid #b0bec5; }
+    .song-card h3 { 
+      margin: 0 0 5px 0; 
+      font-size: 18px; 
+      color: var(--text-main); 
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding-right: 65px;
+    }
+    .song-card p { margin: 0; font-size: 14px; color: var(--text-sub); }
+    .card-footer {
+      margin-top: auto; 
+      padding-top: 15px;
+      border-top: 1px dashed var(--dashed-border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .play-btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: var(--btn-bg);
+      color: var(--text-main);
+      text-decoration: none;
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 14px;
+      transition: 0.2s;
+      box-sizing: border-box;
+      border: none;
+      cursor: pointer;
+    }
+    .play-btn:hover { background: var(--primary); color: var(--primary-text-inv); }
+    .card-actions-row {
+      display: flex;
+      gap: 5px;
+    }
+    .card-sub-btn {
+      flex: 1;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid var(--btn-border);
+      background: var(--input-bg);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: bold;
+      color: var(--text-sub);
+      transition: 0.2s;
+    }
+    .card-sub-btn:hover { background: var(--hover-bg); color: var(--text-main); }
+    .playlist-layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 30px;
+    }
+    .playlist-sidebar {
+      background: var(--card);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      backdrop-filter: blur(5px);
+      height: fit-content;
+    }
+    .playlist-sidebar h3 { margin-top: 0; }
+    .playlist-menu { list-style: none; padding: 0; margin: 20px 0; }
+    .playlist-menu li {
+      padding: 12px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-bottom: 5px;
+      transition: 0.2s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .playlist-menu li:hover { background: var(--hover-bg); }
+    .playlist-menu li.active { background: var(--primary); color: var(--primary-text-inv); }
+    .btn-create-pl {
+      width: 100%;
+      padding: 10px;
+      background: var(--btn-bg-strong);
+      color: var(--text-main);
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .btn-create-pl:hover { background: var(--accent); color: var(--primary-text-inv); }
+    .playlist-main { flex: 1; }
+    .playlist-meta-actions {
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px dashed var(--btn-border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .player-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 90px;
+      background: var(--player-bg);
+      backdrop-filter: blur(15px);
+      border-top: 1px solid var(--border);
+      box-shadow: 0 -5px 25px var(--shadow-color);
+      z-index: 999;
+      display: grid;
+      grid-template-columns: 280px 1fr 280px;
+      align-items: center;
+      padding: 0 30px;
+      box-sizing: border-box;
+    }
+    .player-info { display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+    .player-info .track-name { font-weight: bold; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main); }
+    .player-info .track-artist { font-size: 12px; color: var(--text-sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .player-center { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+    .player-controls { display: flex; align-items: center; gap: 20px; }
+    .player-btn-icon { background: none; border: none; font-size: 18px; cursor: pointer; color: var(--player-icon); transition: 0.2s; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+    .player-btn-icon:hover { color: var(--text-main); background: var(--hover-strong); }
+    .player-btn-icon.active { color: var(--primary); background: var(--hover-bg); position: relative; }
+    .player-btn-icon.active::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 4px;
+      background: var(--primary);
+      border-radius: 50%;
+    }
+    .player-btn-icon.btn-main-play { font-size: 0; background: var(--primary); color: var(--primary-text-inv); width: 42px; height: 42px; padding: 0; }
+    .player-btn-icon.btn-main-play svg { width: 24px; height: 24px; fill: currentColor; display: block; }
+    .player-btn-icon.btn-main-play svg.icon-play { margin-left: 3px; } /* 三角形視覺置中微調 */
+    .player-btn-icon.btn-main-play:hover { background: var(--accent); color: var(--primary-text-inv); scale: 1.05; }
+    .progress-container { display: flex; align-items: center; width: 100%; max-width: 500px; gap: 10px; font-size: 11px; color: var(--text-sub); }
+    .progress-bar-wrap { flex: 1; height: 4px; background: var(--btn-border); border-radius: 2px; position: relative; cursor: pointer; transition: height 0.15s ease; }
+    .progress-bar-wrap:hover { height: 6px; }
+    .progress-bar-fill { height: 100%; background: var(--primary); border-radius: 2px; width: 0%; position: relative; }
+    .progress-bar-fill::after {
+      content: "";
+      position: absolute;
+      right: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 12px;
+      height: 12px;
+      background: var(--primary);
+      border-radius: 50%;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+    .progress-bar-wrap:hover .progress-bar-fill::after { opacity: 1; }
+    .player-right { display: flex; align-items: center; justify-content: flex-end; gap: 15px; }
+    .volume-container { display: flex; align-items: center; gap: 8px; }
+    .volume-slider { -webkit-appearance: none; width: 80px; height: 4px; background: var(--btn-border); border-radius: 2px; outline: none; cursor: pointer; }
+    .volume-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; background: var(--primary); border-radius: 50%; }
+
+    /* YT widget 視窗，初始為標準大小，縮放按鈕固定在容器外可見處 */
+    #yt-widget-container {
+      position: fixed;
+      bottom: 100px;
+      left: 20px;
+      width: 240px;
+      height: 140px;
+      background: #000;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+      z-index: 1000;
+      transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+    }
+    #yt-widget-container.minimized {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      opacity: 0.5;
+    }
+    #yt-widget-container.minimized:hover { opacity: 1; }
+    #yt-widget-container.minimized #yt-player-mask {
+      pointer-events: none;
+      opacity: 0;
+    }
+    #yt-player-mask {
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      overflow: hidden;
+      transition: opacity 0.2s ease;
+    }
+    .yt-toggle-btn {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background: var(--primary);
+      color: var(--primary-text-inv);
+      border: 2px solid var(--input-bg);
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      font-size: 13px;
+      cursor: pointer;
+      z-index: 1001;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    .yt-toggle-btn:hover { background: var(--accent); }
+
+    .dropdown-menu {
+      position: absolute;
+      background: var(--dd-menu-bg);
+      color: var(--text-main);
+      border: 1px solid var(--btn-border);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px var(--shadow-strong);
+      z-index: 1010;
+      display: none;
+      list-style: none;
+      padding: 5px 0;
+      margin: 0;
+      min-width: 150px;
+    }
+    .dropdown-menu li {
+      padding: 10px 15px;
+      font-size: 13px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .dropdown-menu li:hover { background: var(--dd-menu-hover); }
+
+    /* 播放清單彈窗 */
+    .queue-modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.2s ease;
+    }
+    .queue-modal-overlay.show { display: flex; }
+    .queue-modal {
+      background: var(--modal-bg);
+      color: var(--text-main);
+      width: 90%;
+      max-width: 600px;
+      max-height: 75vh;
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .queue-modal-header {
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--dashed-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .queue-modal-header h3 { margin: 0; font-size: 17px; }
+    .queue-modal-header .close-x {
+      background: none;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      color: var(--text-sub);
+      line-height: 1;
+    }
+    .queue-modal-body {
+      overflow-y: auto;
+      padding: 8px 0;
+      flex: 1;
+    }
+    .queue-modal-item {
+      padding: 12px 22px;
+      border-bottom: 1px solid var(--dashed-border);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: 0.15s;
+    }
+    .queue-modal-item:hover { background: var(--modal-item-hover); }
+    .queue-modal-item.current {
+      background: var(--row-current);
+      box-shadow: inset 3px 0 0 var(--primary);
+    }
+    .queue-modal-item .idx {
+      width: 24px;
+      color: var(--text-light);
+      font-size: 13px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .queue-modal-item .info {
+      flex: 1;
+      min-width: 0;
+    }
+    .queue-modal-item .info .name {
+      font-weight: bold;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .queue-modal-item .info .artist {
+      font-size: 12px;
+      color: var(--text-sub);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .queue-modal-item .remove {
+      background: none;
+      border: none;
+      font-size: 14px;
+      color: var(--text-light);
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+    .queue-modal-item .remove:hover { color: #c62828; }
+    .queue-modal-footer {
+      padding: 12px 22px;
+      border-top: 1px solid var(--dashed-border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+    .queue-modal-footer button {
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--btn-border);
+      background: var(--input-bg);
+      color: var(--text-main);
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 13px;
+    }
+    .queue-modal-footer button:hover { background: var(--hover-bg); }
+
+    footer {
+      text-align: center;
+      padding: 25px 10px 40px 10px;
+      font-size: 13px;
+      color: var(--text-sub);
+      background: var(--footer-bg);
+      backdrop-filter: blur(5px);
+      border-top: 1px solid var(--border);
+      line-height: 1.8;
+    }
+    footer .info-row { margin-bottom: 6px; }
+    footer .disclaimer { font-size: 11px; color: var(--text-light); margin-top: 4px; }
+    footer a { color: var(--text-main); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--text-sub); transition: 0.2s; }
+    footer a:hover { color: var(--primary); border-bottom-style: solid; }
+    #loader { display: none; text-align: center; padding: 50px; font-weight: bold; color: var(--text-sub); }
+    .empty-msg { text-align: center; color: var(--text-sub); padding: 40px; font-weight: bold; }
+
+    /* 骨架載入動畫 */
+    .skeleton {
+      background: linear-gradient(90deg, var(--btn-bg) 25%, var(--hover-strong) 50%, var(--btn-bg) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-shimmer 1.5s ease-in-out infinite;
+      border-radius: 6px;
+      display: inline-block;
+    }
+    @keyframes skeleton-shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    .skeleton-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 20px;
+      backdrop-filter: blur(5px);
+    }
+    .skeleton-card .sk-line {
+      height: 12px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+    }
+    .skeleton-card .sk-line.short { width: 40%; }
+    .skeleton-card .sk-line.medium { width: 70%; }
+    .skeleton-card .sk-line.long { width: 90%; }
+    .skeleton-card .sk-line.tall { height: 18px; }
+    .skeleton-table-row {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px;
+      border-bottom: 1px solid var(--table-border);
+    }
+    .skeleton-table-row .sk-cell { height: 14px; border-radius: 6px; }
+
+    /* 視角切換 Tabs(歌曲清單 / 依直播分組 / 最近播放) */
+    .view-mode-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 20px;
+      background: var(--card);
+      padding: 6px;
+      border-radius: 12px;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 4px 15px var(--shadow-color);
+    }
+    .vm-tab {
+      flex: 1;
+      background: none;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: bold;
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .vm-tab:hover { background: var(--hover-bg); color: var(--text-main); }
+    .vm-tab.active { background: var(--primary); color: var(--primary-text-inv); }
+    @media (max-width: 768px) {
+      .vm-tab { padding: 8px 6px; font-size: 12px; }
+    }
+
+    /* 時間軸瀏覽 */
+    .timeline-stream {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      backdrop-filter: blur(5px);
+      transition: 0.2s;
+    }
+    .timeline-stream:hover { border-color: var(--accent); }
+    .timeline-header {
+      padding: 16px 22px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      user-select: none;
+      transition: 0.15s;
+    }
+    .timeline-header:hover { background: var(--hover-bg); }
+    .timeline-header .meta {
+      flex: 1;
+      min-width: 0;
+    }
+    .timeline-header .stream-date {
+      font-size: 13px;
+      color: var(--text-sub);
+      font-weight: bold;
+    }
+    .timeline-header .stream-title {
+      font-size: 15px;
+      color: var(--text-main);
+      font-weight: bold;
+      margin-top: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .timeline-header .stream-count {
+      font-size: 12px;
+      background: var(--badge-bg);
+      color: var(--badge-text);
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+    .timeline-header .toggle-arrow {
+      font-size: 14px;
+      color: var(--text-sub);
+      transition: transform 0.2s;
+    }
+    .timeline-stream.expanded .toggle-arrow { transform: rotate(90deg); }
+    .timeline-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .timeline-stream.expanded .timeline-body {
+      max-height: 4000px;
+    }
+    .timeline-body .stream-actions {
+      padding: 0 22px 12px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .timeline-body .stream-actions button {
+      background: var(--btn-bg);
+      color: var(--text-main);
+      border: 1px solid var(--btn-border);
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 13px;
+    }
+    .timeline-body .stream-actions button:hover { background: var(--primary); color: var(--primary-text-inv); }
+    .timeline-track {
+      padding: 10px 22px;
+      border-top: 1px solid var(--table-border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .timeline-track .tr-time {
+      font-size: 12px;
+      color: var(--text-light);
+      width: 60px;
+      flex-shrink: 0;
+    }
+    .timeline-track .tr-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .timeline-track .tr-info .name {
+      font-weight: bold;
+      font-size: 14px;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .timeline-track .tr-info .artist {
+      font-size: 12px;
+      color: var(--text-sub);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .timeline-track.is-current {
+      background: var(--row-current);
+      box-shadow: inset 3px 0 0 var(--primary);
+    }
+
+    /* 主題切換按鈕 */
+    .theme-toggle {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.1);
+      color: #ddd;
+      border: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .theme-toggle:hover { background: rgba(255,255,255,0.18); transform: translateY(-50%) scale(1.08); }
+    .nav-container { position: relative; }
+
+    /* 歌單拖曳排序 */
+    .drag-handle {
+      cursor: grab;
+      color: var(--text-light);
+      text-align: center;
+      width: 30px;
+      font-size: 14px;
+      user-select: none;
+      letter-spacing: -2px;
+    }
+    .drag-handle:hover { color: var(--text-main); }
+    tr.draggable-row.dragging { opacity: 0.4; }
+    tr.draggable-row.drag-over-top { box-shadow: inset 0 3px 0 var(--primary); }
+    tr.draggable-row.drag-over-bottom { box-shadow: inset 0 -3px 0 var(--primary); }
+
+    /* 收藏星星 */
+    .btn-fav {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      color: var(--text-light);
+      padding: 5px;
+      transition: color 0.15s, transform 0.15s;
+      line-height: 1;
+    }
+    .btn-fav:hover { color: #f5b400; transform: scale(1.15); }
+    .btn-fav:active { transform: scale(0.85); }
+    .btn-fav.is-fav { color: #f5b400; animation: starPop 0.3s ease; }
+    .btn-fav.is-fav:hover { color: #d99800; }
+    @keyframes starPop {
+      0% { transform: scale(0.6); }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+
+    /* 歌回標題連結 */
+    .stream-title-link {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px dotted var(--text-light);
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .stream-title-link:hover {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      border-bottom-style: solid;
+    }
+    /* 歌名連結 */
+    .song-name-link {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px dotted var(--text-light);
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .song-name-link:hover {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      border-bottom-style: solid;
+    }
+
+    /* Toast 通知 */
+    #toast-container {
+      position: fixed;
+      bottom: 110px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 3000;
+      pointer-events: none;
+    }
+    .toast {
+      background: var(--modal-bg);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--primary);
+      padding: 12px 18px;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      font-size: 14px;
+      max-width: 320px;
+      animation: toastIn 0.3s ease;
+      pointer-events: auto;
+    }
+    .toast.removing { animation: toastOut 0.3s ease forwards; }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateX(30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes toastOut {
+      to { opacity: 0; transform: translateX(30px); }
+    }
+    @media (max-width: 768px) {
+      #toast-container { bottom: 100px; right: 10px; left: 10px; }
+      .toast { max-width: none; }
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 768px) {
+      .player-bar { grid-template-columns: 1fr auto; padding: 0 15px; height: 80px; }
+      .player-info, .player-right { display: none; }
+      .playlist-layout { grid-template-columns: 1fr; }
+      .results-table th:nth-child(1), .results-table td:nth-child(1) { display: none; }
+      #yt-widget-container { width: 160px; height: 90px; bottom: 90px; }
+      #yt-widget-container.minimized { width: 44px; height: 44px; }
+      /* 手機:nav 不換行,字體縮小,主題按鈕放入 flex 流 */
+      .nav-container { flex-wrap: nowrap; padding: 0 8px; gap: 4px; }
+      .nav-btn { padding: 12px 6px; font-size: 13px; flex-shrink: 0; }
+      .theme-toggle {
+        position: static;
+        transform: none;
+        width: 34px;
+        height: 34px;
+        font-size: 16px;
+        flex-shrink: 0;
+        margin-left: auto;
+      }
+      .theme-toggle:hover { transform: scale(1.08); }
+      /* 頁尾快捷鍵提示在手機版自動換行 */
+      footer .shortcut-hint { line-height: 2; }
+    }
+    /* 快捷鍵提示:整句不切斷 */
+    footer .shortcut-hint {
+      font-size: 12px;
+      color: var(--text-light);
+    }
+    footer .shortcut-hint span {
+      display: inline-block;
+      white-space: nowrap;
+    }
+  </style>
+  <script>
+    // 提早執行避免主題切換閃光
+    (function() {
+      try {
+        var stored = localStorage.getItem('antrovia_theme');
+        if (stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else if (!stored) {
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (prefersDark) document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch(e) {}
+    })();
+  </script>
+</head>
+<body>
+
+<nav>
+  <div class="nav-container">
+    <button id="nav-search" class="nav-btn active" onclick="switchView('search-view')">🔍 歌曲搜尋</button>
+    <button id="nav-summary" class="nav-btn" onclick="summaryBtnClick()">🎵 所有歌曲</button>
+    <button id="nav-playlist" class="nav-btn" onclick="playlistBtnClick()">📂 我的歌單</button>
+    <button id="theme-toggle" class="theme-toggle" onclick="toggleTheme()" title="切換深色 / 淺色模式">🌙</button>
+  </div>
+</nav>
+
+<div class="main-content">
+  <section id="search-view" class="view-section active">
+    <div class="search-bar">
+      <input type="text" id="keyword" placeholder="搜尋歌曲、原唱,或直播標題..." oninput="onKeywordChange()" onkeypress="if(event.key==='Enter') handleSearch()">
+      <button class="btn-search" onclick="handleSearch()">搜尋</button>
+    </div>
+    <div class="view-mode-tabs">
+      <button class="vm-tab active" data-mode="list" onclick="setSearchMode('list')">📋 歌曲清單</button>
+      <button class="vm-tab" data-mode="timeline" onclick="setSearchMode('timeline')">📅 依直播分組</button>
+      <button class="vm-tab" data-mode="recent" onclick="setSearchMode('recent')">🕒 最近播放</button>
+    </div>
+    <div style="margin-bottom: 15px; display: flex; justify-content: flex-end; align-items: center; gap: 10px;">
+      <span style="font-size:13px; color:var(--text-sub);" id="search-stats"></span>
+      <span id="search-actions-container"></span>
+    </div>
+    <div id="search-results"></div>
+  </section>
+
+  <section id="summary-view" class="view-section">
+    <div class="filter-controls">
+      <div class="control-group">
+        <label for="sort-select">排序：</label>
+        <select id="sort-select" onchange="processAndRenderSummary()">
+          <option value="count-desc">次數：多 ➔ 少</option>
+          <option value="count-asc">次數：少 ➔ 多</option>
+          <option value="name-asc">歌名：A ➔ Z</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <input type="text" id="summary-search" placeholder="在清單中快速篩選..." oninput="processAndRenderSummary()">
+      </div>
+      <button class="btn-action-global" onclick="playAllCurrentSummary()">▶ 播放整頁歌曲</button>
+    </div>
+    <div class="summary-grid" id="summary-results"></div>
+  </section>
+
+  <section id="playlist-view" class="view-section">
+    <div class="playlist-layout">
+      <div class="playlist-sidebar">
+        <h3>自訂歌單</h3>
+        <button class="btn-create-pl" onclick="createNewPlaylist()">＋ 建立新歌單</button>
+        <ul class="playlist-menu" id="playlist-menu-list"></ul>
+        <div class="playlist-meta-actions">
+          <button class="card-sub-btn" onclick="exportPlaylists()">💾 匯出歌單備份</button>
+          <button class="card-sub-btn" onclick="document.getElementById('import-file-input').click()">📥 匯入歌單備份</button>
+          <input type="file" id="import-file-input" style="display:none;" accept=".json" onchange="importPlaylists(event)">
+        </div>
+      </div>
+      <div class="playlist-main">
+        <div id="playlist-header-details" style="margin-bottom:20px; display:flex; justify-content:space-between; align-items:center;"></div>
+        <div id="playlist-tracks-container"></div>
+      </div>
+    </div>
+  </section>
+
+  <div id="loader">處理中，請稍候...</div>
+</div>
+
+<footer>
+  <div class="info-row shortcut-hint">
+    💡 快捷鍵:<span>空白=播放暫停</span> · <span>←/→=快退/快進 5 秒</span> · <span>Shift+←/→=上一首/下一首</span> · <span>↑/↓=音量</span> · <span>M=靜音</span> · <span>/=搜尋</span> · <span>L=清單</span>
+  </div>
+  <div class="info-row">
+    背景繪製:<a href="https://x.com/mApcm0ElZ9f5BGk" target="_blank">方向</a> ｜ 委託主辦:Ender安德、子廷
+  </div>
+  <div class="info-row">
+    網頁製作者：<a href="https://x.com/SnowKagamine_" target="_blank">玥</a> ｜ 聯絡與問題回饋：<a href="https://forms.google.com/" target="_blank">📝 回饋表單連結</a> ｜ 交流社群：<a href="https://discord.gg/bKwFpPusYj" target="_blank">安特羅迦非官方粉絲群 Discord</a>
+  </div>
+  <div class="disclaimer">
+    ※ 本網頁為粉絲自發製作之轉載創作，非官方所屬網頁。
+  </div>
+</footer>
+
+<div id="yt-widget-container">
+  <button class="yt-toggle-btn" onclick="togglePlayerSize()" title="縮放視窗">⇲</button>
+  <div id="yt-player-mask"></div>
+</div>
+
+<div class="player-bar">
+  <div class="player-info">
+    <div class="track-name" id="pb-song">尚未播放歌曲</div>
+    <div class="track-artist" id="pb-artist">-</div>
+  </div>
+  <div class="player-center">
+    <div class="player-controls">
+      <button class="player-btn-icon" title="播放清單內隨機播放" id="pb-shuffle" onclick="toggleShuffle()">🔀</button>
+      <button class="player-btn-icon" title="上一首" onclick="playPrev()">⏮</button>
+      <button class="player-btn-icon btn-main-play" title="播放/暫停" id="pb-play-toggle" onclick="togglePlayPause()"><svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+      <button class="player-btn-icon" title="下一首" onclick="playNext()">⏭</button>
+      <button class="player-btn-icon" title="播放清單循環模式" id="pb-repeat" onclick="toggleRepeat()">🔁</button>
+    </div>
+    <div class="progress-container">
+      <span id="pb-current-time">0:00</span>
+      <div class="progress-bar-wrap" id="pb-progress-wrap">
+        <div class="progress-bar-fill" id="pb-progress-fill"></div>
+      </div>
+      <span id="pb-total-time">0:00</span>
+    </div>
+  </div>
+  <div class="player-right">
+    <div class="volume-container">
+      <button class="player-btn-icon" style="font-size:15px; width:28px; height:28px;" onclick="toggleMute()" id="pb-mute">🔊</button>
+      <input type="range" class="volume-slider" min="0" max="100" value="100" id="pb-volume" oninput="handleVolumeChange(event)">
+    </div>
+    <button class="player-btn-icon" title="顯示當前清單" onclick="showQueueModal()">📋</button>
+  </div>
+</div>
+
+<!-- 播放清單彈窗 -->
+<div class="queue-modal-overlay" id="queue-modal-overlay" onclick="if(event.target===this) hideQueueModal()">
+  <div class="queue-modal">
+    <div class="queue-modal-header">
+      <h3 id="queue-modal-title">播放清單 (0 首)</h3>
+      <button class="close-x" onclick="hideQueueModal()">×</button>
+    </div>
+    <div class="queue-modal-body" id="queue-modal-body"></div>
+    <div class="queue-modal-footer">
+      <button onclick="clearQueue()">🗑 清空清單</button>
+      <button onclick="hideQueueModal()">關閉</button>
+    </div>
+  </div>
+</div>
+
+<ul class="dropdown-menu" id="context-dropdown"></ul>
+<div id="toast-container"></div>
+
+<script>
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbyukn-5Vy0IgELZj5HHzxVTWrhSdSuxOc18o-y1KgXlZifXWmNm03MvtBkx_QVi9ALiGg/exec";
+  let allSongsCache = null; 
+  let summaryCache = null;  
+  let playlists = {};
+  let playCounts = {}; // 個人點播次數紀錄 { "song|artist": { count, lastPlayed, song, artist } }
+  let playQueue = [];
+  let currentQueueIndex = -1;
+  let isShuffle = false;
+  let repeatMode = 0; 
+  let currentTrackEndSeconds = 0;
+  let ytPlayer = null;
+  let ytReady = false;
+  let pendingTrack = null; // YT API 還沒 ready 時暫存待播放的曲目
+  let timeMonitorInterval = null;
+  let lastActiveView = 'search-view';
+  let lastVolume = 100;
+
+  function initStorage() {
+    const stored = localStorage.getItem('antrovia_playlists');
+    if (stored) {
+      try { playlists = JSON.parse(stored); } catch(e) { playlists = {}; }
+    } else {
+      playlists = { "我的最愛": [] };
+      savePlaylistsToStorage();
+    }
+    loadRecentPlays();
+  }
+
+  function savePlaylistsToStorage() {
+    localStorage.setItem('antrovia_playlists', JSON.stringify(playlists));
+  }
+
+  // ===== 最近播放 =====
+  const RECENT_MAX = 20;
+  let recentPlays = [];
+
+  function loadRecentPlays() {
+    try {
+      const raw = localStorage.getItem('antrovia_recent');
+      recentPlays = raw ? JSON.parse(raw) : [];
+    } catch(e) { recentPlays = []; }
+  }
+
+  function saveRecentPlays() {
+    try {
+      localStorage.setItem('antrovia_recent', JSON.stringify(recentPlays));
+    } catch(e) {}
+  }
+
+  function pushRecentPlay(track) {
+    if (!track || !track.song) return;
+    // 用 song + artist + link 當識別,避免重複
+    const key = (track.song || '') + '|' + (track.artist || '') + '|' + (track.link || '');
+    recentPlays = recentPlays.filter(t => {
+      const k = (t.song || '') + '|' + (t.artist || '') + '|' + (t.link || '');
+      return k !== key;
+    });
+    recentPlays.unshift({
+      song: track.song,
+      artist: track.artist,
+      link: track.link,
+      title: track.title,
+      start: track.start,
+      end: track.end,
+      startTime: track.startTime,
+      endTime: track.endTime,
+      isShorts: track.isShorts,
+      isVideo: track.isVideo,
+      playedAt: Date.now()
+    });
+    if (recentPlays.length > RECENT_MAX) recentPlays = recentPlays.slice(0, RECENT_MAX);
+    saveRecentPlays();
+  }
+
+  function clearRecentPlays() {
+    if (!confirm("確定要清空最近播放紀錄嗎?")) return;
+    recentPlays = [];
+    saveRecentPlays();
+    if (document.getElementById('search-view').classList.contains('active')) {
+      const kw = document.getElementById('keyword').value.trim();
+      if (!kw) renderSearchDefault();
+    }
+  }
+
+  function loadYoutubeAPI() {
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+  }
+
+  function onYouTubeIframeAPIReady() {
+    ytPlayer = new YT.Player('yt-player-mask', {
+      height: '100%',
+      width: '100%',
+      videoId: '',
+      playerVars: {
+        'autoplay': 0,
+        'controls': 1,
+        'rel': 0,
+        'showinfo': 0,
+        'modestbranding': 1,
+        'playsinline': 1
+      },
+      events: {
+        'onReady': onPlayerReady,
+        'onStateChange': onPlayerStateChange,
+        'onError': onPlayerError
+      }
+    });
+  }
+
+  function onPlayerReady(event) {
+    ytReady = true;
+    const vol = document.getElementById('pb-volume').value;
+    ytPlayer.setVolume(vol);
+    startTimeMonitor();
+    // 若 API ready 前已有點擊播放，補播
+    if (pendingTrack) {
+      const idx = pendingTrack;
+      pendingTrack = null;
+      playTrackAtIndex(idx);
+    }
+  }
+
+  function onPlayerError(event) {
+    console.error("YT Player error:", event.data);
+    // 錯誤碼 100/101/150 等通常代表影片無法嵌入，自動跳下一首
+    if (event.data === 100 || event.data === 101 || event.data === 150) {
+      console.warn("影片無法嵌入播放，自動跳下一首");
+      setTimeout(playNext, 500);
+    }
+  }
+
+  // 切換播放鍵圖示
+  const SVG_PLAY = '<svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+  const SVG_PAUSE = '<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+  function setPlayButton(isPlaying) {
+    const btn = document.getElementById('pb-play-toggle');
+    if (!btn) return;
+    btn.innerHTML = isPlaying ? SVG_PAUSE : SVG_PLAY;
+  }
+
+  function onPlayerStateChange(event) {
+    if (event.data === YT.PlayerState.PLAYING) {
+      setPlayButton(true);
+      updateTabTitle(true);
+    } else if (event.data === YT.PlayerState.PAUSED) {
+      setPlayButton(false);
+      updateTabTitle(false);
+    } else if (event.data === YT.PlayerState.ENDED) {
+      handleTrackEnd();
+    }
+  }
+
+  function startTimeMonitor() {
+    if (timeMonitorInterval) clearInterval(timeMonitorInterval);
+    timeMonitorInterval = setInterval(() => {
+      if (!ytPlayer || typeof ytPlayer.getCurrentTime !== 'function') return;
+      if (ytPlayer.getPlayerState() !== YT.PlayerState.PLAYING) return;
+      if (isDraggingProgress) return; // 拖曳中不要被覆蓋
+      const current = ytPlayer.getCurrentTime();
+      if (currentTrackEndSeconds > 0 && current >= currentTrackEndSeconds) {
+        handleTrackEnd();
+        return;
+      }
+      let start = 0;
+      let total = ytPlayer.getDuration();
+      if (currentQueueIndex >= 0 && currentQueueIndex < playQueue.length) {
+        const track = playQueue[currentQueueIndex];
+        start = parseStartSec(track);
+        const endSec = parseEndSec(track);
+        if (endSec > start) {
+          total = endSec - start;
+        } else {
+          total = ytPlayer.getDuration() - start;
+        }
+      }
+      const relativeCurrent = Math.max(0, current - start);
+      const displayTotal = total > 0 ? total : 0;
+      document.getElementById('pb-current-time').innerText = formatTime(relativeCurrent);
+      document.getElementById('pb-total-time').innerText = formatTime(displayTotal);
+      if (displayTotal > 0) {
+        const pct = (relativeCurrent / displayTotal) * 100;
+        document.getElementById('pb-progress-fill').style.width = pct + '%';
+      }
+    }, 500);
+  }
+
+  function handleTrackEnd() {
+    if (repeatMode === 1) {
+      playTrackAtIndex(currentQueueIndex);
+    } else {
+      playNext();
+    }
+  }
+
+  // 解析 start 秒數：優先使用 track.start，否則從 link 抓 t= 參數，否則從 startTime "HH:MM:SS" 解析
+  function parseStartSec(track) {
+    if (!track) return 0;
+    if (track.start !== null && track.start !== undefined && track.start !== "") {
+      const v = parseInt(track.start, 10);
+      if (!isNaN(v) && v >= 0) return v;
+    }
+    if (track.link) {
+      const m = track.link.match(/[?&]t=(\d+)s?/);
+      if (m) return parseInt(m[1], 10);
+    }
+    if (track.startTime) {
+      return timeStrToSec(track.startTime);
+    }
+    return 0;
+  }
+
+  function parseEndSec(track) {
+    if (!track) return 0;
+    if (track.end !== null && track.end !== undefined && track.end !== "") {
+      const v = parseInt(track.end, 10);
+      if (!isNaN(v) && v > 0) return v;
+    }
+    if (track.link) {
+      const m = track.link.match(/[?&]end=(\d+)/);
+      if (m) return parseInt(m[1], 10);
+    }
+    if (track.endTime) {
+      return timeStrToSec(track.endTime);
+    }
+    return 0;
+  }
+
+  function timeStrToSec(str) {
+    if (!str) return 0;
+    const parts = String(str).split(':').map(p => parseInt(p, 10) || 0);
+    if (parts.length === 3) return parts[0]*3600 + parts[1]*60 + parts[2];
+    if (parts.length === 2) return parts[0]*60 + parts[1];
+    return parts[0] || 0;
+  }
+
+  function extractVideoId(url) {
+    if (!url) return null;
+    let workUrl = String(url);
+
+    // 處理 Google 重新導向: https://www.google.com/url?q=<encoded_real_url>&...
+    const gMatch = workUrl.match(/[?&]q=([^&]+)/);
+    if (gMatch && workUrl.indexOf('google.com/url') !== -1) {
+      try {
+        workUrl = decodeURIComponent(gMatch[1]);
+      } catch(e) {}
+    }
+
+    // 1) 通用格式
+    let regExp = /(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|v\/|shorts\/|live\/))([A-Za-z0-9_-]{11})/;
+    let match = workUrl.match(regExp);
+    if (match && match[1]) return match[1];
+
+    // 2) 退路:任何地方出現的 v=XXXXXXXXXXX
+    match = workUrl.match(/[?&]v=([A-Za-z0-9_-]{11})/);
+    if (match && match[1]) return match[1];
+
+    // 3) 最後退路:整個網址裡找一段 11 碼且前後不是字元的
+    match = workUrl.match(/(?:^|[^A-Za-z0-9_-])([A-Za-z0-9_-]{11})(?:[^A-Za-z0-9_-]|$)/);
+    if (match && match[1]) return match[1];
+
+    return null;
+  }
+
+  function switchView(viewId) {
+    document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(viewId).classList.add('active');
+    if(viewId === 'search-view') document.getElementById('nav-search').classList.add('active');
+    if(viewId === 'summary-view') document.getElementById('nav-summary').classList.add('active');
+    if(viewId === 'playlist-view') document.getElementById('nav-playlist').classList.add('active');
+    if (viewId !== 'playlist-view') lastActiveView = viewId;
+    hideContextMenu();
+    // 搜尋頁:重新渲染當前視角
+    if (viewId === 'search-view') {
+      renderSearchView();
+    }
+  }
+
+  async function summaryBtnClick() {
+    switchView('summary-view');
+    await loadSummary();
+  }
+
+  // ===== 時間軸瀏覽 =====
+  let timelineCache = null;  // [{date, title, tracks:[...], count}]
+  let timelineExpandedSet = new Set();  // 記住哪些 stream 是展開的
+
+  function buildTimelineCache() {
+    // 把 allSongsCache 按「date + title」group,保留原始順序
+    if (!allSongsCache) {
+      timelineCache = [];
+      return;
+    }
+    const map = new Map();
+    const order = [];
+    for (const r of allSongsCache) {
+      const key = (r.date || '?') + '||' + (r.title || '?');
+      if (!map.has(key)) {
+        map.set(key, { date: r.date || '', title: r.title || '', tracks: [] });
+        order.push(key);
+      }
+      map.get(key).tracks.push(r);
+    }
+    timelineCache = order.map(k => {
+      const s = map.get(k);
+      s.count = s.tracks.length;
+      return s;
+    });
+  }
+
+  function toggleTimelineStream(key) {
+    if (timelineExpandedSet.has(key)) timelineExpandedSet.delete(key);
+    else timelineExpandedSet.add(key);
+    // 不重新整個 render,只 toggle class 比較流暢
+    document.querySelectorAll('.timeline-stream').forEach(el => {
+      if (el.dataset.key === key) el.classList.toggle('expanded');
+    });
+  }
+
+  function playStreamFromTimeline(payload) {
+    const tracks = JSON.parse(decodeURIComponent(payload));
+    if (!tracks || tracks.length === 0) return;
+    playQueue = [...tracks];
+    currentQueueIndex = 0;
+    playTrackAtIndex(0);
+  }
+
+  function queueStreamFromTimeline(payload) {
+    const tracks = JSON.parse(decodeURIComponent(payload));
+    if (!tracks || tracks.length === 0) return;
+    const wasEmpty = playQueue.length === 0;
+    playQueue.push(...tracks);
+    if (wasEmpty) {
+      currentQueueIndex = 0;
+      playTrackAtIndex(0);
+    } else {
+      showToast(`已加入 ${tracks.length} 首歌`);
+    }
+  }
+
+  function playlistBtnClick() {
+    switchView('playlist-view');
+    renderPlaylistSidebar();
+    const keys = Object.keys(playlists);
+    if (keys.length > 0) {
+      selectPlaylist(keys[0]);
+    } else {
+      document.getElementById('playlist-tracks-container').innerHTML = '<div class="empty-msg">目前沒有自訂歌單。</div>';
+    }
+  }
+
+  async function apiCall(action, params = "") {
+    showLoader(true);
+    try {
+      const response = await fetch(`${GAS_URL}?action=${action}${params}`);
+      const data = await response.json();
+      showLoader(false);
+      return data;
+    } catch (e) {
+      showLoader(false);
+      console.error("API Error:", e);
+      alert("讀取失敗，請確認網路連線與權限。");
+    }
+  }
+
+  // ===== 搜尋頁:三視角統一入口 =====
+  let searchViewMode = 'list'; // 'list' | 'timeline' | 'recent'
+
+  async function ensureSongsLoaded() {
+    if (!allSongsCache) {
+      const results = await apiCall('search', '&q=');
+      allSongsCache = results || [];
+      buildTimelineCache();
+    } else if (!timelineCache) {
+      buildTimelineCache();
+    }
+  }
+
+  function setSearchMode(mode) {
+    searchViewMode = mode;
+    // 更新 tab 視覺
+    document.querySelectorAll('.vm-tab').forEach(b => {
+      b.classList.toggle('active', b.dataset.mode === mode);
+    });
+    renderSearchView();
+  }
+
+  async function handleSearch() {
+    // 預設按搜尋鈕 / Enter → 進入歌曲清單模式
+    if (searchViewMode === 'recent') setSearchMode('list');
+    else renderSearchView();
+  }
+
+  let keywordChangeTimer = null;
+  function onKeywordChange() {
+    // 在「最近播放」模式下打字,自動切到「歌曲清單」模式
+    if (searchViewMode === 'recent') {
+      setSearchMode('list');
+      return;
+    }
+    if (keywordChangeTimer) clearTimeout(keywordChangeTimer);
+    keywordChangeTimer = setTimeout(() => {
+      renderSearchView();
+    }, 200);
+  }
+
+  // 統一渲染函式
+  async function renderSearchView() {
+    const q = document.getElementById('keyword').value.trim().toLowerCase();
+    const container = document.getElementById('search-results');
+    const actionContainer = document.getElementById('search-actions-container');
+    const statsEl = document.getElementById('search-stats');
+    actionContainer.innerHTML = '';
+    if (statsEl) statsEl.innerText = '';
+
+    if (searchViewMode === 'recent') {
+      renderRecentView();
+      return;
+    }
+
+    // 需要 allSongs 資料
+    if (!allSongsCache) {
+      renderSearchSkeleton();
+      await ensureSongsLoaded();
+    } else if (searchViewMode === 'timeline' && !timelineCache) {
+      buildTimelineCache();
+    }
+
+    if (searchViewMode === 'list') {
+      renderListView(q);
+    } else if (searchViewMode === 'timeline') {
+      renderTimelineView(q);
+    }
+  }
+
+  // 視角一:歌曲清單(原本 renderSearch 的邏輯,但有/無關鍵字都顯示)
+  function renderListView(q) {
+    const container = document.getElementById('search-results');
+    const actionContainer = document.getElementById('search-actions-container');
+    const statsEl = document.getElementById('search-stats');
+    const results = q
+      ? allSongsCache.filter(r =>
+          (r.song && r.song.toLowerCase().includes(q)) ||
+          (r.artist && r.artist.toLowerCase().includes(q)) ||
+          (r.title && r.title.toLowerCase().includes(q))
+        )
+      : allSongsCache;
+
+    if (!results || results.length === 0) {
+      container.innerHTML = q
+        ? '<div class="empty-msg">查無資料,換個關鍵字試試看?</div>'
+        : '<div class="empty-msg">尚無資料。</div>';
+      return;
+    }
+
+    if (statsEl) statsEl.innerText = `共 ${results.length} 首`;
+    actionContainer.innerHTML = `<button class="btn-action-global" onclick="playFilteredList()">▶ 播放全部</button>`;
+
+    let html = `<table class="results-table">
+      <thead><tr><th></th><th>日期 / 標題</th><th>歌曲 / 原唱</th><th>功能</th></tr></thead>
+      <tbody>`;
+    results.forEach((r, idx) => {
+      let tagHtml = '';
+      if (r.isShorts) tagHtml = `<span style="background:#ffebee; color:#c62828; border:1px solid #ffcdd2; padding:1px 6px; font-size:11px; font-weight:bold; border-radius:10px; margin-left:5px; display:inline-block; vertical-align:middle;">Shorts</span>`;
+      else if (r.isVideo) tagHtml = `<span style="background:#eceff1; color:#37474f; border:1px solid #b0bec5; padding:1px 6px; font-size:11px; font-weight:bold; border-radius:10px; margin-left:5px; display:inline-block; vertical-align:middle;">影片</span>`;
+      const encodedItem = encodeURIComponent(JSON.stringify(r));
+      const isCurrent = (currentQueueIndex >= 0 && playQueue[currentQueueIndex] && playQueue[currentQueueIndex].link === r.link && playQueue[currentQueueIndex].song === r.song);
+      const rowClass = isCurrent ? 'playing-row' : '';
+      html += `<tr class="${rowClass}">
+        <td style="text-align:center; width:40px;">
+          <button class="btn-table-play" title="只播這首(清空當前清單)" onclick="playSingleTrackInstant('${encodedItem}')">▶</button>
+        </td>
+        <td style="color:var(--text-sub); font-size:12px; max-width:200px;"><strong>${r.date}</strong><br>${streamTitleLink(r.title, r)}</td>
+        <td>
+          <strong>${songNameLink(r)}</strong>${tagHtml}<br>
+          <small style="color:var(--text-light)">${r.artist}</small>
+        </td>
+        <td style="width:130px; text-align:center; white-space:nowrap;">
+          ${favoriteButtonHtml(r, encodedItem)}
+          <button class="btn-table-more" title="插隊播放(取代當前曲目)" onclick="replaceCurrentAndPlay('${encodedItem}')">⇆</button>
+          <button class="btn-table-more" title="加入播放清單末端" onclick="addTrackToQueueDirect('${encodedItem}')">＋</button>
+          <button class="btn-table-more" title="更多" onclick="showContextMenu(event, '${encodedItem}')">⋮</button>
+        </td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    container.innerHTML = html;
+  }
+
+  // 視角二:依直播分組
+  function renderTimelineView(q) {
+    const container = document.getElementById('search-results');
+    const actionContainer = document.getElementById('search-actions-container');
+    const statsEl = document.getElementById('search-stats');
+    if (!timelineCache || timelineCache.length === 0) {
+      container.innerHTML = '<div class="empty-msg">尚無資料。</div>';
+      return;
+    }
+    const filtered = timelineCache.filter(s => {
+      if (!q) return true;
+      if ((s.date || '').toLowerCase().includes(q)) return true;
+      if ((s.title || '').toLowerCase().includes(q)) return true;
+      return s.tracks.some(t =>
+        (t.song || '').toLowerCase().includes(q) ||
+        (t.artist || '').toLowerCase().includes(q)
+      );
+    });
+    const totalTracks = filtered.reduce((sum, s) => sum + s.count, 0);
+    if (statsEl) statsEl.innerText = `共 ${filtered.length} 場 / ${totalTracks} 首`;
+
+    if (filtered.length === 0) {
+      container.innerHTML = '<div class="empty-msg">沒有符合的直播。</div>';
+      return;
+    }
+
+    container.innerHTML = filtered.map((s) => {
+      const streamKey = (s.date || '') + '||' + (s.title || '');
+      const isExpanded = timelineExpandedSet.has(streamKey);
+      const tracksHtml = s.tracks.map(t => {
+        const encodedItem = encodeURIComponent(JSON.stringify(t));
+        const isCurrent = (currentQueueIndex >= 0 && playQueue[currentQueueIndex] && playQueue[currentQueueIndex].link === t.link && playQueue[currentQueueIndex].song === t.song);
+        return `<div class="timeline-track ${isCurrent ? 'is-current' : ''}">
+          <div class="tr-info">
+            <div class="name">${songNameLink(t)}</div>
+            <div class="artist">${t.artist || ''}</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:2px;">
+            ${favoriteButtonHtml(t, encodedItem)}
+            <button class="btn-table-play" title="只播這首(清空當前清單)" onclick="playSingleTrackInstant('${encodedItem}')">▶</button>
+            <button class="btn-table-more" title="加入播放清單末端" onclick="addTrackToQueueDirect('${encodedItem}')">＋</button>
+            <button class="btn-table-more" title="更多" onclick="showContextMenu(event, '${encodedItem}')">⋮</button>
+          </div>
+        </div>`;
+      }).join('');
+      const safeKey = streamKey.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+      const streamPayload = encodeURIComponent(JSON.stringify(s.tracks));
+      return `<div class="timeline-stream ${isExpanded ? 'expanded' : ''}" data-key="${escapeAttr(streamKey)}">
+        <div class="timeline-header" onclick="toggleTimelineStream('${safeKey}')">
+          <div class="meta">
+            <div class="stream-date">📅 ${s.date || '?'}</div>
+            <div class="stream-title">${streamTitleLink(s.title || '?', s.tracks && s.tracks[0])}</div>
+          </div>
+          <div class="stream-count">🎵 ${s.count} 首</div>
+          <div class="toggle-arrow">▶</div>
+        </div>
+        <div class="timeline-body">
+          <div class="stream-actions">
+            <button title="清空目前清單,從這場的第一首開始播" onclick="playStreamFromTimeline('${streamPayload}')">▶ 立即播放整場</button>
+            <button title="加到目前清單末端,不打斷當前播放" onclick="queueStreamFromTimeline('${streamPayload}')">＋ 加入清單末端</button>
+          </div>
+          ${tracksHtml}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // 視角三:最近播放
+  function renderRecentView() {
+    const container = document.getElementById('search-results');
+    const actionContainer = document.getElementById('search-actions-container');
+    const statsEl = document.getElementById('search-stats');
+    actionContainer.innerHTML = '';
+    if (!recentPlays || recentPlays.length === 0) {
+      container.innerHTML = '<div class="empty-msg">尚未播放過任何歌曲。<br><span style="font-weight:normal; color:var(--text-light); font-size:13px;">播放過的歌曲會記錄在這裡。</span></div>';
+      return;
+    }
+    if (statsEl) statsEl.innerText = `共 ${recentPlays.length} 首`;
+    actionContainer.innerHTML = `<button class="btn-table-more" style="font-size:12px;" onclick="clearRecentPlays()" title="清空最近播放">🗑 清空</button>`;
+
+    let html = `<table class="results-table"><thead><tr><th></th><th>歌曲 / 原唱</th><th>來源歌回</th><th></th></tr></thead><tbody>`;
+    recentPlays.forEach((r) => {
+      const encodedItem = encodeURIComponent(JSON.stringify(r));
+      const isCurrent = (currentQueueIndex >= 0 && playQueue[currentQueueIndex] && playQueue[currentQueueIndex].link === r.link && playQueue[currentQueueIndex].song === r.song);
+      const rowClass = isCurrent ? 'playing-row' : '';
+      let tagHtml = '';
+      if (r.isShorts) tagHtml = `<span style="background:#ffebee; color:#c62828; border:1px solid #ffcdd2; padding:1px 6px; font-size:11px; font-weight:bold; border-radius:10px; margin-left:5px;">Shorts</span>`;
+      else if (r.isVideo) tagHtml = `<span style="background:#eceff1; color:#37474f; border:1px solid #b0bec5; padding:1px 6px; font-size:11px; font-weight:bold; border-radius:10px; margin-left:5px;">影片</span>`;
+      html += `<tr class="${rowClass}">
+        <td style="text-align:center; width:40px;">
+          <button class="btn-table-play" title="只播這首(清空當前清單)" onclick="playSingleTrackInstant('${encodedItem}')">▶</button>
+        </td>
+        <td><strong>${songNameLink(r)}</strong>${tagHtml}<br><small style="color:var(--text-light)">${r.artist || ''}</small></td>
+        <td style="color:var(--text-sub); font-size:12px; max-width:240px;">${streamTitleLink(r.title || '-', r)}</td>
+        <td style="width:130px; text-align:center; white-space:nowrap;">
+          ${favoriteButtonHtml(r, encodedItem)}
+          <button class="btn-table-more" title="插隊播放(取代當前曲目)" onclick="replaceCurrentAndPlay('${encodedItem}')">⇆</button>
+          <button class="btn-table-more" title="加入播放清單末端" onclick="addTrackToQueueDirect('${encodedItem}')">＋</button>
+          <button class="btn-table-more" title="更多" onclick="showContextMenu(event, '${encodedItem}')">⋮</button>
+        </td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    container.innerHTML = html;
+  }
+
+  // 播放當前篩選的歌曲清單
+  function playFilteredList() {
+    const q = document.getElementById('keyword').value.trim().toLowerCase();
+    const results = q
+      ? allSongsCache.filter(r =>
+          (r.song && r.song.toLowerCase().includes(q)) ||
+          (r.artist && r.artist.toLowerCase().includes(q)) ||
+          (r.title && r.title.toLowerCase().includes(q))
+        )
+      : allSongsCache;
+    if (!results || results.length === 0) return;
+    playQueue = [...results];
+    currentQueueIndex = 0;
+    playTrackAtIndex(0);
+  }
+
+  // 舊 API 相容(handleUrlParams 還會用到 renderSearchDefault)
+  function renderSearchDefault() {
+    setSearchMode('recent');
+  }
+  function renderSearch(results) {
+    setSearchMode('list');
+  }
+  // 舊 inline onsearch 觸發
+  async function loadAndRenderInitial() {
+    await ensureSongsLoaded();
+    renderSearchView();
+  }
+
+  async function loadSummary() {
+    if (summaryCache) return; 
+    renderSummarySkeleton();
+    const data = await apiCall('summary');
+    summaryCache = data || [];
+    processAndRenderSummary();
+  }
+
+  function renderSummarySkeleton(count = 6) {
+    const container = document.getElementById('summary-results');
+    let html = '';
+    for (let i = 0; i < count; i++) {
+      html += `<div class="skeleton-card">
+        <div class="skeleton sk-line short"></div>
+        <div class="skeleton sk-line tall medium" style="margin-top:12px;"></div>
+        <div class="skeleton sk-line short" style="margin-top:6px;"></div>
+        <div style="margin-top:24px;">
+          <div class="skeleton sk-line long" style="height:36px; border-radius:10px;"></div>
+        </div>
+      </div>`;
+    }
+    container.innerHTML = html;
+  }
+
+  function renderSearchSkeleton(count = 5) {
+    const container = document.getElementById('search-results');
+    let html = '<div style="background:var(--card); border-radius:12px; overflow:hidden; backdrop-filter:blur(5px);">';
+    for (let i = 0; i < count; i++) {
+      html += `<div class="skeleton-table-row">
+        <div class="skeleton sk-cell" style="width:30px; height:24px;"></div>
+        <div style="flex:1.5;">
+          <div class="skeleton sk-cell" style="width:60%; margin-bottom:6px;"></div>
+          <div class="skeleton sk-cell" style="width:80%;"></div>
+        </div>
+        <div style="flex:2;">
+          <div class="skeleton sk-cell" style="width:50%; margin-bottom:6px;"></div>
+          <div class="skeleton sk-cell" style="width:30%;"></div>
+        </div>
+        <div class="skeleton sk-cell" style="width:120px; height:24px;"></div>
+      </div>`;
+    }
+    html += '</div>';
+    container.innerHTML = html;
+  }
+
+  function processAndRenderSummary() {
+    if (!summaryCache) return;
+    const sortType = document.getElementById('sort-select').value;
+    const filterText = document.getElementById('summary-search').value.trim().toLowerCase();
+    let processedData = summaryCache.filter(s => 
+      (s.name && s.name.toLowerCase().includes(filterText)) ||
+      (s.artist && s.artist.toLowerCase().includes(filterText)) ||
+      (s.lastTitle && s.lastTitle.toLowerCase().includes(filterText))
+    );
+    if (sortType === 'count-desc') {
+      processedData.sort((a, b) => (b.count || 0) - (a.count || 0));
+    } else if (sortType === 'count-asc') {
+      processedData.sort((a, b) => (a.count || 0) - (b.count || 0));
+    } else if (sortType === 'name-asc') {
+      processedData.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'zh-Hant'));
+    }
+    renderSummary(processedData);
+  }
+
+  function renderSummary(data) {
+    const container = document.getElementById('summary-results');
+    if (!data || data.length === 0) {
+      container.innerHTML = '<div class="empty-msg">沒有符合篩選條件的歌曲。</div>';
+      return;
+    }
+    container.innerHTML = data.map(s => {
+      let tagHtml = '';
+      if (s.isShorts) {
+        tagHtml = `<div class="badge badge-shorts">Shorts</div>`;
+      } else if (s.isVideo) {
+        tagHtml = `<div class="badge badge-video">影片</div>`;
+      }
+      const standardizedItem = {
+        song: s.name,
+        artist: s.artist,
+        link: s.lastLink,
+        title: s.lastTitle,
+        start: s.start,
+        end: s.end,
+        startTime: s.startTime,
+        endTime: s.endTime,
+        isShorts: s.isShorts,
+        isVideo: s.isVideo
+      };
+      const encodedItem = encodeURIComponent(JSON.stringify(standardizedItem));
+      const isCurrent = (currentQueueIndex >= 0 && playQueue[currentQueueIndex] && playQueue[currentQueueIndex].song === s.name);
+      const cardClass = isCurrent ? 'song-card playing-card' : 'song-card';
+      return `
+        <div class="${cardClass}">
+          <div class="badge-wrapper">
+            <div class="badge">演唱 ${s.count} 次</div>
+            ${tagHtml}
+          </div>
+          <div style="position:absolute; top:12px; right:12px; display:flex; align-items:center; gap:2px;">
+            ${favoriteButtonHtml(standardizedItem, encodedItem)}
+            <button class="btn-table-more" onclick="showContextMenu(event, '${encodedItem}')">⋮</button>
+          </div>
+          <h3 title="${s.name}">${songNameLink(standardizedItem)}</h3>
+          <p>${s.artist}</p>
+          <div class="card-footer">
+            <div style="font-size:11px; color:#aaa; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">最近：${recentTitleLink(s.lastTitle, standardizedItem)}</div>
+            <button onclick="addTrackToQueueDirect('${encodedItem}')" class="play-btn">＋ 加入清單(最近版本)</button>
+            <div class="card-actions-row">
+              <button onclick="jumpToSearch('${s.name.replace(/'/g, "\\'")}')" class="card-sub-btn">🔍 歷史演唱</button>
+              <button onclick="replaceCurrentAndPlay('${encodedItem}')" class="card-sub-btn">⇆ 插隊播放</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderPlaylistSidebar() {
+    const listContainer = document.getElementById('playlist-menu-list');
+    const keys = Object.keys(playlists);
+    listContainer.innerHTML = keys.map(k => {
+      return `<li id="pl-menu-item-${k}" onclick="selectPlaylist('${k}')">
+        <span>📁 ${k}</span>
+        <span style="font-size:12px; color:#888; font-weight:normal;" onclick="deletePlaylist(event, '${k}')">❌</span>
+      </li>`;
+    }).join('');
+  }
+
+  function selectPlaylist(playlistName) {
+    document.querySelectorAll('.playlist-menu li').forEach(li => li.classList.remove('active'));
+    const activeLi = document.getElementById(`pl-menu-item-${playlistName}`);
+    if (activeLi) activeLi.classList.add('active');
+    const header = document.getElementById('playlist-header-details');
+    const tracksContainer = document.getElementById('playlist-tracks-container');
+    const tracks = playlists[playlistName] || [];
+    header.innerHTML = `
+      <div>
+        <h2 style="margin:0;">${playlistName}</h2>
+        <span style="font-size:13px; color:#666;">共 ${tracks.length} 首歌曲</span>
+      </div>
+      <button class="btn-action-global" onclick="playWholePlaylist('${playlistName}')">▶ 播放整份歌單</button>
+    `;
+    if (tracks.length === 0) {
+      tracksContainer.innerHTML = '<div class="empty-msg">此歌單內尚無歌曲，可至「歌曲搜尋」或「所有歌曲」中點擊 ⋮ 進行收藏。</div>';
+      return;
+    }
+    let html = `<table class="results-table" id="playlist-tracks-table" data-playlist="${escapeAttr(playlistName)}">
+      <thead><tr><th style="width:30px;"></th><th></th><th>歌曲 / 原唱</th><th>來源歌回標題</th><th style="text-align:center; width:50px;">操作</th></tr></thead>
+      <tbody>`;
+    tracks.forEach((t, idx) => {
+      const encodedItem = encodeURIComponent(JSON.stringify(t));
+      const isCurrent = (currentQueueIndex >= 0 && playQueue[currentQueueIndex] && playQueue[currentQueueIndex].link === t.link && playQueue[currentQueueIndex].song === t.song);
+      const rowClass = isCurrent ? 'playing-row' : '';
+      html += `<tr class="${rowClass} draggable-row" draggable="true" data-idx="${idx}">
+        <td class="drag-handle" title="拖曳排序">⋮⋮</td>
+        <td style="text-align:center; width:40px;">
+          <button class="btn-table-play" title="從這首開始播整份歌單" onclick="playPlaylistTrackAtIndex('${escapeJs(playlistName)}', ${idx})">▶</button>
+        </td>
+        <td><strong>${songNameLink(t)}</strong><br><small style="color:var(--text-light)">${t.artist || ''}</small></td>
+        <td style="color:var(--text-sub); font-size:12px; max-width:300px;">${streamTitleLink(t.title || '-', t)}</td>
+        <td style="width:50px; text-align:center;">
+          <button class="btn-table-more" onclick="removeTrackFromPlaylist(event, '${escapeJs(playlistName)}', ${idx})">❌</button>
+        </td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    tracksContainer.innerHTML = html;
+    bindPlaylistDragSort(playlistName);
+  }
+
+  function escapeAttr(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+  }
+  function escapeJs(s) {
+    return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+  }
+
+  // 歌單拖曳排序
+  function bindPlaylistDragSort(playlistName) {
+    const table = document.getElementById('playlist-tracks-table');
+    if (!table) return;
+    const tbody = table.querySelector('tbody');
+    let draggingEl = null;
+    let draggingIdx = -1;
+
+    tbody.querySelectorAll('tr.draggable-row').forEach(row => {
+      row.addEventListener('dragstart', (e) => {
+        draggingEl = row;
+        draggingIdx = parseInt(row.dataset.idx, 10);
+        row.classList.add('dragging');
+        if (e.dataTransfer) {
+          e.dataTransfer.effectAllowed = 'move';
+          // Firefox 需要 setData 才會啟動拖曳
+          try { e.dataTransfer.setData('text/plain', String(draggingIdx)); } catch(err) {}
+        }
+      });
+      row.addEventListener('dragend', () => {
+        row.classList.remove('dragging');
+        tbody.querySelectorAll('.drag-over-top, .drag-over-bottom').forEach(r => {
+          r.classList.remove('drag-over-top', 'drag-over-bottom');
+        });
+        draggingEl = null;
+      });
+      row.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        if (!draggingEl || row === draggingEl) return;
+        const rect = row.getBoundingClientRect();
+        const isAbove = e.clientY < rect.top + rect.height / 2;
+        tbody.querySelectorAll('.drag-over-top, .drag-over-bottom').forEach(r => {
+          r.classList.remove('drag-over-top', 'drag-over-bottom');
+        });
+        row.classList.add(isAbove ? 'drag-over-top' : 'drag-over-bottom');
+      });
+      row.addEventListener('drop', (e) => {
+        e.preventDefault();
+        if (!draggingEl || row === draggingEl) return;
+        const targetIdx = parseInt(row.dataset.idx, 10);
+        const rect = row.getBoundingClientRect();
+        const isAbove = e.clientY < rect.top + rect.height / 2;
+        movePlaylistTrack(playlistName, draggingIdx, targetIdx, isAbove);
+      });
+    });
+  }
+
+  function movePlaylistTrack(playlistName, fromIdx, toIdx, insertBefore) {
+    const list = playlists[playlistName];
+    if (!list || fromIdx === toIdx) return;
+    const [moved] = list.splice(fromIdx, 1);
+    // 從前面移到後面時 toIdx 會少 1
+    let insertAt = toIdx;
+    if (fromIdx < toIdx) insertAt = insertBefore ? toIdx - 1 : toIdx;
+    else insertAt = insertBefore ? toIdx : toIdx + 1;
+    if (insertAt < 0) insertAt = 0;
+    if (insertAt > list.length) insertAt = list.length;
+    list.splice(insertAt, 0, moved);
+    savePlaylistsToStorage();
+    selectPlaylist(playlistName);
+  }
+
+  function createNewPlaylist() {
+    const name = prompt("請輸入新歌單名稱：");
+    if (!name) return;
+    if (playlists[name]) {
+      alert("歌單名稱已存在！");
+      return;
+    }
+    playlists[name] = [];
+    savePlaylistsToStorage();
+    renderPlaylistSidebar();
+    selectPlaylist(name);
+  }
+
+  function deletePlaylist(event, name) {
+    event.stopPropagation();
+    if (!confirm(`確定要刪除歌單「${name}」嗎？`)) return;
+    delete playlists[name];
+    savePlaylistsToStorage();
+    renderPlaylistSidebar();
+    const keys = Object.keys(playlists);
+    if (keys.length > 0) {
+      selectPlaylist(keys[0]);
+    } else {
+      document.getElementById('playlist-header-details').innerHTML = '';
+      document.getElementById('playlist-tracks-container').innerHTML = '<div class="empty-msg">目前沒有自訂歌單。</div>';
+    }
+  }
+
+  function removeTrackFromPlaylist(event, playlistName, idx) {
+    event.stopPropagation();
+    if (playlists[playlistName]) {
+      const removed = playlists[playlistName][idx];
+      playlists[playlistName].splice(idx, 1);
+      savePlaylistsToStorage();
+      selectPlaylist(playlistName);
+      // 如果是從「我的最愛」移除,同步所有頁面的星星
+      if (playlistName === FAVORITE_LIST_NAME && removed) {
+        updateFavoriteButtonsFor(removed, false);
+      }
+    }
+  }
+
+  function playSingleTrackInstant(encodedItem) {
+    const track = JSON.parse(decodeURIComponent(encodedItem));
+    playQueue = [track];
+    currentQueueIndex = 0;
+    playTrackAtIndex(0);
+  }
+
+  function playTrackAtIndex(index) {
+    if (index < 0 || index >= playQueue.length) return;
+    currentQueueIndex = index;
+    const track = playQueue[currentQueueIndex];
+    document.getElementById('pb-song').innerText = track.song || '(未知歌曲)';
+    document.getElementById('pb-artist').innerText = track.artist || '-';
+    
+    const videoId = extractVideoId(track.link);
+    if (!videoId) {
+      console.error("無法解析影片 ID。Track 完整資料：", track);
+      alert("無法解析此歌曲的影片連結。\n\n" +
+            "歌曲：" + (track.song || '(空)') + "\n" +
+            "原始連結：" + (track.link || '(空白 — GAS 沒有回傳 link 欄位)') + "\n\n" +
+            "請按 F12 開啟瀏覽器主控台 (Console) 查看完整資料，並回報給開發者。");
+      return;
+    }
+    
+    // YT API 還沒 ready 時暫存
+    if (!ytReady || !ytPlayer || typeof ytPlayer.loadVideoById !== 'function') {
+      pendingTrack = index;
+      console.log("YT API 尚未就緒，暫存待播放：", index);
+      return;
+    }
+    
+    const startSec = parseStartSec(track);
+    currentTrackEndSeconds = parseEndSec(track);
+    
+    try {
+      ytPlayer.loadVideoById({
+        videoId: videoId,
+        startSeconds: startSec
+      });
+      pushRecentPlay(track);
+    } catch (e) {
+      console.error("loadVideoById 錯誤:", e);
+    }
+    
+    document.querySelectorAll('.results-table tr').forEach(tr => tr.classList.remove('playing-row'));
+    document.querySelectorAll('.song-card').forEach(card => card.classList.remove('playing-card'));
+    
+    if (document.getElementById('search-view').classList.contains('active')) {
+      handleSearch();
+    } else if (document.getElementById('summary-view').classList.contains('active')) {
+      processAndRenderSummary();
+    } else if (document.getElementById('playlist-view').classList.contains('active')) {
+      const activeLi = document.querySelector('.playlist-menu li.active');
+      if (activeLi) {
+        const plName = activeLi.id.replace('pl-menu-item-', '');
+        selectPlaylist(plName);
+      }
+    }
+
+    // 若彈窗開著，同步更新
+    if (document.getElementById('queue-modal-overlay').classList.contains('show')) {
+      renderQueueModal();
+    }
+  }
+
+  function playNext() {
+    if (playQueue.length === 0) return;
+
+    // 整輪循環:不移除,只切下一首,放到清單尾循環
+    if (repeatMode === 2) {
+      if (isShuffle) {
+        currentQueueIndex = pickRandomIndexExcludingCurrent(playQueue.length, currentQueueIndex);
+      } else {
+        currentQueueIndex = (currentQueueIndex + 1) % playQueue.length;
+      }
+      playTrackAtIndex(currentQueueIndex);
+      return;
+    }
+
+    // 一般模式:移除目前那首
+    if (currentQueueIndex >= 0 && currentQueueIndex < playQueue.length) {
+      playQueue.splice(currentQueueIndex, 1);
+    }
+
+    if (playQueue.length === 0) {
+      // 清單空了 → 停止
+      currentQueueIndex = -1;
+      stopPlayback();
+      refreshUIForCurrentView();
+      return;
+    }
+
+    if (isShuffle) {
+      // 隨機模式:從剩餘清單隨機挑(此時 splice 已執行,沒有「當前」要排除)
+      currentQueueIndex = Math.floor(Math.random() * playQueue.length);
+    } else {
+      // 移除後索引保持原位,自然會指到「下一首」
+      if (currentQueueIndex >= playQueue.length) {
+        currentQueueIndex = playQueue.length - 1;
+      }
+    }
+    playTrackAtIndex(currentQueueIndex);
+  }
+
+  // 從 0..length-1 隨機挑一個,排除指定索引(避免原地循環同一首)
+  function pickRandomIndexExcludingCurrent(length, exclude) {
+    if (length <= 1) return 0;
+    let r;
+    do {
+      r = Math.floor(Math.random() * length);
+    } while (r === exclude);
+    return r;
+  }
+
+  // 上一首:因為清單採「播完即移除」,沒有歷史可回退 → 重播當前歌曲
+  function playPrev() {
+    if (playQueue.length === 0 || currentQueueIndex < 0) return;
+    if (ytPlayer && typeof ytPlayer.seekTo === 'function') {
+      const track = playQueue[currentQueueIndex];
+      const startSec = parseStartSec(track);
+      try {
+        ytPlayer.seekTo(startSec, true);
+        ytPlayer.playVideo();
+      } catch(e) {}
+    }
+  }
+
+  // 重新整理當前頁面顯示(刪除歌曲後同步刷新)
+  function refreshUIForCurrentView() {
+    if (document.getElementById('search-view').classList.contains('active')) {
+      renderSearchView();
+    } else if (document.getElementById('summary-view').classList.contains('active')) {
+      if (summaryCache) processAndRenderSummary();
+    } else if (document.getElementById('playlist-view').classList.contains('active')) {
+      const activeLi = document.querySelector('.playlist-menu li.active');
+      if (activeLi) {
+        const plName = activeLi.id.replace('pl-menu-item-', '');
+        selectPlaylist(plName);
+      }
+    }
+    if (document.getElementById('queue-modal-overlay').classList.contains('show')) {
+      renderQueueModal();
+    }
+  }
+
+  // 停止播放並重置 UI 狀態（用於整份清單播完）
+  function stopPlayback() {
+    currentTrackEndSeconds = 0;
+    if (ytPlayer && typeof ytPlayer.stopVideo === 'function') {
+      try { ytPlayer.stopVideo(); } catch(e) {}
+    }
+    // 徹底清空 iframe，避免殘留最後一幀畫面
+    if (ytPlayer && typeof ytPlayer.loadVideoById === 'function') {
+      try {
+        // 用空字串清掉 video
+        ytPlayer.cueVideoById({ videoId: '' });
+      } catch(e) {}
+    }
+    setPlayButton(false);
+    document.getElementById('pb-current-time').innerText = "0:00";
+    document.getElementById('pb-total-time').innerText = "0:00";
+    document.getElementById('pb-progress-fill').style.width = "0%";
+    updateTabTitle(false);
+    // 自動縮小 YT 視窗，視覺上「結束」
+    const container = document.getElementById('yt-widget-container');
+    if (container && !container.classList.contains('minimized')) {
+      container.classList.add('minimized');
+      const btn = container.querySelector('.yt-toggle-btn');
+      if (btn) {
+        btn.innerText = "⇱";
+        btn.title = "展開視窗";
+      }
+    }
+  }
+
+  function togglePlayPause() {
+    if (!ytPlayer || typeof ytPlayer.getPlayerState !== 'function') return;
+    const state = ytPlayer.getPlayerState();
+    if (state === YT.PlayerState.PLAYING) {
+      ytPlayer.pauseVideo();
+    } else {
+      ytPlayer.playVideo();
+    }
+  }
+
+  function toggleShuffle() {
+    isShuffle = !isShuffle;
+    document.getElementById('pb-shuffle').classList.toggle('active', isShuffle);
+    showToast(isShuffle ? '🔀 播放清單內隨機播放:開啟' : '🔀 播放清單內隨機播放:關閉');
+  }
+
+  function toggleRepeat() {
+    repeatMode = (repeatMode + 1) % 3;
+    const btn = document.getElementById('pb-repeat');
+    btn.classList.remove('active', 'mode-single', 'mode-all');
+    if (repeatMode === 0) {
+      btn.innerText = "🔁";
+      showToast('🔁 播放清單循環:關閉');
+    } else if (repeatMode === 1) {
+      btn.innerText = "🔂";
+      btn.classList.add('active', 'mode-single');
+      showToast('🔂 單曲循環');
+    } else if (repeatMode === 2) {
+      btn.innerText = "🔁";
+      btn.classList.add('active', 'mode-all');
+      showToast('🔁 整份播放清單循環');
+    }
+  }
+
+  // 進度條:支援點擊與拖曳
+  let isDraggingProgress = false;
+  let progressDragStartFn = null;
+
+  function calcSeekFromPosition(clientX) {
+    if (currentQueueIndex < 0 || currentQueueIndex >= playQueue.length) return null;
+    const track = playQueue[currentQueueIndex];
+    const start = parseStartSec(track);
+    const endSec = parseEndSec(track);
+    let total = ytPlayer.getDuration() - start;
+    if (endSec > start) total = endSec - start;
+    const wrap = document.getElementById('pb-progress-wrap');
+    if (!wrap) return null;
+    const rect = wrap.getBoundingClientRect();
+    let pct = (clientX - rect.left) / rect.width;
+    if (pct < 0) pct = 0;
+    if (pct > 1) pct = 1;
+    return { seekTo: start + (pct * total), pct, total, start };
+  }
+
+  function previewSeek(clientX) {
+    const info = calcSeekFromPosition(clientX);
+    if (!info) return;
+    // 拖曳時即時更新進度條視覺與時間顯示
+    document.getElementById('pb-progress-fill').style.width = (info.pct * 100) + '%';
+    document.getElementById('pb-current-time').innerText = formatTime(info.pct * info.total);
+  }
+
+  function commitSeek(clientX) {
+    const info = calcSeekFromPosition(clientX);
+    if (!info || !ytPlayer || typeof ytPlayer.seekTo !== 'function') return;
+    ytPlayer.seekTo(info.seekTo, true);
+  }
+
+  function bindProgressBar() {
+    const wrap = document.getElementById('pb-progress-wrap');
+    if (!wrap) return;
+    // 滑鼠
+    wrap.addEventListener('mousedown', (e) => {
+      if (!ytPlayer || typeof ytPlayer.getDuration !== 'function') return;
+      if (currentQueueIndex < 0) return;
+      isDraggingProgress = true;
+      previewSeek(e.clientX);
+      e.preventDefault();
+    });
+    document.addEventListener('mousemove', (e) => {
+      if (!isDraggingProgress) return;
+      previewSeek(e.clientX);
+    });
+    document.addEventListener('mouseup', (e) => {
+      if (!isDraggingProgress) return;
+      isDraggingProgress = false;
+      commitSeek(e.clientX);
+    });
+    // 觸控
+    wrap.addEventListener('touchstart', (e) => {
+      if (!ytPlayer || typeof ytPlayer.getDuration !== 'function') return;
+      if (currentQueueIndex < 0) return;
+      isDraggingProgress = true;
+      previewSeek(e.touches[0].clientX);
+    }, { passive: true });
+    document.addEventListener('touchmove', (e) => {
+      if (!isDraggingProgress) return;
+      previewSeek(e.touches[0].clientX);
+    }, { passive: true });
+    document.addEventListener('touchend', (e) => {
+      if (!isDraggingProgress) return;
+      isDraggingProgress = false;
+      if (e.changedTouches && e.changedTouches[0]) {
+        commitSeek(e.changedTouches[0].clientX);
+      }
+    });
+  }
+
+  // 移除舊版 handleProgressSeek (現在改用 bindProgressBar)
+  function handleProgressSeek(event) {
+    // 保留空函式以免舊 inline handler 報錯
+  }
+
+  function toggleMute() {
+    if (!ytPlayer || typeof ytPlayer.isMuted !== 'function') return;
+    const muteBtn = document.getElementById('pb-mute');
+    const slider = document.getElementById('pb-volume');
+    if (ytPlayer.isMuted()) {
+      ytPlayer.unMute();
+      muteBtn.innerText = "🔊";
+      slider.value = lastVolume;
+      ytPlayer.setVolume(lastVolume);
+    } else {
+      lastVolume = slider.value;
+      ytPlayer.mute();
+      muteBtn.innerText = "🔇";
+      slider.value = 0;
+    }
+  }
+
+  function handleVolumeChange(event) {
+    const vol = event.target.value;
+    if (!ytPlayer || typeof ytPlayer.setVolume !== 'function') return;
+    ytPlayer.setVolume(vol);
+    const muteBtn = document.getElementById('pb-mute');
+    if (parseInt(vol, 10) === 0) {
+      muteBtn.innerText = "🔇";
+    } else {
+      muteBtn.innerText = "🔊";
+    }
+  }
+
+  function togglePlayerSize() {
+    const container = document.getElementById('yt-widget-container');
+    const btn = container.querySelector('.yt-toggle-btn');
+    container.classList.toggle('minimized');
+    if (container.classList.contains('minimized')) {
+      btn.innerText = "⇱";
+      btn.title = "展開視窗";
+    } else {
+      btn.innerText = "⇲";
+      btn.title = "縮小視窗";
+    }
+  }
+
+  function formatTime(seconds) {
+    if (isNaN(seconds) || seconds < 0) return "0:00";
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return m + ":" + (s < 10 ? "0" : "") + s;
+  }
+
+  function updateTabTitle(isPlaying) {
+    if (isPlaying && currentQueueIndex >= 0 && playQueue[currentQueueIndex]) {
+      document.title = "▶ " + playQueue[currentQueueIndex].song + " | 安特羅迦";
+    } else {
+      document.title = "安特羅迦 － 網頁音樂播放器";
+    }
+  }
+
+  function showLoader(show) {
+    document.getElementById('loader').style.display = show ? 'block' : 'none';
+  }
+
+  function playAllCurrentSearch() {
+    if (!allSongsCache) return;
+    const q = document.getElementById('keyword').value.trim().toLowerCase();
+    const filtered = allSongsCache.filter(r => 
+      (r.song && r.song.toLowerCase().includes(q)) || 
+      (r.artist && r.artist.toLowerCase().includes(q)) ||
+      (r.title && r.title.toLowerCase().includes(q))
+    );
+    if (filtered.length === 0) return;
+    playQueue = [...filtered];
+    currentQueueIndex = 0;
+    playTrackAtIndex(0);
+  }
+
+  function playAllCurrentSummary() {
+    if (!summaryCache) return;
+    const filterText = document.getElementById('summary-search').value.trim().toLowerCase();
+    let processedData = summaryCache.filter(s => 
+      (s.name && s.name.toLowerCase().includes(filterText)) ||
+      (s.artist && s.artist.toLowerCase().includes(filterText)) ||
+      (s.lastTitle && s.lastTitle.toLowerCase().includes(filterText))
+    );
+    if (processedData.length === 0) return;
+    playQueue = processedData.map(s => ({
+      song: s.name,
+      artist: s.artist,
+      link: s.lastLink,
+      title: s.lastTitle,
+      start: s.start,
+      end: s.end,
+      startTime: s.startTime,
+      endTime: s.endTime,
+      isShorts: s.isShorts,
+      isVideo: s.isVideo
+    }));
+    currentQueueIndex = 0;
+    playTrackAtIndex(0);
+  }
+
+  function playWholePlaylist(playlistName) {
+    const tracks = playlists[playlistName] || [];
+    if (tracks.length === 0) return;
+    playQueue = [...tracks];
+    currentQueueIndex = 0;
+    playTrackAtIndex(0);
+  }
+
+  function playPlaylistTrackAtIndex(playlistName, idx) {
+    const tracks = playlists[playlistName] || [];
+    if (tracks.length === 0) return;
+    playQueue = [...tracks];
+    currentQueueIndex = idx;
+    playTrackAtIndex(idx);
+  }
+
+  function addTrackToQueueDirect(encodedItem) {
+    const track = JSON.parse(decodeURIComponent(encodedItem));
+    const wasEmpty = playQueue.length === 0;
+    playQueue.push(track);
+    // 空清單時加入 → 自動播這首
+    if (wasEmpty) {
+      currentQueueIndex = 0;
+      playTrackAtIndex(0);
+    } else {
+      showToast(`已加入「${track.song}」`);
+    }
+  }
+
+  // 切歌立即播放:取代目前播放位置那首,並立即播放,清單其他曲目保留
+  function replaceCurrentAndPlay(encodedItem) {
+    const track = JSON.parse(decodeURIComponent(encodedItem));
+    if (playQueue.length === 0 || currentQueueIndex < 0) {
+      // 沒人在播 → 直接放清單尾並播
+      playQueue.push(track);
+      currentQueueIndex = playQueue.length - 1;
+      playTrackAtIndex(currentQueueIndex);
+    } else {
+      // 取代目前位置
+      playQueue[currentQueueIndex] = track;
+      playTrackAtIndex(currentQueueIndex);
+    }
+  }
+
+  function jumpToSearch(songName) {
+    switchView('search-view');
+    document.getElementById('keyword').value = songName;
+    handleSearch();
+  }
+
+  function exportPlaylists() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(playlists));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", "antrovia_playlists_backup.json");
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    document.body.removeChild(downloadAnchor);
+  }
+
+  function importPlaylists(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const imported = JSON.parse(e.target.result);
+        if (typeof imported === 'object' && imported !== null) {
+          playlists = { ...playlists, ...imported };
+          savePlaylistsToStorage();
+          renderPlaylistSidebar();
+          showToast("歌單匯入成功");
+          const keys = Object.keys(playlists);
+          if (keys.length > 0) selectPlaylist(keys[0]);
+        }
+      } catch (err) {
+        alert("解析備份檔案失敗。");
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  function showContextMenu(event, encodedItem) {
+    event.stopPropagation();
+    const menu = document.getElementById('context-dropdown');
+    menu.innerHTML = '';
+    
+    const item = JSON.parse(decodeURIComponent(encodedItem));
+
+    const liShare = document.createElement('li');
+    liShare.innerText = "🔗 複製分享連結";
+    liShare.onclick = () => {
+      const url = buildShareUrl(item);
+      copyToClipboard(url).then(() => {
+        showToast('已複製分享連結');
+      }).catch(() => {
+        showToast('複製失敗,請手動複製: ' + url, 4000);
+      });
+      hideContextMenu();
+    };
+    menu.appendChild(liShare);
+    
+    Object.keys(playlists).forEach(plName => {
+      const liPl = document.createElement('li');
+      liPl.innerText = `📂 收藏至 ${plName}`;
+      liPl.onclick = () => {
+        playlists[plName].push(item);
+        savePlaylistsToStorage();
+        hideContextMenu();
+        showToast(`已收藏「${item.song}」至 ${plName}`);
+        // 若是加到「我的最愛」,同步星星
+        if (plName === FAVORITE_LIST_NAME) {
+          updateFavoriteButtonsFor(item, true);
+        }
+      };
+      menu.appendChild(liPl);
+    });
+    
+    menu.style.display = 'block';
+    menu.style.left = event.clientX + 'px';
+    menu.style.top = (window.scrollY + event.clientY) + 'px';
+  }
+
+  function buildShareUrl(item) {
+    // 優先使用該首歌的 YouTube 起始時間 URL
+    const ytUrl = songStartUrl(item);
+    if (ytUrl) return ytUrl;
+    // 退路:站內 ?song= 連結
+    const base = window.location.origin + window.location.pathname;
+    const params = new URLSearchParams();
+    params.set('song', item.song || '');
+    if (item.artist) params.set('artist', item.artist);
+    return base + '?' + params.toString();
+  }
+
+  function copyToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text);
+    }
+    // 退路
+    return new Promise((resolve, reject) => {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        resolve();
+      } catch(e) { reject(e); }
+    });
+  }
+
+  function hideContextMenu() {
+    document.getElementById('context-dropdown').style.display = 'none';
+  }
+
+  // ===== 播放清單彈窗 =====
+  function showQueueModal() {
+    renderQueueModal();
+    document.getElementById('queue-modal-overlay').classList.add('show');
+  }
+
+  function hideQueueModal() {
+    document.getElementById('queue-modal-overlay').classList.remove('show');
+  }
+
+  function renderQueueModal() {
+    const body = document.getElementById('queue-modal-body');
+    const title = document.getElementById('queue-modal-title');
+    title.innerText = `播放清單 (${playQueue.length} 首)`;
+    if (playQueue.length === 0) {
+      body.innerHTML = '<div class="empty-msg">目前清單是空的。</div>';
+      return;
+    }
+    body.innerHTML = playQueue.map((t, idx) => {
+      const isCurrent = idx === currentQueueIndex;
+      return `
+        <div class="queue-modal-item ${isCurrent ? 'current' : ''}">
+          <div class="idx">${isCurrent ? '▶' : (idx + 1)}</div>
+          <div class="info" onclick="playFromQueueModal(${idx})">
+            <div class="name">${t.song || '(未知歌曲)'}</div>
+            <div class="artist">${t.artist || '-'}</div>
+          </div>
+          <button class="remove" onclick="removeFromQueue(${idx})" title="從清單移除">✕</button>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function playFromQueueModal(idx) {
+    if (idx < 0 || idx >= playQueue.length) return;
+    playTrackAtIndex(idx);
+  }
+
+  function removeFromQueue(idx) {
+    if (idx < 0 || idx >= playQueue.length) return;
+    const wasCurrent = (idx === currentQueueIndex);
+    playQueue.splice(idx, 1);
+    if (wasCurrent) {
+      // 刪掉的剛好是目前播放的 → 自動播下一首(索引保持原位即可)
+      if (playQueue.length === 0) {
+        currentQueueIndex = -1;
+        stopPlayback();
+      } else {
+        if (currentQueueIndex >= playQueue.length) {
+          currentQueueIndex = playQueue.length - 1;
+        }
+        playTrackAtIndex(currentQueueIndex);
+      }
+    } else if (idx < currentQueueIndex) {
+      currentQueueIndex--;
+    }
+    renderQueueModal();
+    refreshUIForCurrentView();
+  }
+
+  function clearQueue() {
+    if (playQueue.length === 0) return;
+    if (!confirm("確定要清空整份播放清單嗎？")) return;
+    playQueue = [];
+    currentQueueIndex = -1;
+    if (ytPlayer && typeof ytPlayer.stopVideo === 'function') {
+      try { ytPlayer.stopVideo(); } catch(e) {}
+    }
+    document.getElementById('pb-song').innerText = '尚未播放歌曲';
+    document.getElementById('pb-artist').innerText = '-';
+    renderQueueModal();
+  }
+
+  // ===== 主題切換 =====
+  function applyTheme(theme) {
+    if (theme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      const btn = document.getElementById('theme-toggle');
+      if (btn) btn.innerText = '☀️';
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+      const btn = document.getElementById('theme-toggle');
+      if (btn) btn.innerText = '🌙';
+    }
+  }
+
+  function toggleTheme() {
+    const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    const next = current === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('antrovia_theme', next);
+    applyTheme(next);
+  }
+
+  function initTheme() {
+    const stored = localStorage.getItem('antrovia_theme');
+    if (stored === 'dark' || stored === 'light') {
+      applyTheme(stored);
+    } else {
+      // 跟隨系統設定
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      applyTheme(prefersDark ? 'dark' : 'light');
+    }
+  }
+
+  // ===== Toast 通知 =====
+  function showToast(msg, duration = 2200) {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerText = msg;
+    container.appendChild(toast);
+    setTimeout(() => {
+      toast.classList.add('removing');
+      setTimeout(() => toast.remove(), 300);
+    }, duration);
+  }
+
+  // ===== 鍵盤快捷鍵 =====
+  function bindKeyboardShortcuts() {
+    document.addEventListener('keydown', (e) => {
+      // 在輸入框內不啟用快捷鍵
+      const tag = (e.target.tagName || '').toLowerCase();
+      if (tag === 'input' || tag === 'textarea' || e.target.isContentEditable) return;
+      // 有修飾鍵不處理(避免擋瀏覽器快捷鍵)
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      if (e.code === 'Space') {
+        e.preventDefault();
+        togglePlayPause();
+      } else if (e.code === 'ArrowRight' && e.shiftKey) {
+        e.preventDefault();
+        playNext();
+      } else if (e.code === 'ArrowLeft' && e.shiftKey) {
+        e.preventDefault();
+        playPrev();
+      } else if (e.code === 'ArrowRight') {
+        e.preventDefault();
+        seekRelative(5);
+      } else if (e.code === 'ArrowLeft') {
+        e.preventDefault();
+        seekRelative(-5);
+      } else if (e.code === 'ArrowUp') {
+        e.preventDefault();
+        adjustVolume(5);
+      } else if (e.code === 'ArrowDown') {
+        e.preventDefault();
+        adjustVolume(-5);
+      } else if (e.code === 'KeyM') {
+        toggleMute();
+      } else if (e.code === 'Slash' || e.key === '/') {
+        // / = 跳到搜尋框
+        e.preventDefault();
+        const kw = document.getElementById('keyword');
+        if (kw) {
+          switchView('search-view');
+          kw.focus();
+        }
+      } else if (e.code === 'KeyL') {
+        // L = 顯示清單
+        showQueueModal();
+      }
+    });
+  }
+
+  function seekRelative(delta) {
+    if (!ytPlayer || typeof ytPlayer.getCurrentTime !== 'function') return;
+    if (currentQueueIndex < 0) return;
+    const current = ytPlayer.getCurrentTime();
+    const track = playQueue[currentQueueIndex];
+    const start = parseStartSec(track);
+    const endSec = parseEndSec(track);
+    let target = current + delta;
+    if (target < start) target = start;
+    if (endSec > 0 && target > endSec - 1) target = endSec - 1;
+    ytPlayer.seekTo(target, true);
+  }
+
+  function adjustVolume(delta) {
+    if (!ytPlayer || typeof ytPlayer.setVolume !== 'function') return;
+    const slider = document.getElementById('pb-volume');
+    let v = parseInt(slider.value, 10) + delta;
+    if (v < 0) v = 0;
+    if (v > 100) v = 100;
+    slider.value = v;
+    ytPlayer.setVolume(v);
+    const muteBtn = document.getElementById('pb-mute');
+    muteBtn.innerText = v === 0 ? "🔇" : "🔊";
+    showToast('音量 ' + v + '%');
+  }
+
+  // ===== URL 參數定位 =====
+  // 支援 ?song=歌名 或 ?song=歌名&artist=原唱
+  // 也支援 ?q=任意關鍵字 自動跳搜尋頁並執行搜尋
+  async function handleUrlParams() {
+    const params = new URLSearchParams(window.location.search);
+    const song = params.get('song');
+    const artist = params.get('artist');
+    const q = params.get('q');
+
+    if (song) {
+      // 載入所有歌曲後找最新的版本來播放
+      if (!allSongsCache) {
+        const results = await apiCall('search', '&q=');
+        allSongsCache = results || [];
+      }
+      const songLower = song.toLowerCase();
+      const artistLower = artist ? artist.toLowerCase() : '';
+      // 篩出符合 song(+ artist)的所有版本,取第一筆(資料表是新到舊)
+      const matches = allSongsCache.filter(r => {
+        if (!r.song || r.song.toLowerCase() !== songLower) return false;
+        if (artistLower && (!r.artist || r.artist.toLowerCase() !== artistLower)) return false;
+        return true;
+      });
+      if (matches.length > 0) {
+        playQueue = [matches[0]];
+        currentQueueIndex = 0;
+        // YT API 可能還沒 ready,playTrackAtIndex 內有 pendingTrack 機制處理
+        playTrackAtIndex(0);
+        showToast(`從連結載入「${matches[0].song}」`);
+      } else {
+        showToast(`找不到「${song}」`, 3000);
+        switchView('search-view');
+        document.getElementById('keyword').value = song;
+        handleSearch();
+      }
+    } else if (q) {
+      switchView('search-view');
+      document.getElementById('keyword').value = q;
+      handleSearch();
+    }
+  }
+
+  // ===== 我的最愛 ⭐ =====
+  const FAVORITE_LIST_NAME = "我的最愛";
+
+  function isFavorite(track) {
+    const fav = playlists[FAVORITE_LIST_NAME];
+    if (!fav || !track) return false;
+    const key = (track.song || '') + '|' + (track.artist || '') + '|' + (track.link || '');
+    return fav.some(t => ((t.song || '') + '|' + (t.artist || '') + '|' + (t.link || '')) === key);
+  }
+
+  function toggleFavorite(encodedItem, event) {
+    if (event) event.stopPropagation();
+    const track = JSON.parse(decodeURIComponent(encodedItem));
+    if (!playlists[FAVORITE_LIST_NAME]) playlists[FAVORITE_LIST_NAME] = [];
+    const fav = playlists[FAVORITE_LIST_NAME];
+    const key = (track.song || '') + '|' + (track.artist || '') + '|' + (track.link || '');
+    const idx = fav.findIndex(t => ((t.song || '') + '|' + (t.artist || '') + '|' + (t.link || '')) === key);
+    const nowFav = idx < 0;
+    if (idx >= 0) {
+      fav.splice(idx, 1);
+      showToast(`已從我的最愛移除`);
+    } else {
+      fav.push(track);
+      showToast(`⭐ 已加入我的最愛`);
+    }
+    savePlaylistsToStorage();
+    // 即時更新所有同首歌的星星按鈕視覺(同一首可能出現在搜尋結果、最近播放、所有歌曲、清單彈窗)
+    updateFavoriteButtonsFor(track, nowFav);
+    // 如果當前在「我的最愛」歌單頁,需要更新表格內容
+    if (document.getElementById('playlist-view').classList.contains('active')) {
+      const activeLi = document.querySelector('.playlist-menu li.active');
+      if (activeLi) {
+        const plName = activeLi.id.replace('pl-menu-item-', '');
+        if (plName === FAVORITE_LIST_NAME) selectPlaylist(plName);
+      }
+    }
+  }
+
+  // 把畫面上所有同 key 的星星按鈕同步成新狀態
+  function updateFavoriteButtonsFor(track, nowFav) {
+    const targetKey = (track.song || '') + '|' + (track.artist || '') + '|' + (track.link || '');
+    document.querySelectorAll('.btn-fav').forEach(btn => {
+      // 從按鈕對應的 onclick 抓 encodedItem 拆出來比對
+      const onclickAttr = btn.getAttribute('onclick') || '';
+      const m = onclickAttr.match(/toggleFavorite\('([^']+)'/);
+      if (!m) return;
+      try {
+        const t = JSON.parse(decodeURIComponent(m[1]));
+        const k = (t.song || '') + '|' + (t.artist || '') + '|' + (t.link || '');
+        if (k === targetKey) {
+          if (nowFav) {
+            btn.classList.add('is-fav');
+            btn.innerText = '★';
+            btn.title = '取消我的最愛';
+          } else {
+            btn.classList.remove('is-fav');
+            btn.innerText = '☆';
+            btn.title = '加入我的最愛';
+          }
+        }
+      } catch(e) {}
+    });
+  }
+
+  function favoriteButtonHtml(track, encodedItem) {
+    const fav = isFavorite(track);
+    return `<button class="btn-fav ${fav ? 'is-fav' : ''}" title="${fav ? '取消我的最愛' : '加入我的最愛'}" onclick="toggleFavorite('${encodedItem}', event)">${fav ? '★' : '☆'}</button>`;
+  }
+
+  // 從歌曲的 link 抽出 videoId,組成「該場直播從 0:00 開始」的 YouTube URL
+  function buildStreamUrl(track) {
+    if (!track || !track.link) return null;
+    const videoId = extractVideoId(track.link);
+    if (!videoId) return null;
+    return 'https://www.youtube.com/watch?v=' + videoId;
+  }
+
+  // 把「歌回標題」包成可點擊的 YouTube 連結(點了開新分頁到直播從頭)
+  function streamTitleLink(title, track) {
+    if (!title || title === '-') return title || '-';
+    const safe = String(title).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+    const url = buildStreamUrl(track);
+    if (!url) return safe;
+    return `<a href="${url}" target="_blank" rel="noopener" class="stream-title-link" title="在 YouTube 開啟直播" onclick="event.stopPropagation()">${safe}</a>`;
+  }
+
+  // 該首歌的 YouTube 起始時間 URL(帶 t=YYYs)
+  function songStartUrl(track) {
+    if (!track) return null;
+    const videoId = extractVideoId(track.link || '');
+    if (!videoId) return null;
+    const startSec = parseStartSec(track);
+    let url = 'https://www.youtube.com/watch?v=' + videoId;
+    if (startSec > 0) url += '&t=' + startSec + 's';
+    return url;
+  }
+
+  // 把「歌名」包成可點擊的 YouTube 連結(點了開新分頁到該首歌的開始時間)
+  function songNameLink(track) {
+    const safe = String(track.song || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+    const url = songStartUrl(track);
+    if (!url) return safe;
+    return `<a href="${url}" target="_blank" rel="noopener" class="song-name-link" title="在 YouTube 從此首歌開始播放" onclick="event.stopPropagation()">${safe}</a>`;
+  }
+
+  // 「最近某直播」連結:顯示文字是直播標題,點下去定位到該首歌的起始時間
+  function recentTitleLink(title, track) {
+    if (!title || title === '-') return title || '-';
+    const safe = String(title).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+    const url = songStartUrl(track);
+    if (!url) return safe;
+    return `<a href="${url}" target="_blank" rel="noopener" class="stream-title-link" title="在 YouTube 從這場直播的這首歌開始播放" onclick="event.stopPropagation()">${safe}</a>`;
+  }
+
+  document.addEventListener('click', hideContextMenu);
+
+  window.onload = function() {
+    initTheme();
+    initStorage();
+    loadYoutubeAPI();
+    bindProgressBar();
+    bindKeyboardShortcuts();
+    setSearchMode('recent');
+    handleUrlParams();
+    registerServiceWorker();
+  };
+
+  function registerServiceWorker() {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(err => {
+        console.log('SW 註冊失敗(非致命):', err);
+      });
+    }
+  }
+</script>
+
+</body>
+</html>
