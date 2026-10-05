@@ -3229,15 +3229,30 @@
     }
   }
 
+  // 本次開啟 modal 時「原本未讀」的 id snapshot,用來渲染左側藍邊視覺
+  let _unreadSnapshot = new Set();
+
   function openNotificationModal() {
+    // 先 snapshot 哪些是未讀,等等 modal 要用這個決定視覺
+    const readIds = new Set(getReadIds());
+    _unreadSnapshot = new Set();
+    if (updatesCache) {
+      updatesCache.forEach(u => {
+        if (!readIds.has(u.id)) _unreadSnapshot.add(u.id);
+      });
+    }
+    // 立即把所有通知標為已讀(紅點秒消)
+    if (updatesCache) {
+      const allIds = updatesCache.map(u => u.id);
+      saveReadIds(allIds);
+      refreshNotificationBadge();
+    }
     renderNotificationList();
     document.getElementById('notification-modal-overlay').classList.add('show');
   }
 
   function closeNotificationModal() {
     document.getElementById('notification-modal-overlay').classList.remove('show');
-    // 關閉時自動把所有通知標為已讀
-    markAllNotificationsRead(true);
   }
 
   function renderNotificationList() {
@@ -3246,9 +3261,10 @@
       list.innerHTML = '<div class="notification-empty">目前沒有更新通知</div>';
       return;
     }
-    const read = new Set(getReadIds());
     list.innerHTML = updatesCache.map(u => {
-      const isUnread = !read.has(u.id);
+      // 使用 snapshot(開 modal 當下的未讀狀態)而非當前 localStorage,
+      // 這樣開 modal 後紅點消失、但 modal 內仍能看出「這次新的」
+      const isUnread = _unreadSnapshot.has(u.id);
       const dateFmt = formatUpdateDate(u.date);
       return `<div class="notification-item ${isUnread ? 'unread' : ''}">
         <div class="n-icon">${u.icon || '📢'}</div>
