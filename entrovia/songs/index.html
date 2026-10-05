@@ -1276,11 +1276,13 @@
     }
     window._lastLoggedPlay = { key, time: now };
     try {
+      // 只傳 videoId 作為來源直播辨識(短,避免 URL 太長被擋)
+      const videoId = extractVideoId(track.link || '') || '';
       const params = new URLSearchParams({
         action: 'log',
         song: track.song || '',
         artist: track.artist || '',
-        link: track.link || '',
+        vid: videoId,
         sid: getSessionId()
       });
       // no-cors 讓請求不會因 CORS 失敗(我們也不需要 response)
