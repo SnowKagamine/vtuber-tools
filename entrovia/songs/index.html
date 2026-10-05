@@ -1277,19 +1277,26 @@
     }
     window._lastLoggedPlay = { key, time: now };
     try {
-      // 只傳 videoId 作為來源直播辨識(短,避免 URL 太長被擋)
       const videoId = extractVideoId(track.link || '') || '';
-      const params = new URLSearchParams({
-        action: 'log',
-        song: track.song || '',
-        artist: track.artist || '',
-        vid: videoId,
-        sid: getSessionId()
-      });
-      // 用 Image beacon,不走 fetch:避開 CORS/Origin 檢查,請求絕對送得出去
-      const img = new Image();
-      img.referrerPolicy = 'no-referrer';
-      img.src = GAS_URL + '?' + params.toString();
+      const body = new URLSearchParams();
+      body.append('action', 'log');
+      body.append('song', track.song || '');
+      body.append('artist', track.artist || '');
+      body.append('vid', videoId);
+      body.append('sid', getSessionId());
+
+      // 優先用 sendBeacon(專為分析設計,絕對送得出去)
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(GAS_URL, body);
+      } else {
+        // Fallback: fetch POST
+        fetch(GAS_URL, {
+          method: 'POST',
+          body: body,
+          mode: 'no-cors',
+          credentials: 'omit'
+        }).catch(() => {});
+      }
     } catch (e) {
       // 靜默失敗
     }
