@@ -1285,8 +1285,13 @@
         vid: videoId,
         sid: getSessionId()
       });
-      // no-cors 讓請求不會因 CORS 失敗(我們也不需要 response)
-      fetch(GAS_URL + '?' + params.toString(), { method: 'GET', mode: 'no-cors' }).catch(() => {});
+      // no-cors + 不送 Referer,避免 Google 擋
+      fetch(GAS_URL + '?' + params.toString(), {
+        method: 'GET',
+        mode: 'no-cors',
+        referrerPolicy: 'no-referrer',
+        credentials: 'omit'
+      }).catch(() => {});
     } catch (e) {
       // 靜默失敗
     }
