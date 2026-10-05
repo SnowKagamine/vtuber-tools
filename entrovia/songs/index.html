@@ -307,6 +307,7 @@
     }
     .badge-shorts { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
     .badge-video { background: #eceff1; color: #37474f; border: 1px solid #b0bec5; }
+    .badge-ng { background: #fff3e0; color: #e65100; border: 1px solid #ffcc80; }
     .song-card h3 { 
       margin: 0 0 5px 0; 
       font-size: 18px; 
@@ -1056,15 +1057,21 @@
   <section id="summary-view" class="view-section">
     <div class="filter-controls">
       <div class="control-group">
-        <label for="sort-select">排序：</label>
+        <label for="sort-select">排序:</label>
         <select id="sort-select" onchange="processAndRenderSummary()">
-          <option value="count-desc">次數：多 ➔ 少</option>
-          <option value="count-asc">次數：少 ➔ 多</option>
-          <option value="name-asc">歌名：A ➔ Z</option>
+          <option value="count-desc">次數:多 ➔ 少</option>
+          <option value="count-asc">次數:少 ➔ 多</option>
+          <option value="name-asc">歌名:A ➔ Z</option>
         </select>
       </div>
       <div class="control-group">
         <input type="text" id="summary-search" placeholder="在清單中快速篩選..." oninput="processAndRenderSummary()">
+      </div>
+      <div class="control-group">
+        <label style="cursor:pointer; user-select:none;">
+          <input type="checkbox" id="include-ng" onchange="processAndRenderSummary()" style="margin-right:4px; vertical-align:middle;">
+          包含 NG 曲目
+        </label>
       </div>
       <button class="btn-action-global" onclick="playAllCurrentSummary()">▶ 播放整頁歌曲</button>
     </div>
@@ -1243,6 +1250,43 @@
     if (document.getElementById('search-view').classList.contains('active')) {
       const kw = document.getElementById('keyword').value.trim();
       if (!kw) renderSearchDefault();
+    }
+  }
+
+  // ===== 匿名 Session ID (給後端統計「不重複使用者」) =====
+  function getSessionId() {
+    let sid = localStorage.getItem('antrovia_sid');
+    if (!sid) {
+      sid = 'sid_' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+      try { localStorage.setItem('antrovia_sid', sid); } catch(e) {}
+    }
+    return sid;
+  }
+
+  // ===== 傳送點播事件到後端 =====
+  // 用 fetch no-cors + GET,避免 CORS preflight 錯誤
+  // 失敗了也不影響前端體驗(靜默)
+  function logPlayToBackend(track) {
+    if (!track || !track.song) return;
+    // 10 秒內同一首歌不重複記錄(避免拖拉進度條觸發多次)
+    const key = (track.song || '') + '|' + (track.artist || '');
+    const now = Date.now();
+    if (window._lastLoggedPlay && window._lastLoggedPlay.key === key && (now - window._lastLoggedPlay.time) < 10000) {
+      return;
+    }
+    window._lastLoggedPlay = { key, time: now };
+    try {
+      const params = new URLSearchParams({
+        action: 'log',
+        song: track.song || '',
+        artist: track.artist || '',
+        link: track.link || '',
+        sid: getSessionId()
+      });
+      // no-cors 讓請求不會因 CORS 失敗(我們也不需要 response)
+      fetch(GAS_URL + '?' + params.toString(), { method: 'GET', mode: 'no-cors' }).catch(() => {});
+    } catch (e) {
+      // 靜默失敗
     }
   }
 
@@ -1627,9 +1671,7 @@
       <thead><tr><th></th><th>日期 / 標題</th><th>歌曲 / 原唱</th><th>功能</th></tr></thead>
       <tbody>`;
     results.forEach((r, idx) => {
-      let tagHtml = '';
-      if (r.isShorts) tagHtml = `<span style="background:#ffebee; color:#c62828; border:1px solid #ffcdd2; padding:1px 6px; font-size:11px; font-weight:bold; border-radius:10px; margin-left:5px; display:inline-block; vertical-align:middle;">Shorts</span>`;
-      else if (r.isVideo) tagHtml = `<span style="background:#eceff1; color:#37474f; border:1px solid #b0bec5; padding:1px 6px; font-size:11px; font-weight:bold; border-radius:10px; margin-left:5px; display:inline-block; vertical-align:middle;">影片</span>`;
+      const tagHtml = tagsHtmlInline(r);
       const encodedItem = encodeURIComponent(JSON.stringify(r));
       const isCurrent = (currentQueueIndex >= 0 && playQueue[currentQueueIndex] && playQueue[currentQueueIndex].link === r.link && playQueue[currentQueueIndex].song === r.song);
       const rowClass = isCurrent ? 'playing-row' : '';
@@ -1739,9 +1781,7 @@
       const encodedItem = encodeURIComponent(JSON.stringify(r));
       const isCurrent = (currentQueueIndex >= 0 && playQueue[currentQueueIndex] && playQueue[currentQueueIndex].link === r.link && playQueue[currentQueueIndex].song === r.song);
       const rowClass = isCurrent ? 'playing-row' : '';
-      let tagHtml = '';
-      if (r.isShorts) tagHtml = `<span style="background:#ffebee; color:#c62828; border:1px solid #ffcdd2; padding:1px 6px; font-size:11px; font-weight:bold; border-radius:10px; margin-left:5px;">Shorts</span>`;
-      else if (r.isVideo) tagHtml = `<span style="background:#eceff1; color:#37474f; border:1px solid #b0bec5; padding:1px 6px; font-size:11px; font-weight:bold; border-radius:10px; margin-left:5px;">影片</span>`;
+      const tagHtml = tagsHtmlInline(r);
       html += `<tr class="${rowClass}">
         <td style="text-align:center; width:40px;">
           <button class="btn-table-play" title="只播這首(清空當前清單)" onclick="playSingleTrackInstant('${encodedItem}')">▶</button>
@@ -1838,22 +1878,33 @@
     if (!summaryCache) return;
     const sortType = document.getElementById('sort-select').value;
     const filterText = document.getElementById('summary-search').value.trim().toLowerCase();
+    const includeNG = document.getElementById('include-ng')?.checked || false;
+
     let processedData = summaryCache.filter(s => 
       (s.name && s.name.toLowerCase().includes(filterText)) ||
       (s.artist && s.artist.toLowerCase().includes(filterText)) ||
       (s.lastTitle && s.lastTitle.toLowerCase().includes(filterText))
     );
+
+    // 過濾:預設只列有正常演唱的;勾「包含 NG」則連只有 NG 的歌也列
+    processedData = processedData.filter(s => {
+      if (includeNG) return ((s.count || 0) + (s.countNG || 0)) > 0;
+      return (s.count || 0) > 0;
+    });
+
+    // 排序所用的次數,跟著「包含 NG」變動
+    const getCount = s => includeNG ? (s.count || 0) + (s.countNG || 0) : (s.count || 0);
     if (sortType === 'count-desc') {
-      processedData.sort((a, b) => (b.count || 0) - (a.count || 0));
+      processedData.sort((a, b) => getCount(b) - getCount(a));
     } else if (sortType === 'count-asc') {
-      processedData.sort((a, b) => (a.count || 0) - (b.count || 0));
+      processedData.sort((a, b) => getCount(a) - getCount(b));
     } else if (sortType === 'name-asc') {
       processedData.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'zh-Hant'));
     }
-    renderSummary(processedData);
+    renderSummary(processedData, includeNG);
   }
 
-  function renderSummary(data) {
+  function renderSummary(data, includeNG) {
     const container = document.getElementById('summary-results');
     if (!data || data.length === 0) {
       container.innerHTML = '<div class="empty-msg">沒有符合篩選條件的歌曲。</div>';
@@ -1861,11 +1912,26 @@
     }
     container.innerHTML = data.map(s => {
       let tagHtml = '';
-      if (s.isShorts) {
-        tagHtml = `<div class="badge badge-shorts">Shorts</div>`;
-      } else if (s.isVideo) {
-        tagHtml = `<div class="badge badge-video">影片</div>`;
+      if (s.isShorts) tagHtml += `<div class="badge badge-shorts">Shorts</div>`;
+      if (s.isVideo) tagHtml += `<div class="badge badge-video">影片</div>`;
+      // NG 次數標籤:有 NG 就顯示
+      const ngCount = s.countNG || 0;
+      if (ngCount > 0) tagHtml += `<div class="badge badge-ng">🎭 NG ${ngCount}</div>`;
+
+      // 演唱次數的主 badge:
+      //   勾「包含 NG」時,顯示 正常+NG 加總
+      //   未勾時,只顯示正常次數
+      const normalCount = s.count || 0;
+      let mainCountBadge;
+      if (includeNG && ngCount > 0) {
+        mainCountBadge = `<div class="badge">演唱 ${normalCount + ngCount} 次</div>`;
+      } else if (normalCount === 0 && ngCount > 0) {
+        // 只有 NG 沒正常的情況(只有勾包含 NG 時會到這)
+        mainCountBadge = `<div class="badge">僅 NG 紀錄</div>`;
+      } else {
+        mainCountBadge = `<div class="badge">演唱 ${normalCount} 次</div>`;
       }
+
       const standardizedItem = {
         song: s.name,
         artist: s.artist,
@@ -1884,7 +1950,7 @@
       return `
         <div class="${cardClass}">
           <div class="badge-wrapper">
-            <div class="badge">演唱 ${s.count} 次</div>
+            ${mainCountBadge}
             ${tagHtml}
           </div>
           <div style="position:absolute; top:12px; right:12px; display:flex; align-items:center; gap:2px;">
@@ -2110,6 +2176,7 @@
         startSeconds: startSec
       });
       pushRecentPlay(track);
+      logPlayToBackend(track);
     } catch (e) {
       console.error("loadVideoById 錯誤:", e);
     }
@@ -2964,6 +3031,17 @@
     return `<a href="${url}" target="_blank" rel="noopener" class="stream-title-link" title="在 YouTube 從這場直播的這首歌開始播放" onclick="event.stopPropagation()">${safe}</a>`;
   }
 
+  // 通用的 tag span 集合(列表用,inline 顯示)
+  // NG 跟 Shorts/Video 可能並存,所以全部用 if 而非 else if
+  function tagsHtmlInline(r) {
+    let html = '';
+    const baseStyle = 'padding:1px 6px; font-size:11px; font-weight:bold; border-radius:10px; margin-left:5px; display:inline-block; vertical-align:middle;';
+    if (r.isShorts) html += `<span style="background:#ffebee; color:#c62828; border:1px solid #ffcdd2; ${baseStyle}">Shorts</span>`;
+    if (r.isVideo) html += `<span style="background:#eceff1; color:#37474f; border:1px solid #b0bec5; ${baseStyle}">影片</span>`;
+    if (r.isNG) html += `<span style="background:#fff3e0; color:#e65100; border:1px solid #ffcc80; ${baseStyle}">🎭 NG</span>`;
+    return html;
+  }
+
   document.addEventListener('click', hideContextMenu);
 
   window.onload = function() {
@@ -2986,5 +3064,8 @@
   }
 </script>
 
+<!-- Cloudflare Web Analytics -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "5a64faae6c634fe4a86910f6b2d8f51d"}'></script>
+<!-- End Cloudflare Web Analytics -->
 </body>
 </html>
