@@ -1253,11 +1253,12 @@
     }
   }
 
-  // ===== 匿名 Session ID (給後端統計「不重複使用者」) =====
+  // ===== 匿名 User ID (給後端統計「不重複使用者」) =====
   function getSessionId() {
     let sid = localStorage.getItem('antrovia_sid');
-    if (!sid) {
-      sid = 'sid_' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+    // 若無或是舊格式(sid_ 開頭),重新產生新格式避免被 Google 擋
+    if (!sid || sid.indexOf('sid_') === 0) {
+      sid = 'u' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
       try { localStorage.setItem('antrovia_sid', sid); } catch(e) {}
     }
     return sid;
@@ -1285,13 +1286,10 @@
         vid: videoId,
         sid: getSessionId()
       });
-      // no-cors + 不送 Referer,避免 Google 擋
-      fetch(GAS_URL + '?' + params.toString(), {
-        method: 'GET',
-        mode: 'no-cors',
-        referrerPolicy: 'no-referrer',
-        credentials: 'omit'
-      }).catch(() => {});
+      // 用 Image beacon,不走 fetch:避開 CORS/Origin 檢查,請求絕對送得出去
+      const img = new Image();
+      img.referrerPolicy = 'no-referrer';
+      img.src = GAS_URL + '?' + params.toString();
     } catch (e) {
       // 靜默失敗
     }
