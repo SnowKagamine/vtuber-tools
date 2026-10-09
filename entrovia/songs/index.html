@@ -1804,7 +1804,7 @@
         <td style="width:130px; text-align:center; white-space:nowrap;">
           ${favoriteButtonHtml(r, encodedItem)}
           ${highlightsButtonHtml(r, encodedItem)}
-          <button class="btn-table-more" title="插隊播放(取代當前曲目)" onclick="replaceCurrentAndPlay('${encodedItem}')">⇆</button>
+          <button class="btn-table-more" title="插播(取代當前曲目)" onclick="replaceCurrentAndPlay('${encodedItem}')">⇆</button>
           <button class="btn-table-more" title="加入播放清單末端" onclick="addTrackToQueueDirect('${encodedItem}')">＋</button>
           <button class="btn-table-more" title="更多" onclick="showContextMenu(event, '${encodedItem}')">⋮</button>
         </td>
@@ -1910,7 +1910,7 @@
         <td style="width:130px; text-align:center; white-space:nowrap;">
           ${favoriteButtonHtml(r, encodedItem)}
           ${highlightsButtonHtml(r, encodedItem)}
-          <button class="btn-table-more" title="插隊播放(取代當前曲目)" onclick="replaceCurrentAndPlay('${encodedItem}')">⇆</button>
+          <button class="btn-table-more" title="插播(取代當前曲目)" onclick="replaceCurrentAndPlay('${encodedItem}')">⇆</button>
           <button class="btn-table-more" title="加入播放清單末端" onclick="addTrackToQueueDirect('${encodedItem}')">＋</button>
           <button class="btn-table-more" title="更多" onclick="showContextMenu(event, '${encodedItem}')">⋮</button>
         </td>
@@ -1952,8 +1952,15 @@
   async function loadSummary() {
     if (summaryCache) return; 
     renderSummarySkeleton();
-    const data = await apiCall('summary');
+    // 平行載入 summary + search(後者讓 highlights 立即可用)
+    const summaryPromise = apiCall('summary');
+    const songsPromise = allSongsCache ? Promise.resolve(allSongsCache) : apiCall('search', '&q=');
+    const [data, songs] = await Promise.all([summaryPromise, songsPromise]);
     summaryCache = data || [];
+    if (!allSongsCache) {
+      allSongsCache = songs || [];
+      buildTimelineCache();
+    }
     processAndRenderSummary();
   }
 
@@ -2062,7 +2069,9 @@
         startTime: s.startTime,
         endTime: s.endTime,
         isShorts: s.isShorts,
-        isVideo: s.isVideo
+        isVideo: s.isVideo,
+        // 從所有場次彙總該首歌的精華(帶場次日期)
+        highlights: getHighlightsForSong(s.name, s.artist)
       };
       const encodedItem = encodeURIComponent(JSON.stringify(standardizedItem));
       const isCurrent = (currentQueueIndex >= 0 && playQueue[currentQueueIndex] && playQueue[currentQueueIndex].song === s.name);
@@ -2075,6 +2084,7 @@
           </div>
           <div style="position:absolute; top:12px; right:12px; display:flex; align-items:center; gap:2px;">
             ${favoriteButtonHtml(standardizedItem, encodedItem)}
+            ${highlightsButtonHtml(standardizedItem, encodedItem)}
             <button class="btn-table-more" onclick="showContextMenu(event, '${encodedItem}')">⋮</button>
           </div>
           <h3 title="${s.name}">${songNameLink(standardizedItem)}</h3>
@@ -2084,7 +2094,7 @@
             <button onclick="addTrackToQueueDirect('${encodedItem}')" class="play-btn">＋ 加入清單(最近版本)</button>
             <div class="card-actions-row">
               <button onclick="jumpToSearch('${s.name.replace(/'/g, "\\'")}')" class="card-sub-btn">🔍 歷史演唱</button>
-              <button onclick="replaceCurrentAndPlay('${encodedItem}')" class="card-sub-btn">⇆ 插隊播放</button>
+              <button onclick="replaceCurrentAndPlay('${encodedItem}')" class="card-sub-btn">⇆ 插播</button>
             </div>
           </div>
         </div>
@@ -3132,7 +3142,8 @@
     // 既有精華列表
     h.forEach(item => {
       const li = document.createElement('li');
-      li.innerText = `🎬 ${item.author || '匿名'} - ${item.type || '精華'}`;
+      const dateSuffix = item.date ? ` (${formatShortDate(item.date)})` : '';
+      li.innerText = `🎬 ${item.author || '匿名'} - ${item.type || '精華'}${dateSuffix}`;
       li.onclick = () => {
         window.open(item.link, '_blank', 'noopener');
         hideContextMenu();
@@ -3150,7 +3161,7 @@
 
     // 投稿選項
     const submitLi = document.createElement('li');
-    submitLi.innerText = '➕ 我也剪了,投稿精華';
+    submitLi.innerText = '➕ 我想投稿剪輯精華';
     submitLi.style.color = 'var(--text-sub)';
     submitLi.onclick = () => {
       const prefill = buildSubmitUrl(track);
@@ -3162,6 +3173,33 @@
     menu.style.display = 'block';
     menu.style.left = event.clientX + 'px';
     menu.style.top = (window.scrollY + event.clientY) + 'px';
+  }
+
+  // 把日期格式化成短版 (2026-10-05 → 10/5,也容忍 2026/10/5)
+  function formatShortDate(d) {
+    if (!d) return '';
+    const m = String(d).match(/(\d{4})[-\/年](\d{1,2})[-\/月]?(\d{1,2})/);
+    if (m) return parseInt(m[2], 10) + '/' + parseInt(m[3], 10);
+    return d;
+  }
+
+  // 彙總某首歌「所有場次」的 highlights(去重,附上場次日期)
+  function getHighlightsForSong(name, artist) {
+    if (!allSongsCache || !name) return [];
+    const results = [];
+    const seen = new Set();
+    for (const r of allSongsCache) {
+      if (r.song !== name) continue;
+      if (artist && r.artist !== artist) continue;
+      if (!r.highlights || r.highlights.length === 0) continue;
+      for (const h of r.highlights) {
+        const key = (h.link || '') + '|' + (h.author || '');
+        if (seen.has(key)) continue;
+        seen.add(key);
+        results.push({ ...h, date: r.date });
+      }
+    }
+    return results;
   }
 
   // 建立投稿頁 URL,預填歌曲資訊
