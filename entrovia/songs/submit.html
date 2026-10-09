@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>投稿精華 ｜ 安特羅迦歌單站</title>
+  <link rel="icon" href="icon.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #333;
+      --card: rgba(255, 255, 255, 0.92);
+      --border: rgba(224, 224, 224, 0.6);
+      --text-main: #222;
+      --text-sub: #666;
+      --text-light: #aaa;
+      --accent: #555;
+      --bg-overlay: rgba(244, 246, 248, 0.85);
+      --btn-bg: #f1f1f1;
+      --btn-border: #ddd;
+      --input-bg: white;
+      --primary-text-inv: white;
+      --shadow: rgba(0,0,0,0.08);
+      --success: #2e7d32;
+      --error: #c62828;
+    }
+    [data-theme="dark"] {
+      --primary: #e0e0e0;
+      --card: rgba(36, 38, 44, 0.9);
+      --border: rgba(80, 80, 90, 0.5);
+      --text-main: #e8e8e8;
+      --text-sub: #aaa;
+      --text-light: #777;
+      --accent: #bbb;
+      --bg-overlay: rgba(18, 20, 26, 0.88);
+      --btn-bg: #3a3d44;
+      --btn-border: #4d5058;
+      --input-bg: #2c2f36;
+      --primary-text-inv: #1a1c20;
+      --shadow: rgba(0,0,0,0.4);
+      --success: #66bb6a;
+      --error: #ef5350;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text-main);
+      background-image:
+        linear-gradient(var(--bg-overlay), var(--bg-overlay)),
+        url("bg.jpg");
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      line-height: 1.6;
+    }
+    .card {
+      max-width: 560px;
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 30px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 30px var(--shadow);
+    }
+    .back-link {
+      display: inline-block;
+      color: var(--text-sub);
+      text-decoration: none;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+    .back-link:hover { color: var(--primary); }
+    h1 {
+      margin: 0 0 6px 0;
+      font-size: 22px;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px dashed var(--border);
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: bold;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+    .form-group label .req {
+      color: #c62828;
+    }
+    .form-group label .hint {
+      font-weight: normal;
+      color: var(--text-light);
+      font-size: 12px;
+      margin-left: 6px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--btn-border);
+      border-radius: 8px;
+      background: var(--input-bg);
+      color: var(--text-main);
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border 0.15s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--primary);
+    }
+    .form-group input[readonly] {
+      background: var(--btn-bg);
+      color: var(--text-sub);
+    }
+    .form-group textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+    .form-group .error {
+      color: var(--error);
+      font-size: 12px;
+      margin-top: 4px;
+      display: none;
+    }
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: var(--primary-text-inv);
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+      margin-top: 8px;
+    }
+    .btn-submit:hover { background: var(--accent); transform: translateY(-1px); }
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .notice {
+      font-size: 12px;
+      color: var(--text-light);
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px dashed var(--border);
+      line-height: 1.7;
+    }
+
+    /* 成功畫面 */
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .success-screen.show { display: block; }
+    .success-screen .icon {
+      font-size: 56px;
+      margin-bottom: 16px;
+    }
+    .success-screen h2 {
+      margin: 0 0 10px 0;
+      color: var(--success);
+    }
+    .success-screen p {
+      color: var(--text-sub);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+    .success-screen .buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .success-screen button {
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: 1px solid var(--btn-border);
+      background: var(--input-bg);
+      color: var(--text-main);
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .success-screen button:hover { background: var(--btn-bg); }
+    .success-screen button.primary {
+      background: var(--primary);
+      color: var(--primary-text-inv);
+      border-color: var(--primary);
+    }
+  </style>
+  <script>
+    (function() {
+      try {
+        var stored = localStorage.getItem('antrovia_theme');
+        if (stored === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+        else if (!stored && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch(e) {}
+    })();
+  </script>
+</head>
+<body>
+
+<div class="card" id="form-card">
+  <a href="./" class="back-link">← 返回歌單站</a>
+  <h1>🎬 投稿精華片段</h1>
+  <div class="subtitle">
+    你剪了安特羅迦的精華、Shorts、MMD?分享給更多粉絲發現!<br>
+    投稿後會由管理者審核(通常 24 小時內)。
+  </div>
+
+  <form id="submit-form">
+    <div class="form-group">
+      <label>直播日期 <span class="req">*</span> <span class="hint">(格式:YYYY-MM-DD)</span></label>
+      <input type="date" id="f-date" required>
+    </div>
+
+    <div class="form-group">
+      <label>歌曲名 <span class="req">*</span></label>
+      <input type="text" id="f-song" required placeholder="例如:髮如雪">
+    </div>
+
+    <div class="form-group">
+      <label>原唱 <span class="req">*</span></label>
+      <input type="text" id="f-artist" required placeholder="例如:周杰倫">
+    </div>
+
+    <div class="form-group">
+      <label>你的頻道名 / X 帳號 <span class="req">*</span></label>
+      <input type="text" id="f-author" required placeholder="例如:@你的頻道名">
+    </div>
+
+    <div class="form-group">
+      <label>影片類型 <span class="req">*</span></label>
+      <select id="f-type" required>
+        <option value="精華">精華</option>
+        <option value="Shorts">Shorts</option>
+        <option value="其他">其他</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>YouTube 連結 <span class="req">*</span></label>
+      <input type="url" id="f-link" required placeholder="https://www.youtube.com/watch?v=...">
+    </div>
+
+    <div class="form-group">
+      <label>備註 <span class="hint">(選填)</span></label>
+      <textarea id="f-note" placeholder="任何想補充的資訊..."></textarea>
+    </div>
+
+    <button type="submit" class="btn-submit" id="submit-btn">送出投稿</button>
+  </form>
+
+  <div class="notice">
+    💡 說明:
+    <ul style="margin:6px 0; padding-left:20px;">
+      <li>請確保影片是你自己製作的,或已獲得作者同意</li>
+      <li>連結請用公開可訪問的 YouTube 影片</li>
+      <li>管理者保留審核與調整的權利</li>
+    </ul>
+  </div>
+</div>
+
+<div class="card success-screen" id="success-screen">
+  <div class="icon">✅</div>
+  <h2>投稿已送出!</h2>
+  <p>
+    感謝你的分享!我會盡快審核,通過後會顯示在對應歌曲的 🎬 選單中。
+  </p>
+  <div class="buttons">
+    <button onclick="window.location.href='./'">返回歌單站</button>
+    <button class="primary" onclick="resetForm()">再投稿一則</button>
+  </div>
+</div>
+
+<script>
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbyiBdjR4ZU_XFM9lond22fk7CR5ZtDub3Q07h8LMp4w-JDCeXOFItLeflBLZktDMtYbPA/exec";
+
+  // 從 URL 參數預填(從歌卡 🎬 → 投稿 進來時會自動帶)
+  (function prefillFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const d = params.get('date');
+    const s = params.get('song');
+    const a = params.get('artist');
+    if (d) {
+      // 把各種可能的日期格式統一成 YYYY-MM-DD
+      const m = d.match(/(\d{4})[-\/年](\d{1,2})[-\/月]?(\d{1,2})/);
+      if (m) {
+        const ymd = m[1] + '-' + ('0' + m[2]).slice(-2) + '-' + ('0' + m[3]).slice(-2);
+        document.getElementById('f-date').value = ymd;
+      }
+    }
+    if (s) document.getElementById('f-song').value = s;
+    if (a) document.getElementById('f-artist').value = a;
+  })();
+
+  document.getElementById('submit-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.innerText = '送出中...';
+
+    // 用短參數名避開 Google heuristic 擋人
+    const params = new URLSearchParams();
+    params.set('action', 'submit');
+    params.set('d', document.getElementById('f-date').value);
+    params.set('s', document.getElementById('f-song').value);
+    params.set('r', document.getElementById('f-artist').value);
+    params.set('au', document.getElementById('f-author').value);
+    params.set('ty', document.getElementById('f-type').value);
+    params.set('l', document.getElementById('f-link').value);
+    params.set('n', document.getElementById('f-note').value);
+
+    // 用 Image beacon 送出(避開 CORS)
+    const img = new Image();
+    img.src = GAS_URL + '?' + params.toString();
+
+    // 樂觀 UI:1 秒後顯示成功畫面
+    // (無法 100% 確認 GAS 是否成功,但大部分情況都會成功;失敗的話你去 Sheet 看就知道)
+    setTimeout(() => {
+      document.getElementById('form-card').style.display = 'none';
+      document.getElementById('success-screen').classList.add('show');
+    }, 800);
+  });
+
+  function resetForm() {
+    document.getElementById('submit-form').reset();
+    document.getElementById('submit-btn').disabled = false;
+    document.getElementById('submit-btn').innerText = '送出投稿';
+    document.getElementById('form-card').style.display = 'block';
+    document.getElementById('success-screen').classList.remove('show');
+    // 清掉 URL 預填(重新投稿不帶預填)
+    window.history.replaceState({}, '', window.location.pathname);
+    document.getElementById('f-date').value = '';
+    document.getElementById('f-song').value = '';
+    document.getElementById('f-artist').value = '';
+  }
+</script>
+
+<!-- Cloudflare Web Analytics -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "5a64faae6c634fe4a86910f6b2d8f51d"}'></script>
+
+</body>
+</html>
