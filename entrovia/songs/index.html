@@ -1166,10 +1166,7 @@
         <input type="text" id="summary-search" placeholder="在清單中快速篩選..." oninput="processAndRenderSummary()">
       </div>
       <div class="control-group">
-        <label style="cursor:pointer; user-select:none;" title="包含 NG 片段與改詞等特殊版本">
-          <input type="checkbox" id="include-ng" onchange="processAndRenderSummary()" style="margin-right:4px; vertical-align:middle;">
-          包含 NG / 特殊版本
-        </label>
+        <label style="cursor:pointer; user-select:none; display:inline-flex; align-items:center; gap:3px;" title="包含 NG 片段與改詞等特殊版本"><input type="checkbox" id="include-ng" onchange="processAndRenderSummary()" style="margin:0; width:15px; height:15px;">包含 NG / 特殊版本</label>
       </div>
       <button class="btn-action-global" onclick="playAllCurrentSummary()">▶ 播放整頁歌曲</button>
     </div>
