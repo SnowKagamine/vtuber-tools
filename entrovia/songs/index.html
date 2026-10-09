@@ -1803,6 +1803,7 @@
         </td>
         <td style="width:130px; text-align:center; white-space:nowrap;">
           ${favoriteButtonHtml(r, encodedItem)}
+          ${highlightsButtonHtml(r, encodedItem)}
           <button class="btn-table-more" title="插隊播放(取代當前曲目)" onclick="replaceCurrentAndPlay('${encodedItem}')">⇆</button>
           <button class="btn-table-more" title="加入播放清單末端" onclick="addTrackToQueueDirect('${encodedItem}')">＋</button>
           <button class="btn-table-more" title="更多" onclick="showContextMenu(event, '${encodedItem}')">⋮</button>
@@ -1852,6 +1853,7 @@
           </div>
           <div style="display:flex; align-items:center; gap:2px;">
             ${favoriteButtonHtml(t, encodedItem)}
+            ${highlightsButtonHtml(t, encodedItem)}
             <button class="btn-table-play" title="只播這首(清空當前清單)" onclick="playSingleTrackInstant('${encodedItem}')">▶</button>
             <button class="btn-table-more" title="加入播放清單末端" onclick="addTrackToQueueDirect('${encodedItem}')">＋</button>
             <button class="btn-table-more" title="更多" onclick="showContextMenu(event, '${encodedItem}')">⋮</button>
@@ -1907,6 +1909,7 @@
         <td style="color:var(--text-sub); font-size:12px; max-width:240px;">${streamTitleLink(r.title || '-', r)}</td>
         <td style="width:130px; text-align:center; white-space:nowrap;">
           ${favoriteButtonHtml(r, encodedItem)}
+          ${highlightsButtonHtml(r, encodedItem)}
           <button class="btn-table-more" title="插隊播放(取代當前曲目)" onclick="replaceCurrentAndPlay('${encodedItem}')">⇆</button>
           <button class="btn-table-more" title="加入播放清單末端" onclick="addTrackToQueueDirect('${encodedItem}')">＋</button>
           <button class="btn-table-more" title="更多" onclick="showContextMenu(event, '${encodedItem}')">⋮</button>
@@ -3101,6 +3104,73 @@
   function favoriteButtonHtml(track, encodedItem) {
     const fav = isFavorite(track);
     return `<button class="btn-fav ${fav ? 'is-fav' : ''}" title="${fav ? '取消我的最愛' : '加入我的最愛'}" onclick="toggleFavorite('${encodedItem}', event)">${fav ? '★' : '☆'}</button>`;
+  }
+
+  // 粉絲精華投稿頁(站內)
+  const HIGHLIGHT_SUBMIT_URL = "submit.html";
+
+  // 🎬 精華按鈕 — 任何歌都可點(有則顯示列表、無則顯示「成為第一位投稿者」)
+  function highlightsButtonHtml(track, encodedItem) {
+    const h = track.highlights || [];
+    const hasHighlights = h.length > 0;
+    const title = hasHighlights
+      ? (h.length === 1
+          ? `🎬 ${h[0].author || '匿名'} 的${h[0].type || '精華'}`
+          : `🎬 ${h.length} 則相關精華`)
+      : '🎬 這首暫無精華,成為第一位投稿者';
+    const colorStyle = hasHighlights ? 'color:#c62828;' : 'opacity:0.4;';
+    return `<button class="btn-table-more" style="${colorStyle}" title="${escapeAttr(title)}" onclick="showHighlights(event, '${encodedItem}')">🎬</button>`;
+  }
+
+  function showHighlights(event, encodedItem) {
+    event.stopPropagation();
+    const track = JSON.parse(decodeURIComponent(encodedItem));
+    const h = track.highlights || [];
+    const menu = document.getElementById('context-dropdown');
+    menu.innerHTML = '';
+
+    // 既有精華列表
+    h.forEach(item => {
+      const li = document.createElement('li');
+      li.innerText = `🎬 ${item.author || '匿名'} - ${item.type || '精華'}`;
+      li.onclick = () => {
+        window.open(item.link, '_blank', 'noopener');
+        hideContextMenu();
+      };
+      menu.appendChild(li);
+    });
+
+    // 分隔線
+    if (h.length > 0) {
+      const divider = document.createElement('li');
+      divider.style.cssText = 'border-top:1px solid var(--dashed-border); margin:4px 0; padding:0; pointer-events:none; cursor:default;';
+      divider.innerHTML = '&nbsp;';
+      menu.appendChild(divider);
+    }
+
+    // 投稿選項
+    const submitLi = document.createElement('li');
+    submitLi.innerText = '➕ 我也剪了,投稿精華';
+    submitLi.style.color = 'var(--text-sub)';
+    submitLi.onclick = () => {
+      const prefill = buildSubmitUrl(track);
+      window.open(prefill, '_blank', 'noopener');
+      hideContextMenu();
+    };
+    menu.appendChild(submitLi);
+
+    menu.style.display = 'block';
+    menu.style.left = event.clientX + 'px';
+    menu.style.top = (window.scrollY + event.clientY) + 'px';
+  }
+
+  // 建立投稿頁 URL,預填歌曲資訊
+  function buildSubmitUrl(track) {
+    const params = new URLSearchParams();
+    if (track.date) params.set('date', track.date);
+    if (track.song) params.set('song', track.song);
+    if (track.artist) params.set('artist', track.artist);
+    return HIGHLIGHT_SUBMIT_URL + '?' + params.toString();
   }
 
   // 從歌曲的 link 抽出 videoId,組成「該場直播從 0:00 開始」的 YouTube URL
