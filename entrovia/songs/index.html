@@ -1211,7 +1211,7 @@
 </footer>
 
 <div id="yt-widget-container">
-  <button class="yt-toggle-btn" onclick="togglePlayerSize()" title="縮放視窗">⇲</button>
+  <button class="yt-toggle-btn" onclick="togglePlayerSize()" title="縮放視窗">⇙</button>
   <div id="yt-player-mask"></div>
 </div>
 
@@ -1846,7 +1846,7 @@
         const isCurrent = (currentQueueIndex >= 0 && playQueue[currentQueueIndex] && playQueue[currentQueueIndex].link === t.link && playQueue[currentQueueIndex].song === t.song);
         return `<div class="timeline-track ${isCurrent ? 'is-current' : ''}">
           <div class="tr-info">
-            <div class="name">${songNameLink(t)}</div>
+            <div class="name">${songNameLink(t)}${tagsHtmlInline(t)}</div>
             <div class="artist">${t.artist || ''}</div>
           </div>
           <div style="display:flex; align-items:center; gap:2px;">
@@ -2041,11 +2041,13 @@
       let tagHtml = '';
       if (s.isShorts) tagHtml += `<div class="badge badge-shorts">Shorts</div>`;
       if (s.isVideo) tagHtml += `<div class="badge badge-video">影片</div>`;
-      // NG 和特殊版本分別顯示
+      // NG 和特殊版本:只在勾了「包含 NG / 特殊版本」才顯示 badge
       const ngCount = s.countNG || 0;
       const specialCount = s.countSpecial || 0;
-      if (ngCount > 0) tagHtml += `<div class="badge badge-ng">🎭 NG ${ngCount}</div>`;
-      if (specialCount > 0) tagHtml += `<div class="badge badge-reword">🎤 特殊 ${specialCount}</div>`;
+      if (includeNG) {
+        if (ngCount > 0) tagHtml += `<div class="badge badge-ng">🎭 NG ${ngCount}</div>`;
+        if (specialCount > 0) tagHtml += `<div class="badge badge-reword">🎤 特殊 ${specialCount}</div>`;
+      }
 
       // 演唱次數的主 badge:
       //   勾「包含非正常版本」時,顯示 正常+NG+特殊 加總
@@ -2438,7 +2440,7 @@
       container.classList.add('minimized');
       const btn = container.querySelector('.yt-toggle-btn');
       if (btn) {
-        btn.innerText = "⇱";
+        btn.innerText = "⇗";
         btn.title = "展開視窗";
       }
     }
@@ -2591,10 +2593,10 @@
     const btn = container.querySelector('.yt-toggle-btn');
     container.classList.toggle('minimized');
     if (container.classList.contains('minimized')) {
-      btn.innerText = "⇱";
+      btn.innerText = "⇗";
       btn.title = "展開視窗";
     } else {
-      btn.innerText = "⇲";
+      btn.innerText = "⇙";
       btn.title = "縮小視窗";
     }
   }
