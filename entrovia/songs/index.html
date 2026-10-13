@@ -3261,14 +3261,15 @@
   }
 
   // 通用的 tag span 集合(列表用,inline 顯示)
-  // 標籤可並存(NG + 改詞、Shorts + NG 等都可能)
+  // 標籤可並存(NG + 特殊、Shorts + NG 等都可能)
+  // 列表顯示採用統稱:isReword 等「非 NG 的特殊版本」統一標示為「🎤 特殊」
   function tagsHtmlInline(r) {
     let html = '';
     const baseStyle = 'padding:1px 6px; font-size:11px; font-weight:bold; border-radius:10px; margin-left:5px; display:inline-block; vertical-align:middle;';
     if (r.isShorts) html += `<span style="background:#ffebee; color:#c62828; border:1px solid #ffcdd2; ${baseStyle}">Shorts</span>`;
     if (r.isVideo) html += `<span style="background:#eceff1; color:#37474f; border:1px solid #b0bec5; ${baseStyle}">影片</span>`;
     if (r.isNG) html += `<span style="background:#fff3e0; color:#e65100; border:1px solid #ffcc80; ${baseStyle}">🎭 NG</span>`;
-    if (r.isReword) html += `<span style="background:#f3e5f5; color:#6a1b9a; border:1px solid #ce93d8; ${baseStyle}">🎤 改詞</span>`;
+    if (r.isReword) html += `<span style="background:#f3e5f5; color:#6a1b9a; border:1px solid #ce93d8; ${baseStyle}">🎤 特殊</span>`;
     return html;
   }
 
