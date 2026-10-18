@@ -1145,7 +1145,9 @@
       <button class="vm-tab" data-mode="timeline" onclick="setSearchMode('timeline')">📅 依直播分組</button>
       <button class="vm-tab" data-mode="recent" onclick="setSearchMode('recent')">🕒 最近播放</button>
     </div>
-    <div style="margin-bottom: 15px; display: flex; justify-content: flex-end; align-items: center; gap: 10px;">
+    <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+      <label style="display:inline-flex; align-items:center; gap:3px; cursor:pointer; user-select:none; font-size:13px; color:var(--text-sub);" title="包含 NG 片段與改詞等特殊版本"><input type="checkbox" id="search-include-ng" onchange="setIncludeNG(this.checked)" style="margin:0; width:14px; height:14px;">包含 NG / 特殊版本</label>
+      <div style="flex:1;"></div>
       <span style="font-size:13px; color:var(--text-sub);" id="search-stats"></span>
       <span id="search-actions-container"></span>
     </div>
@@ -1166,7 +1168,7 @@
         <input type="text" id="summary-search" placeholder="在清單中快速篩選..." oninput="processAndRenderSummary()">
       </div>
       <div class="control-group">
-        <label style="cursor:pointer; user-select:none; display:inline-flex; align-items:center; gap:3px;" title="包含 NG 片段與改詞等特殊版本"><input type="checkbox" id="include-ng" onchange="processAndRenderSummary()" style="margin:0; width:15px; height:15px;">包含 NG / 特殊版本</label>
+        <label style="cursor:pointer; user-select:none; display:inline-flex; align-items:center; gap:3px;" title="包含 NG 片段與改詞等特殊版本"><input type="checkbox" id="include-ng" onchange="setIncludeNG(this.checked)" style="margin:0; width:15px; height:15px;">包含 NG / 特殊版本</label>
       </div>
       <button class="btn-action-global" onclick="playAllCurrentSummary()">▶ 播放整頁歌曲</button>
     </div>
@@ -1199,11 +1201,9 @@
   <div class="info-row shortcut-hint">
     💡 快捷鍵:<span>空白=播放暫停</span> · <span>←/→=快退/快進 5 秒</span> · <span>Shift+←/→=上一首/下一首</span> · <span>↑/↓=音量</span> · <span>M=靜音</span> · <span>/=搜尋</span> · <span>L=清單</span>
   </div>
+
   <div class="info-row">
-    背景繪製:<a href="https://x.com/mApcm0ElZ9f5BGk" target="_blank">方向</a> ｜ 委託主辦:Ender安德、子廷
-  </div>
-  <div class="info-row">
-    網頁製作者：<a href="https://x.com/SnowKagamine_" target="_blank">玥</a> ｜ 聯絡與問題回饋：<a href="https://forms.google.com/" target="_blank">📝 回饋表單連結</a> ｜ 交流社群：<a href="https://discord.gg/bKwFpPusYj" target="_blank">安特羅迦非官方粉絲群 Discord</a>
+    網頁製作者：<a href="https://x.com/SnowKagamine_" target="_blank">玥</a> ｜ 聯絡與問題回饋：<a href="feedback.html">📝 回饋表單</a> ｜ 交流社群：<a href="https://discord.gg/bKwFpPusYj" target="_blank">安特羅迦非官方粉絲群 Discord</a>
   </div>
   <div class="disclaimer">
     ※ 本網頁為粉絲自發製作之轉載創作，非官方所屬網頁。
@@ -1764,13 +1764,17 @@
     const container = document.getElementById('search-results');
     const actionContainer = document.getElementById('search-actions-container');
     const statsEl = document.getElementById('search-stats');
-    const results = q
+    let results = q
       ? allSongsCache.filter(r =>
           (r.song && r.song.toLowerCase().includes(q)) ||
           (r.artist && r.artist.toLowerCase().includes(q)) ||
           (r.title && r.title.toLowerCase().includes(q))
         )
       : allSongsCache;
+    // 未勾「包含 NG / 特殊版本」時過濾掉 NG / 改詞 等非正常版本
+    if (!_includeNGGlobal) {
+      results = results.filter(r => !r.isNG && !r.isReword);
+    }
 
     if (!results || results.length === 0) {
       container.innerHTML = q
@@ -1821,7 +1825,12 @@
       container.innerHTML = '<div class="empty-msg">尚無資料。</div>';
       return;
     }
-    const filtered = timelineCache.filter(s => {
+    const filtered = timelineCache.map(s => {
+      // 每場內的 tracks 過濾 NG/特殊(如果未勾)
+      const tracks = _includeNGGlobal ? s.tracks : s.tracks.filter(t => !t.isNG && !t.isReword);
+      return { ...s, tracks: tracks, count: tracks.length };
+    }).filter(s => {
+      if (s.tracks.length === 0) return false;  // 過濾後整場都空就不列
       if (!q) return true;
       if ((s.date || '').toLowerCase().includes(q)) return true;
       if ((s.title || '').toLowerCase().includes(q)) return true;
@@ -1890,11 +1899,17 @@
       container.innerHTML = '<div class="empty-msg">尚未播放過任何歌曲。<br><span style="font-weight:normal; color:var(--text-light); font-size:13px;">播放過的歌曲會記錄在這裡。</span></div>';
       return;
     }
-    if (statsEl) statsEl.innerText = `共 ${recentPlays.length} 首`;
+    // 未勾「包含 NG / 特殊版本」就過濾
+    const list = _includeNGGlobal ? recentPlays : recentPlays.filter(r => !r.isNG && !r.isReword);
+    if (list.length === 0) {
+      container.innerHTML = '<div class="empty-msg">目前沒有符合條件的最近播放紀錄。<br><span style="font-weight:normal; color:var(--text-light); font-size:13px;">勾選「包含 NG / 特殊版本」可顯示全部。</span></div>';
+      return;
+    }
+    if (statsEl) statsEl.innerText = `共 ${list.length} 首`;
     actionContainer.innerHTML = `<button class="btn-table-more" style="font-size:12px;" onclick="clearRecentPlays()" title="清空最近播放">🗑 清空</button>`;
 
     let html = `<table class="results-table"><thead><tr><th></th><th>歌曲 / 原唱</th><th>來源歌回</th><th></th></tr></thead><tbody>`;
-    recentPlays.forEach((r) => {
+    list.forEach((r) => {
       const encodedItem = encodeURIComponent(JSON.stringify(r));
       const isCurrent = (currentQueueIndex >= 0 && playQueue[currentQueueIndex] && playQueue[currentQueueIndex].link === r.link && playQueue[currentQueueIndex].song === r.song);
       const rowClass = isCurrent ? 'playing-row' : '';
@@ -2003,7 +2018,7 @@
     if (!summaryCache) return;
     const sortType = document.getElementById('sort-select').value;
     const filterText = document.getElementById('summary-search').value.trim().toLowerCase();
-    const includeNG = document.getElementById('include-ng')?.checked || false;
+    const includeNG = _includeNGGlobal;
 
     let processedData = summaryCache.filter(s => 
       (s.name && s.name.toLowerCase().includes(filterText)) ||
@@ -3260,6 +3275,24 @@
     return `<a href="${url}" target="_blank" rel="noopener" class="stream-title-link" title="在 YouTube 從這場直播的這首歌開始播放" onclick="event.stopPropagation()">${safe}</a>`;
   }
 
+  // 全站共用「是否包含 NG / 特殊版本」設定(localStorage 持久)
+  let _includeNGGlobal = (function() {
+    try { return localStorage.getItem('antrovia_include_ng') === '1'; } catch(e) { return false; }
+  })();
+
+  // 統一同步函式:兩個 checkbox 都要跟著 _includeNGGlobal 變
+  function setIncludeNG(val) {
+    _includeNGGlobal = !!val;
+    try { localStorage.setItem('antrovia_include_ng', _includeNGGlobal ? '1' : '0'); } catch(e) {}
+    // 兩邊 checkbox 同步 UI 狀態
+    const cb1 = document.getElementById('search-include-ng');
+    const cb2 = document.getElementById('include-ng');
+    if (cb1) cb1.checked = _includeNGGlobal;
+    if (cb2) cb2.checked = _includeNGGlobal;
+    // 當前頁面重新渲染
+    refreshUIForCurrentView();
+  }
+
   // 通用的 tag span 集合(列表用,inline 顯示)
   // 標籤可並存(NG + 特殊、Shorts + NG 等都可能)
   // 列表顯示採用統稱:isReword 等「非 NG 的特殊版本」統一標示為「🎤 特殊」
@@ -3281,6 +3314,12 @@
     loadYoutubeAPI();
     bindProgressBar();
     bindKeyboardShortcuts();
+    // 把 localStorage 的 include-ng 設定寫到兩個 checkbox UI
+    const cb1 = document.getElementById('search-include-ng');
+    const cb2 = document.getElementById('include-ng');
+    if (cb1) cb1.checked = _includeNGGlobal;
+    if (cb2) cb2.checked = _includeNGGlobal;
+
     setSearchMode('recent');
     handleUrlParams();
     registerServiceWorker();
