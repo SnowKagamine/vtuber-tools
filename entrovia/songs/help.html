@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>使用說明 ｜ 安特羅迦歌單站</title>
+  <link rel="icon" href="icon.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #333;
+      --card: rgba(255, 255, 255, 0.92);
+      --border: rgba(224, 224, 224, 0.6);
+      --text-main: #222;
+      --text-sub: #555;
+      --text-light: #999;
+      --accent: #555;
+      --bg-overlay: rgba(244, 246, 248, 0.55);
+      --btn-bg: #f1f1f1;
+      --btn-border: #ddd;
+      --input-bg: white;
+      --primary-text-inv: white;
+      --shadow: rgba(0,0,0,0.08);
+      --kbd-bg: #f5f5f5;
+      --kbd-border: #ccc;
+      --brand-purple: #8c6fc9;
+      --brand-red: #c23e73;
+      --brand-blue: #4b7fe0;
+    }
+    [data-theme="dark"] {
+      --primary: #e0e0e0;
+      --card: rgba(36, 38, 44, 0.9);
+      --border: rgba(80, 80, 90, 0.5);
+      --text-main: #e8e8e8;
+      --text-sub: #bbb;
+      --text-light: #888;
+      --accent: #bbb;
+      --bg-overlay: rgba(18, 20, 26, 0.62);
+      --btn-bg: #3a3d44;
+      --btn-border: #4d5058;
+      --input-bg: #2c2f36;
+      --primary-text-inv: #1a1c20;
+      --shadow: rgba(0,0,0,0.4);
+      --kbd-bg: #2a2d33;
+      --kbd-border: #555;
+      --brand-purple: #b48aff;
+      --brand-red: #f85a8f;
+      --brand-blue: #7aacff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text-main);
+      background-image:
+        linear-gradient(var(--bg-overlay), var(--bg-overlay)),
+        url("bg.svg");
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      padding: 40px 20px;
+      line-height: 1.75;
+    }
+    .wrapper {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .back-link {
+      display: inline-block;
+      color: var(--text-sub);
+      text-decoration: none;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+    .back-link:hover { color: var(--brand-purple); }
+
+    .page-header {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-top: 3px solid transparent;
+      border-image: linear-gradient(90deg, var(--brand-red), var(--brand-purple), var(--brand-blue)) 1;
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 30px var(--shadow);
+    }
+    .page-header h1 {
+      margin: 0 0 8px 0;
+      font-size: 26px;
+    }
+    .page-header .sub {
+      color: var(--text-sub);
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 28px;
+      margin-bottom: 16px;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 4px 15px var(--shadow);
+    }
+    .section h2 {
+      margin: 0 0 12px 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed var(--border);
+    }
+    .section h3 {
+      font-size: 15px;
+      margin: 18px 0 6px 0;
+      color: var(--text-main);
+    }
+    .section p {
+      margin: 6px 0;
+      font-size: 14px;
+      color: var(--text-sub);
+    }
+    .section ul {
+      margin: 8px 0;
+      padding-left: 0;
+      list-style: none;
+    }
+    .section ul li {
+      font-size: 14px;
+      color: var(--text-sub);
+      padding: 6px 0;
+      border-bottom: 1px dashed var(--border);
+    }
+    .section ul li:last-child { border-bottom: none; }
+
+    /* 快速上手步驟 */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .step-card {
+      background: linear-gradient(135deg,
+        rgba(216, 69, 111, 0.08),
+        rgba(90, 147, 255, 0.08));
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+    .step-num {
+      display: inline-block;
+      width: 26px; height: 26px;
+      line-height: 26px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--brand-red), var(--brand-purple));
+      color: white;
+      font-weight: bold;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+    .step-card .step-title {
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    .step-card .step-sub {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    /* 按鈕說明表 */
+    .btn-table {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      gap: 10px 16px;
+      align-items: start;
+      margin: 10px 0;
+    }
+    .btn-table .b-icon {
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      padding: 8px 0;
+      background: var(--btn-bg);
+      border: 1px solid var(--btn-border);
+      border-radius: 8px;
+      color: var(--text-main);
+    }
+    .btn-table .b-icon.red { color: var(--brand-red); border-color: var(--brand-red); }
+    .btn-table .b-icon.purple { color: var(--brand-purple); border-color: var(--brand-purple); }
+    .btn-table .b-icon.gold { color: #f9a825; border-color: #f9a825; }
+    .btn-table .b-text {
+      font-size: 14px;
+      padding: 4px 0;
+      color: var(--text-sub);
+    }
+    .btn-table .b-text strong { color: var(--text-main); display: block; margin-bottom: 2px; }
+
+    /* 標籤樣例 */
+    .tag-sample {
+      display: inline-block;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: bold;
+      border-radius: 10px;
+      margin: 0 2px;
+      vertical-align: middle;
+    }
+    .tag-shorts { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
+    .tag-video { background: #eceff1; color: #37474f; border: 1px solid #b0bec5; }
+    .tag-ng { background: #fde0e9; color: #ad2358; border: 1px solid #f4a9c2; }
+    .tag-special { background: #e3eaff; color: #3a4fb3; border: 1px solid #a9b9f0; }
+
+    /* 快捷鍵 */
+    .shortcuts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .shortcut-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: var(--btn-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .shortcut-row .sc-key {
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      display: flex;
+      gap: 4px;
+    }
+    kbd {
+      display: inline-block;
+      padding: 2px 7px;
+      font-family: inherit;
+      font-size: 12px;
+      background: var(--kbd-bg);
+      border: 1px solid var(--kbd-border);
+      border-bottom-width: 2px;
+      border-radius: 4px;
+      color: var(--text-main);
+    }
+    .shortcut-row .sc-desc {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    /* FAQ */
+    details {
+      background: var(--btn-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 18px;
+      margin-bottom: 10px;
+      transition: background 0.2s;
+    }
+    details:hover { border-color: var(--brand-purple); }
+    details[open] {
+      background: var(--card);
+      border-color: var(--brand-purple);
+      box-shadow: 0 0 10px rgba(140, 111, 201, 0.15);
+    }
+    summary {
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text-main);
+      list-style: none;
+      padding-right: 20px;
+      position: relative;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after {
+      content: "+";
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--brand-purple);
+      font-weight: bold;
+      font-size: 18px;
+    }
+    details[open] summary::after { content: "−"; }
+    details p {
+      margin: 10px 0 0 0;
+      font-size: 13px;
+      color: var(--text-sub);
+      line-height: 1.7;
+    }
+
+    /* 底部返回 */
+    .footer-nav {
+      text-align: center;
+      margin-top: 20px;
+      padding: 20px 0;
+    }
+    .footer-nav a {
+      display: inline-block;
+      padding: 12px 24px;
+      background: var(--primary);
+      color: var(--primary-text-inv);
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+      transition: 0.2s;
+    }
+    .footer-nav a:hover {
+      background: linear-gradient(135deg, var(--brand-red), var(--brand-purple));
+      transform: translateY(-1px);
+    }
+
+    .highlight-box {
+      background: linear-gradient(135deg,
+        rgba(216, 69, 111, 0.1),
+        rgba(140, 111, 201, 0.1),
+        rgba(90, 147, 255, 0.1));
+      border-left: 3px solid var(--brand-purple);
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin: 10px 0;
+      font-size: 13px;
+      color: var(--text-main);
+    }
+  </style>
+  <script>
+    (function() {
+      try {
+        var stored = localStorage.getItem('antrovia_theme');
+        if (stored === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+        else if (!stored && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch(e) {}
+    })();
+  </script>
+</head>
+<body>
+
+<div class="wrapper">
+  <a href="./" class="back-link">← 返回歌單站</a>
+
+  <!-- 標題 -->
+  <div class="page-header">
+    <h1>📖 使用說明</h1>
+    <p class="sub">安特羅迦粉絲自製歌單站 — 看完這頁 5 分鐘變熟手</p>
+  </div>
+
+  <!-- 1 分鐘上手 -->
+  <div class="section">
+    <h2>⚡ 1 分鐘上手</h2>
+    <div class="steps">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <div class="step-title">搜尋</div>
+        <div class="step-sub">輸入歌名、原唱、關鍵字</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <div class="step-title">點歌名</div>
+        <div class="step-sub">加入播放清單</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <div class="step-title">按 ▶</div>
+        <div class="step-sub">清單依序播放</div>
+      </div>
+    </div>
+    <div class="highlight-box">
+      💡 想完整支持安特?點歌名加入清單後,也可以透過 <strong>⋮ 更多 → 📺 在 YouTube 開啟</strong> 到原直播觀看,觀看數會回饋給她。
+    </div>
+  </div>
+
+  <!-- 搜尋三視角 -->
+  <div class="section">
+    <h2>🔍 歌曲搜尋的三個視角</h2>
+    <p>搜尋頁的上方有三個分頁切換,同一組搜尋條件可以用不同方式瀏覽:</p>
+    <ul>
+      <li><strong>📋 歌曲清單</strong>:所有唱過的歌,扁平列表,最直觀。</li>
+      <li><strong>📅 依直播分組</strong>:按場次分組,想看「某場歌回唱了什麼」就用這個。</li>
+      <li><strong>🕒 最近播放</strong>:你瀏覽過的歷史(存在你瀏覽器,不會上傳)。</li>
+    </ul>
+    <div class="highlight-box">
+      💡 右上有「包含 NG / 特殊版本」勾選框 — 預設**不列** NG 片段跟改詞版本,想看就勾起來。
+    </div>
+  </div>
+
+  <!-- 按鈕說明 -->
+  <div class="section">
+    <h2>🎛 歌卡上的按鈕是什麼?</h2>
+    <p>每首歌旁邊有幾個按鈕,各自功能:</p>
+    <div class="btn-table">
+      <div class="b-icon gold">☆</div>
+      <div class="b-text"><strong>我的最愛</strong>點了變 ★ 加到「我的最愛」歌單,再點取消。</div>
+
+      <div class="b-icon">⇆</div>
+      <div class="b-text"><strong>插播</strong>把這首歌放到當前播放的「下一首」位置。</div>
+
+      <div class="b-icon">＋</div>
+      <div class="b-text"><strong>加入清單</strong>把這首加到當前播放清單的末端。</div>
+
+      <div class="b-icon red">🎬</div>
+      <div class="b-text"><strong>粉絲剪輯精華</strong>紅色=有精華可看;淡灰=目前沒有,點了可以投稿你剪的。</div>
+
+      <div class="b-icon">⋮</div>
+      <div class="b-text"><strong>更多</strong>複製分享連結、在 YouTube 開啟、收藏至某個歌單。</div>
+
+      <div class="b-icon purple">✍</div>
+      <div class="b-text"><strong>點歌名本身</strong>直接把這首加入清單(等同按 ＋)。</div>
+    </div>
+  </div>
+
+  <!-- 標籤說明 -->
+  <div class="section">
+    <h2>🏷 標籤:什麼時候會看到?</h2>
+    <ul>
+      <li><span class="tag-sample tag-shorts">Shorts</span> 這首是 Shorts 短影片版本</li>
+      <li><span class="tag-sample tag-video">影片</span> 這首來自影片不是直播</li>
+      <li><span class="tag-sample tag-ng">🎭 NG</span> NG 片段(忘詞、唱錯、彩蛋)</li>
+      <li><span class="tag-sample tag-special">🎤 特殊</span> 特殊版本(改詞等)</li>
+    </ul>
+    <p>NG 跟特殊預設**不列入列表**,想看要勾「包含 NG / 特殊版本」。</p>
+  </div>
+
+  <!-- 我的歌單 -->
+  <div class="section">
+    <h2>📂 我的歌單</h2>
+    <p>你可以建立無限數量的自訂歌單,把喜歡的歌分類收藏:</p>
+    <ul>
+      <li><strong>建立新歌單</strong>:在歌單側邊欄的「+ 新增歌單」按鈕</li>
+      <li><strong>加歌到歌單</strong>:歌卡的 ⋮ → 收藏至 [歌單名]</li>
+      <li><strong>⭐ 我的最愛</strong>:特殊預設歌單,所有收藏的歌自動放這</li>
+      <li><strong>排序</strong>:歌單內可以拖曳歌曲改順序</li>
+      <li><strong>💾 匯出此歌單</strong>:備份單一歌單成 JSON 檔</li>
+      <li><strong>💾 匯出所有歌單</strong>:備份全部</li>
+      <li><strong>📥 匯入</strong>:自動智慧偵測,衝突名字自動加編號不會覆蓋</li>
+    </ul>
+    <div class="highlight-box">
+      ⚠️ 歌單**存在你瀏覽器**本機,換裝置或清快取會不見。重要歌單記得匯出備份!
+    </div>
+  </div>
+
+  <!-- 精華系統 -->
+  <div class="section">
+    <h2>🎬 粉絲剪輯精華</h2>
+    <p>如果你剪了安特的精華或 Shorts,歡迎投稿讓其他粉絲發現:</p>
+    <ul>
+      <li><strong>看別人的精華</strong>:歌卡的 🎬 按鈕 → 選單列出該首歌所有相關精華</li>
+      <li><strong>投稿你的精華</strong>:歌卡 🎬 → 選單底部「➕ 我想投稿剪輯精華」</li>
+      <li><strong>投稿會審核</strong>:管理者審核過後才會顯示在網站上(通常 24 小時內)</li>
+    </ul>
+  </div>
+
+  <!-- 快捷鍵 -->
+  <div class="section">
+    <h2>⌨️ 鍵盤快捷鍵</h2>
+    <p>常用鍵盤的話,這些快捷鍵能大幅提升效率:</p>
+    <div class="shortcuts">
+      <div class="shortcut-row">
+        <div class="sc-key"><kbd>空白</kbd></div>
+        <div class="sc-desc">播放 / 暫停</div>
+      </div>
+      <div class="shortcut-row">
+        <div class="sc-key"><kbd>←</kbd> <kbd>→</kbd></div>
+        <div class="sc-desc">快退 / 快進 5 秒</div>
+      </div>
+      <div class="shortcut-row">
+        <div class="sc-key"><kbd>Shift</kbd>+<kbd>←</kbd> <kbd>→</kbd></div>
+        <div class="sc-desc">上一首 / 下一首</div>
+      </div>
+      <div class="shortcut-row">
+        <div class="sc-key"><kbd>↑</kbd> <kbd>↓</kbd></div>
+        <div class="sc-desc">音量 ±5</div>
+      </div>
+      <div class="shortcut-row">
+        <div class="sc-key"><kbd>M</kbd></div>
+        <div class="sc-desc">靜音切換</div>
+      </div>
+      <div class="shortcut-row">
+        <div class="sc-key"><kbd>/</kbd></div>
+        <div class="sc-desc">聚焦到搜尋框</div>
+      </div>
+      <div class="shortcut-row">
+        <div class="sc-key"><kbd>L</kbd></div>
+        <div class="sc-desc">開啟播放清單</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 常見問題 -->
+  <div class="section">
+    <h2>❓ 常見問題</h2>
+
+    <details>
+      <summary>這網站是官方的嗎?</summary>
+      <p>不是,這是**粉絲自製**的轉載整理網站,非春魚創意或安特羅迦官方所屬。</p>
+    </details>
+
+    <details>
+      <summary>NG 跟特殊版本是什麼?</summary>
+      <p><strong>🎭 NG</strong> 是歌回中忘詞、唱錯、彩蛋的片段。<strong>🎤 特殊</strong> 主要是改詞版本或特別變奏。預設兩者都不列入正常統計與列表,想看要勾右上的「包含 NG / 特殊版本」。</p>
+    </details>
+
+    <details>
+      <summary>我剪了精華片段怎麼投稿?</summary>
+      <p>找到你剪的那首歌 → 點歌卡的 🎬 按鈕 → 選單底部「➕ 我想投稿剪輯精華」。表單會自動帶入歌曲資訊,你只要填作者名跟 YouTube 連結。審核通過後會顯示在對應歌曲的 🎬 選單中。</p>
+    </details>
+
+    <details>
+      <summary>我的歌單在其他裝置看不到?</summary>
+      <p>歌單**存在你的瀏覽器本機**(localStorage),不會自動同步到其他裝置。如果想在手機跟電腦都用,請用「💾 匯出此歌單」或「💾 匯出所有歌單」備份成 JSON 檔,再在另一個裝置匯入。</p>
+    </details>
+
+    <details>
+      <summary>清快取 / 換瀏覽器會不會丟失歌單?</summary>
+      <p>會。瀏覽器清除「網站資料」或「所有 cookie」會把歌單一併清掉。建議**定期匯出備份**。歌單本身是純文字 JSON 檔,存雲端或電腦都很小。</p>
+    </details>
+
+    <details>
+      <summary>更新通知(鈴鐺紅點)怎麼關掉?</summary>
+      <p>點鈴鐺開啟通知視窗,就會自動標記為已讀。只有真正有新通知時才會跳紅點。</p>
+    </details>
+
+    <details>
+      <summary>右下彈出「網站已更新」怎麼辦?</summary>
+      <p>代表網站有新版本功能或 bug 修補,建議按「🔄 立即重新整理」拿到最新版本。如果現在不方便,按「稍後」會先關掉,下次有更新版再提示。</p>
+    </details>
+
+    <details>
+      <summary>發現 bug / 歌單資料錯誤怎麼辦?</summary>
+      <p>頁尾有「📝 回饋表單」,歡迎回報!類別可選 bug 回報、內容錯誤、功能建議等。</p>
+    </details>
+
+
+  </div>
+
+  <!-- 底部返回 -->
+  <div class="footer-nav">
+    <a href="./">返回歌單站</a>
+  </div>
+</div>
+
+<!-- Cloudflare Web Analytics -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "5a64faae6c634fe4a86910f6b2d8f51d"}'></script>
+
+</body>
+</html>
