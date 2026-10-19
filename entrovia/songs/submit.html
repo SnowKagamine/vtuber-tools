@@ -336,16 +336,17 @@
     btn.disabled = true;
     btn.innerText = '送出中...';
 
-    // 用短參數名避開 Google heuristic 擋人
+    // 短參數 + 只送有值的,避開 Google heuristic
     const params = new URLSearchParams();
-    params.set('a', 'submit');
-    params.set('d', document.getElementById('f-date').value);
-    params.set('s', document.getElementById('f-song').value);
-    params.set('r', document.getElementById('f-artist').value);
-    params.set('au', document.getElementById('f-author').value);
-    params.set('ty', document.getElementById('f-type').value);
-    params.set('l', document.getElementById('f-link').value);
-    params.set('n', document.getElementById('f-note').value);
+    params.set('a', 'sub');  // 用短值 sub 代替 submit
+    const addIfValue = (key, value) => { if (value && value.trim()) params.set(key, value.trim()); };
+    addIfValue('d', document.getElementById('f-date').value);
+    addIfValue('s', document.getElementById('f-song').value);
+    addIfValue('r', document.getElementById('f-artist').value);
+    addIfValue('au', document.getElementById('f-author').value);
+    addIfValue('ty', document.getElementById('f-type').value);
+    addIfValue('l', document.getElementById('f-link').value);
+    addIfValue('n', document.getElementById('f-note').value);
 
     // 用 Image beacon 送出(避開 CORS)
     const img = new Image();
