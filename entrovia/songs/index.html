@@ -161,7 +161,9 @@
     }
     .nav-btn.active {
       color: var(--nav-text-active);
-      border-bottom: 3px solid var(--nav-text-active);
+      border-bottom: 3px solid transparent;
+      border-image: linear-gradient(90deg, var(--brand-red), var(--brand-purple), var(--brand-blue)) 1;
+      text-shadow: 0 0 8px rgba(180, 138, 255, 0.4);
     }
     .main-content {
       max-width: 1000px;
@@ -304,6 +306,11 @@
       color: var(--text-sub);
       font-size: 16px;
       padding: 5px;
+      transition: color 0.15s, text-shadow 0.15s;
+    }
+    .btn-table-more:hover {
+      color: var(--brand-purple);
+      text-shadow: 0 0 8px var(--brand-purple);
     }
     .summary-grid {
       display: grid;
@@ -311,7 +318,10 @@
       gap: 20px;
     }
     .song-card {
-      background: var(--card);
+      background:
+        radial-gradient(circle at top left, rgba(216, 69, 111, 0.06), transparent 50%),
+        radial-gradient(circle at bottom right, rgba(90, 147, 255, 0.06), transparent 50%),
+        var(--card);
       border: 1px solid var(--border);
       border-radius: 15px;
       padding: 20px;
@@ -320,7 +330,18 @@
       flex-direction: column;
       backdrop-filter: blur(5px);
       position: relative;
+      overflow: hidden;
     }
+    .song-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--brand-red), var(--brand-purple), var(--brand-blue));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .song-card:hover::before { opacity: 0.6; }
     .song-card:hover {
       transform: translateY(-5px);
       box-shadow:
@@ -338,6 +359,22 @@
         0 0 20px var(--brand-glow-red),
         0 0 20px var(--brand-glow-blue),
         0 10px 25px var(--shadow-strong);
+      animation: playingPulse 3s ease-in-out infinite;
+    }
+    .song-card.playing-card::before { opacity: 1 !important; }
+    @keyframes playingPulse {
+      0%, 100% {
+        box-shadow:
+          0 0 20px var(--brand-glow-red),
+          0 0 20px var(--brand-glow-blue),
+          0 10px 25px var(--shadow-strong);
+      }
+      50% {
+        box-shadow:
+          0 0 30px var(--brand-glow-red),
+          0 0 30px var(--brand-glow-blue),
+          0 10px 25px var(--shadow-strong);
+      }
     }
     .badge-wrapper {
       display: flex;
@@ -437,7 +474,11 @@
       align-items: center;
     }
     .playlist-menu li:hover { background: var(--hover-bg); }
-    .playlist-menu li.active { background: var(--primary); color: var(--primary-text-inv); }
+    .playlist-menu li.active {
+      background: linear-gradient(135deg, var(--brand-red), var(--brand-purple), var(--brand-blue));
+      color: white;
+      box-shadow: 0 2px 8px var(--brand-glow-red);
+    }
     .btn-create-pl {
       width: 100%;
       padding: 10px;
@@ -466,7 +507,8 @@
       height: 90px;
       background: var(--player-bg);
       backdrop-filter: blur(15px);
-      border-top: 1px solid var(--border);
+      border-top: 2px solid transparent;
+      border-image: linear-gradient(90deg, var(--brand-red), var(--brand-purple), var(--brand-blue)) 1;
       box-shadow: 0 -5px 25px var(--shadow-color);
       z-index: 999;
       display: grid;
@@ -728,9 +770,15 @@
 
     /* 骨架載入動畫 */
     .skeleton {
-      background: linear-gradient(90deg, var(--btn-bg) 25%, var(--hover-strong) 50%, var(--btn-bg) 75%);
+      background:
+        linear-gradient(90deg,
+          var(--btn-bg) 15%,
+          rgba(216, 69, 111, 0.15) 35%,
+          rgba(140, 111, 201, 0.2) 50%,
+          rgba(90, 147, 255, 0.15) 65%,
+          var(--btn-bg) 85%);
       background-size: 200% 100%;
-      animation: skeleton-shimmer 1.5s ease-in-out infinite;
+      animation: skeleton-shimmer 1.8s ease-in-out infinite;
       border-radius: 6px;
       display: inline-block;
     }
@@ -787,7 +835,11 @@
       transition: 0.2s;
     }
     .vm-tab:hover { background: var(--hover-bg); color: var(--text-main); }
-    .vm-tab.active { background: var(--primary); color: var(--primary-text-inv); }
+    .vm-tab.active {
+      background: linear-gradient(135deg, var(--brand-red), var(--brand-purple), var(--brand-blue));
+      color: white;
+      box-shadow: 0 2px 10px var(--brand-glow-red);
+    }
     @media (max-width: 768px) {
       .vm-tab { padding: 8px 6px; font-size: 12px; }
     }
@@ -1068,8 +1120,8 @@
       transition: color 0.15s, border-color 0.15s;
     }
     .stream-title-link:hover {
-      color: var(--primary);
-      border-bottom-color: var(--primary);
+      color: var(--brand-purple);
+      border-bottom-color: var(--brand-purple);
       border-bottom-style: solid;
     }
     /* 歌名連結 */
@@ -1080,9 +1132,13 @@
       transition: color 0.15s, border-color 0.15s;
     }
     .song-name-link:hover {
-      color: var(--primary);
-      border-bottom-color: var(--primary);
+      color: var(--brand-purple);
+      border-bottom-color: var(--brand-purple);
       border-bottom-style: solid;
+    }
+    /* 卡片歌名(點加入清單)— 多一個 hover 的紫色 glow 強調可點 */
+    .song-card-title-link:hover {
+      text-shadow: 0 0 10px rgba(140, 111, 201, 0.4);
     }
 
     /* Toast 通知 */
@@ -1100,10 +1156,10 @@
       background: var(--modal-bg);
       color: var(--text-main);
       border: 1px solid var(--border);
-      border-left: 4px solid var(--primary);
+      border-left: 4px solid var(--brand-purple);
       padding: 12px 18px;
       border-radius: 8px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2), 0 0 15px rgba(140, 111, 201, 0.15);
       font-size: 14px;
       max-width: 320px;
       animation: toastIn 0.3s ease;
@@ -1121,7 +1177,7 @@
       #toast-container { bottom: 100px; right: 10px; left: 10px; }
       .toast { max-width: none; }
     }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
     @media (max-width: 768px) {
       .player-bar { grid-template-columns: 1fr auto; padding: 0 15px; height: 80px; }
       .player-info, .player-right { display: none; }
@@ -2157,7 +2213,7 @@
             ${highlightsButtonHtml(standardizedItem, encodedItem)}
             <button class="btn-table-more" onclick="showContextMenu(event, '${encodedItem}')">⋮</button>
           </div>
-          <h3 title="${s.name}">${songNameLink(standardizedItem)}</h3>
+          <h3 title="${s.name} (點擊加入播放清單)">${songCardTitle(encodedItem, standardizedItem)}</h3>
           <p>${s.artist}</p>
           <div class="card-footer">
             <div style="font-size:11px; color:#aaa; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">最近：${recentTitleLink(s.lastTitle, standardizedItem)}</div>
@@ -3315,6 +3371,12 @@
     const url = songStartUrl(track);
     if (!url) return safe;
     return `<a href="${url}" target="_blank" rel="noopener" class="song-name-link" title="在 YouTube 從此首歌開始播放" onclick="event.stopPropagation()">${safe}</a>`;
+  }
+
+  // 「所有歌曲」卡片專用:點歌名把這首加入當前播放清單
+  function songCardTitle(encodedItem, track) {
+    const safe = String(track.song || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+    return `<a href="javascript:void(0)" class="song-name-link song-card-title-link" title="加入播放清單末端" onclick="event.stopPropagation(); addTrackToQueueDirect('${encodedItem}')">${safe}</a>`;
   }
 
   // 「最近某直播」連結:顯示文字是直播標題,點下去定位到該首歌的起始時間
