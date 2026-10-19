@@ -2870,6 +2870,18 @@
     
     const item = JSON.parse(decodeURIComponent(encodedItem));
 
+    // 在 YouTube 開啟(點歌名改成加入清單後,保留跳 YT 的入口)
+    const ytUrl = songStartUrl(item);
+    if (ytUrl) {
+      const liYt = document.createElement('li');
+      liYt.innerText = "📺 在 YouTube 開啟";
+      liYt.onclick = () => {
+        window.open(ytUrl, '_blank', 'noopener');
+        hideContextMenu();
+      };
+      menu.appendChild(liYt);
+    }
+
     const liShare = document.createElement('li');
     liShare.innerText = "🔗 複製分享連結";
     liShare.onclick = () => {
@@ -3366,17 +3378,17 @@
   }
 
   // 把「歌名」包成可點擊的 YouTube 連結(點了開新分頁到該首歌的開始時間)
+  // 全站歌名統一行為:點擊 → 加入播放清單末端
+  // 想在 YouTube 開啟 → 用「⋮ 更多」選單
   function songNameLink(track) {
     const safe = String(track.song || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
-    const url = songStartUrl(track);
-    if (!url) return safe;
-    return `<a href="${url}" target="_blank" rel="noopener" class="song-name-link" title="在 YouTube 從此首歌開始播放" onclick="event.stopPropagation()">${safe}</a>`;
+    const encoded = encodeURIComponent(JSON.stringify(track));
+    return `<a href="javascript:void(0)" class="song-name-link song-card-title-link" title="點擊加入播放清單" onclick="event.stopPropagation(); addTrackToQueueDirect('${encoded}')">${safe}</a>`;
   }
 
-  // 「所有歌曲」卡片專用:點歌名把這首加入當前播放清單
+  // 兼容 alias(以防其他地方還有引用)
   function songCardTitle(encodedItem, track) {
-    const safe = String(track.song || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
-    return `<a href="javascript:void(0)" class="song-name-link song-card-title-link" title="加入播放清單末端" onclick="event.stopPropagation(); addTrackToQueueDirect('${encodedItem}')">${safe}</a>`;
+    return songNameLink(track);
   }
 
   // 「最近某直播」連結:顯示文字是直播標題,點下去定位到該首歌的起始時間
