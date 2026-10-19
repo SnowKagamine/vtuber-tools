@@ -1289,7 +1289,7 @@
         <button class="btn-create-pl" onclick="createNewPlaylist()">＋ 建立新歌單</button>
         <ul class="playlist-menu" id="playlist-menu-list"></ul>
         <div class="playlist-meta-actions">
-          <button class="card-sub-btn" onclick="exportPlaylists()">💾 匯出歌單備份</button>
+          <button class="card-sub-btn" onclick="exportPlaylists()">💾 匯出所有歌單</button>
           <button class="card-sub-btn" onclick="document.getElementById('import-file-input').click()">📥 匯入歌單備份</button>
           <input type="file" id="import-file-input" style="display:none;" accept=".json" onchange="importPlaylists(event)">
         </div>
@@ -2252,7 +2252,7 @@
         <span style="font-size:13px; color:#666;">共 ${tracks.length} 首歌曲</span>
       </div>
       <div style="display:flex; gap:8px; flex-wrap:wrap;">
-        <button class="btn-action-global" onclick="exportSinglePlaylist('${escapeJs(playlistName)}')" title="將此歌單匯出為 JSON 檔">💾 匯出</button>
+        <button class="btn-action-global" onclick="exportSinglePlaylist('${escapeJs(playlistName)}')" title="將此歌單匯出為 JSON 檔">💾 匯出此歌單</button>
         <button class="btn-action-global" onclick="playWholePlaylist('${playlistName}')">▶ 播放整份歌單</button>
       </div>
     `;
