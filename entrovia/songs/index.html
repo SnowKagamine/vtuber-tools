@@ -1141,6 +1141,63 @@
       text-shadow: 0 0 10px rgba(140, 111, 201, 0.4);
     }
 
+    /* 版本更新 banner — 右下角彈出,持久不自動消失 */
+    #update-banner {
+      position: fixed;
+      bottom: 110px;
+      right: 20px;
+      max-width: 340px;
+      background: var(--modal-bg);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--brand-purple);
+      border-radius: 12px;
+      box-shadow:
+        0 10px 30px rgba(0,0,0,0.2),
+        0 0 20px rgba(140, 111, 201, 0.25);
+      padding: 16px 20px;
+      z-index: 1500;
+      opacity: 0;
+      transform: translateX(30px);
+      transition: opacity 0.3s, transform 0.3s;
+      font-size: 14px;
+      color: var(--text-main);
+    }
+    #update-banner.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    #update-banner .ub-text { margin-bottom: 10px; }
+    #update-banner .ub-sub { color: var(--text-sub); font-size: 12px; margin-top: 2px; }
+    #update-banner .ub-actions { display: flex; gap: 8px; }
+    #update-banner .ub-btn {
+      padding: 7px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--btn-border);
+      background: var(--input-bg);
+      color: var(--text-main);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: bold;
+      transition: 0.15s;
+    }
+    #update-banner .ub-btn:hover { background: var(--btn-bg); }
+    #update-banner .ub-btn.ub-primary {
+      background: linear-gradient(135deg, var(--brand-red), var(--brand-purple));
+      color: white;
+      border-color: transparent;
+    }
+    #update-banner .ub-btn.ub-primary:hover {
+      box-shadow: 0 2px 8px var(--brand-glow-red);
+    }
+    @media (max-width: 768px) {
+      #update-banner {
+        bottom: 100px;
+        left: 15px;
+        right: 15px;
+        max-width: none;
+      }
+    }
+
     /* Toast 通知 */
     #toast-container {
       position: fixed;
@@ -3493,7 +3550,63 @@
     handleUrlParams();
     registerServiceWorker();
     loadUpdates();
+    // 版本偵測:首次 + 每 5 分鐘 + 視窗重新 focus 時各檢查一次
+    checkForUpdate();
+    setInterval(checkForUpdate, 5 * 60 * 1000);
+    window.addEventListener('focus', checkForUpdate);
   };
+
+  // ===== 版本偵測:自動提示使用者有新版 =====
+  let _knownVersion = null;
+  let _dismissedVersion = null;
+
+  async function checkForUpdate() {
+    try {
+      const res = await fetch('version.json?t=' + Date.now());
+      if (!res.ok) return;
+      const data = await res.json();
+      const v = data.version;
+      if (!v) return;
+      // 第一次只記錄,不彈
+      if (!_knownVersion) {
+        _knownVersion = v;
+        return;
+      }
+      // 已經給使用者看過這個版本的提示 → 不再提示
+      if (v === _knownVersion || v === _dismissedVersion) return;
+      // 彈 banner
+      showUpdateBanner(v);
+    } catch (e) { /* 靜默 */ }
+  }
+
+  function showUpdateBanner(newVersion) {
+    // 已有 banner 就只更新版本,不要重複建立
+    let banner = document.getElementById('update-banner');
+    if (banner) return;
+    banner = document.createElement('div');
+    banner.id = 'update-banner';
+    banner.innerHTML = `
+      <div class="ub-text">
+        <strong>🎉 網站已更新</strong>
+        <div class="ub-sub">重新整理以載入最新版本</div>
+      </div>
+      <div class="ub-actions">
+        <button class="ub-btn ub-primary" onclick="location.reload()">🔄 立即重新整理</button>
+        <button class="ub-btn" onclick="dismissUpdateBanner('${newVersion}')">稍後</button>
+      </div>
+    `;
+    document.body.appendChild(banner);
+    requestAnimationFrame(() => banner.classList.add('show'));
+  }
+
+  function dismissUpdateBanner(version) {
+    _dismissedVersion = version;
+    const banner = document.getElementById('update-banner');
+    if (banner) {
+      banner.classList.remove('show');
+      setTimeout(() => banner.remove(), 300);
+    }
+  }
 
   // ===== 更新通知系統 =====
   let updatesCache = null;
