@@ -2251,7 +2251,10 @@
         <h2 style="margin:0;">${playlistName}</h2>
         <span style="font-size:13px; color:#666;">共 ${tracks.length} 首歌曲</span>
       </div>
-      <button class="btn-action-global" onclick="playWholePlaylist('${playlistName}')">▶ 播放整份歌單</button>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button class="btn-action-global" onclick="exportSinglePlaylist('${escapeJs(playlistName)}')" title="將此歌單匯出為 JSON 檔">💾 匯出</button>
+        <button class="btn-action-global" onclick="playWholePlaylist('${playlistName}')">▶ 播放整份歌單</button>
+      </div>
     `;
     if (tracks.length === 0) {
       tracksContainer.innerHTML = '<div class="empty-msg">此歌單內尚無歌曲，可至「歌曲搜尋」或「所有歌曲」中點擊 ⋮ 進行收藏。</div>';
@@ -2839,6 +2842,22 @@
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     document.body.removeChild(downloadAnchor);
+    showToast(`已匯出全部 ${Object.keys(playlists).length} 份歌單`);
+  }
+
+  // 匯出單一歌單(格式與全部匯出相同,只有一個 key)
+  function exportSinglePlaylist(name) {
+    const data = { [name]: playlists[name] || [] };
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    // 檔名過濾檔案系統禁用的字元
+    const safeName = name.replace(/[\\/:*?"<>|]/g, '_');
+    downloadAnchor.setAttribute("download", `antrovia_playlist_${safeName}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    document.body.removeChild(downloadAnchor);
+    showToast(`已匯出歌單「${name}」`);
   }
 
   function importPlaylists(event) {
@@ -2848,17 +2867,42 @@
     reader.onload = function(e) {
       try {
         const imported = JSON.parse(e.target.result);
-        if (typeof imported === 'object' && imported !== null) {
-          playlists = { ...playlists, ...imported };
-          savePlaylistsToStorage();
-          renderPlaylistSidebar();
-          showToast("歌單匯入成功");
-          const keys = Object.keys(playlists);
-          if (keys.length > 0) selectPlaylist(keys[0]);
+        if (typeof imported !== 'object' || imported === null || Array.isArray(imported)) {
+          alert("解析備份檔案失敗:格式不正確。");
+          return;
         }
+        let importedCount = 0;
+        let renamedCount = 0;
+        let firstName = null;
+        Object.keys(imported).forEach(k => {
+          if (!Array.isArray(imported[k])) return;  // 歌單值必須是陣列
+          let finalName = k;
+          if (playlists[finalName]) {
+            // 衝突:自動加編號避免覆蓋現有歌單
+            let i = 2;
+            while (playlists[`${k} (${i})`]) i++;
+            finalName = `${k} (${i})`;
+            renamedCount++;
+          }
+          playlists[finalName] = imported[k];
+          importedCount++;
+          if (!firstName) firstName = finalName;
+        });
+        if (importedCount === 0) {
+          alert("檔案內沒有可匯入的歌單資料。");
+          return;
+        }
+        savePlaylistsToStorage();
+        renderPlaylistSidebar();
+        let msg = `已匯入 ${importedCount} 份歌單`;
+        if (renamedCount > 0) msg += `(${renamedCount} 份重名已自動加編號)`;
+        showToast(msg);
+        if (firstName) selectPlaylist(firstName);
       } catch (err) {
         alert("解析備份檔案失敗。");
       }
+      // 清空 input,讓同一個檔可以重複匯入
+      event.target.value = '';
     };
     reader.readAsText(file);
   }
