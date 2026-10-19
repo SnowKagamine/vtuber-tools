@@ -21,13 +21,13 @@
   <meta name="twitter:title" content="安特羅迦歌單站 ｜ 粉絲自製歌回搜尋平台">
   <meta name="twitter:description" content="搜尋、播放、收藏安特羅迦的歌回,支援自建歌單、精華片段投稿與直播分組瀏覽。">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght=400;700&display=swap" rel="stylesheet">
-  <link class="icon" rel="icon" href="icon.png" type="image/png">
+  <link class="icon" rel="icon" href="icon.png?v=2" type="image/png">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#333333">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="安特羅迦">
-  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="apple-touch-icon" href="icon.png?v=2">
   <style>
     :root {
       --primary: #333;
@@ -1252,11 +1252,50 @@
     }
     @keyframes fadeIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
     @media (max-width: 768px) {
-      .player-bar { grid-template-columns: 1fr auto; padding: 0 15px; height: 80px; }
-      .player-info, .player-right { display: none; }
+      /* 手機版 player bar:兩行佈局 — 歌名+清單 / 控制+進度條 */
+      .player-bar {
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+          "info   right"
+          "center center";
+        padding: 6px 14px;
+        height: 85px;
+        gap: 4px;
+        align-items: center;
+      }
+      .player-info {
+        grid-area: info;
+        min-width: 0;
+        overflow: hidden;
+      }
+      .player-info .track-name {
+        font-size: 13px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .player-info .track-artist {
+        display: none;  /* 手機隱藏原唱,專注歌名 */
+      }
+      .player-center { grid-area: center; }
+      .player-controls { gap: 8px; }
+      /* 手機隱藏隨機與循環按鈕,留主要控制 */
+      .player-controls > .player-btn-icon:nth-child(1),
+      .player-controls > .player-btn-icon:nth-child(5) {
+        display: none;
+      }
+      .player-right {
+        grid-area: right;
+        gap: 6px;
+        justify-self: end;
+      }
+      .player-right .volume-container {
+        display: none;  /* 手機用系統音量 */
+      }
       .playlist-layout { grid-template-columns: 1fr; }
       .results-table th:nth-child(1), .results-table td:nth-child(1) { display: none; }
-      #yt-widget-container { width: 160px; height: 90px; bottom: 90px; }
+      #yt-widget-container { width: 160px; height: 90px; bottom: 95px; }
       #yt-widget-container.minimized { width: 44px; height: 44px; }
       /* 手機:nav 不換行,字體縮小,主題按鈕放入 flex 流 */
       .nav-container { flex-wrap: nowrap; padding: 0 8px; gap: 4px; }
