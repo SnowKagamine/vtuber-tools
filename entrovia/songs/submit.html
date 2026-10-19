@@ -336,17 +336,21 @@
     btn.disabled = true;
     btn.innerText = '送出中...';
 
-    // 短參數 + 只送有值的,避開 Google heuristic
+    // 所有欄位打包成 base64 當單一 z 參數,避開 Google URL heuristic
+    const payload = {
+      d: document.getElementById('f-date').value,
+      s: document.getElementById('f-song').value,
+      r: document.getElementById('f-artist').value,
+      au: document.getElementById('f-author').value,
+      ty: document.getElementById('f-type').value,
+      l: document.getElementById('f-link').value,
+      n: document.getElementById('f-note').value
+    };
+    const json = JSON.stringify(payload);
+    const encoded = btoa(unescape(encodeURIComponent(json)));
     const params = new URLSearchParams();
-    params.set('a', 'sub');  // 用短值 sub 代替 submit
-    const addIfValue = (key, value) => { if (value && value.trim()) params.set(key, value.trim()); };
-    addIfValue('d', document.getElementById('f-date').value);
-    addIfValue('s', document.getElementById('f-song').value);
-    addIfValue('r', document.getElementById('f-artist').value);
-    addIfValue('au', document.getElementById('f-author').value);
-    addIfValue('ty', document.getElementById('f-type').value);
-    addIfValue('l', document.getElementById('f-link').value);
-    addIfValue('n', document.getElementById('f-note').value);
+    params.set('a', 'sub');
+    params.set('z', encoded);
 
     // 用 Image beacon 送出(避開 CORS)
     const img = new Image();
