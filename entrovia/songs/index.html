@@ -39,7 +39,7 @@
       --shadow-color: rgba(0,0,0,0.05);
       --shadow-strong: rgba(0,0,0,0.1);
       --player-icon: #555;
-      --dashed-border: #eee;
+      --dashed-border: rgba(140, 111, 201, 0.2);
       --nav-inactive: #aaa;
       --primary-text-inv: white;
       --badge-bg: rgba(0, 0, 0, 0.06);
@@ -48,6 +48,12 @@
       --dd-menu-hover: #f5f5f5;
       --nav-bg: #333;
       --nav-text-active: white;
+      /* 安特羅迦 brand accent */
+      --brand-purple: #8c6fc9;
+      --brand-red: #c23e73;
+      --brand-blue: #4b7fe0;
+      --brand-glow-red: rgba(216, 69, 111, 0.35);
+      --brand-glow-blue: rgba(90, 147, 255, 0.35);
     }
     [data-theme="dark"] {
       --primary: #e0e0e0;
@@ -75,7 +81,7 @@
       --shadow-color: rgba(0,0,0,0.4);
       --shadow-strong: rgba(0,0,0,0.6);
       --player-icon: #ccc;
-      --dashed-border: #3a3d44;
+      --dashed-border: rgba(180, 138, 255, 0.25);
       --nav-inactive: #888;
       --primary-text-inv: #1a1c20;
       --badge-bg: rgba(255, 255, 255, 0.1);
@@ -84,7 +90,27 @@
       --dd-menu-hover: #3a3d44;
       --nav-bg: #1a1c20;
       --nav-text-active: #fff;
+      /* 安特羅迦 brand accent(深色模式用亮一點的) */
+      --brand-purple: #b48aff;
+      --brand-red: #f85a8f;
+      --brand-blue: #7aacff;
+      --brand-glow-red: rgba(248, 90, 143, 0.45);
+      --brand-glow-blue: rgba(122, 172, 255, 0.45);
     }
+    /* Scrollbar 紫色,呼應 brand */
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, var(--brand-red), var(--brand-blue));
+      border-radius: 5px;
+      border: 2px solid var(--bg-overlay);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, var(--brand-red), var(--brand-purple), var(--brand-blue));
+    }
+    /* Firefox */
+    * { scrollbar-color: var(--brand-purple) transparent; scrollbar-width: thin; }
+
     body {
       font-family: 'Noto Sans TC', sans-serif;
       margin: 0;
@@ -101,12 +127,19 @@
       transition: color 0.3s ease;
     }
     nav {
-      background: var(--nav-bg);
+      background:
+        linear-gradient(90deg,
+          rgba(216, 69, 111, 0.12),
+          rgba(140, 111, 201, 0.08),
+          rgba(90, 147, 255, 0.12)),
+        var(--nav-bg);
       padding: 5px 0;
       position: sticky;
       top: 0;
       z-index: 100;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      border-bottom: 2px solid transparent;
+      border-image: linear-gradient(90deg, var(--brand-red), var(--brand-purple), var(--brand-blue)) 1;
     }
     .nav-container {
       max-width: 1000px;
@@ -215,6 +248,11 @@
       outline: none;
       background: var(--input-bg);
       color: var(--text-main);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .filter-controls select:focus, .filter-controls input:focus {
+      border-color: var(--brand-purple);
+      box-shadow: 0 0 0 2px rgba(140, 111, 201, 0.2);
     }
     .filter-controls input {
       width: 200px;
@@ -231,8 +269,10 @@
       transition: 0.2s;
     }
     .btn-action-global:hover {
-      background: var(--primary);
-      color: var(--primary-text-inv);
+      background: linear-gradient(135deg, var(--brand-red), var(--brand-purple));
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 4px 12px var(--brand-glow-red);
     }
     .results-table {
       width: 100%;
@@ -283,12 +323,21 @@
     }
     .song-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 10px 25px var(--shadow-strong);
-      border-color: var(--accent);
+      box-shadow:
+        0 10px 25px var(--shadow-strong),
+        -8px 0 20px var(--brand-glow-red),
+        8px 0 20px var(--brand-glow-blue);
+      border-color: var(--brand-purple);
     }
     .song-card.playing-card {
-      border-color: var(--primary);
-      box-shadow: 0 0 12px var(--shadow-strong);
+      border-color: transparent;
+      background:
+        linear-gradient(var(--card), var(--card)) padding-box,
+        linear-gradient(135deg, var(--brand-red), var(--brand-purple), var(--brand-blue)) border-box;
+      box-shadow:
+        0 0 20px var(--brand-glow-red),
+        0 0 20px var(--brand-glow-blue),
+        0 10px 25px var(--shadow-strong);
     }
     .badge-wrapper {
       display: flex;
@@ -307,8 +356,8 @@
     }
     .badge-shorts { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
     .badge-video { background: #eceff1; color: #37474f; border: 1px solid #b0bec5; }
-    .badge-ng { background: #fff3e0; color: #e65100; border: 1px solid #ffcc80; }
-    .badge-reword { background: #f3e5f5; color: #6a1b9a; border: 1px solid #ce93d8; }
+    .badge-ng { background: #fde0e9; color: #ad2358; border: 1px solid #f4a9c2; }
+    .badge-reword { background: #e3eaff; color: #3a4fb3; border: 1px solid #a9b9f0; }
     .song-card h3 { 
       margin: 0 0 5px 0; 
       font-size: 18px; 
@@ -448,11 +497,11 @@
     .player-btn-icon.btn-main-play { font-size: 0; background: var(--primary); color: var(--primary-text-inv); width: 42px; height: 42px; padding: 0; }
     .player-btn-icon.btn-main-play svg { width: 24px; height: 24px; fill: currentColor; display: block; }
     .player-btn-icon.btn-main-play svg.icon-play { margin-left: 3px; } /* 三角形視覺置中微調 */
-    .player-btn-icon.btn-main-play:hover { background: var(--accent); color: var(--primary-text-inv); scale: 1.05; }
+    .player-btn-icon.btn-main-play:hover { background: linear-gradient(135deg, var(--brand-red), var(--brand-purple)); color: white; scale: 1.05; box-shadow: 0 0 12px var(--brand-glow-red); }
     .progress-container { display: flex; align-items: center; width: 100%; max-width: 500px; gap: 10px; font-size: 11px; color: var(--text-sub); }
     .progress-bar-wrap { flex: 1; height: 4px; background: var(--btn-border); border-radius: 2px; position: relative; cursor: pointer; transition: height 0.15s ease; }
     .progress-bar-wrap:hover { height: 6px; }
-    .progress-bar-fill { height: 100%; background: var(--primary); border-radius: 2px; width: 0%; position: relative; }
+    .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--brand-red), var(--brand-purple), var(--brand-blue)); border-radius: 2px; width: 0%; position: relative; box-shadow: 0 0 6px var(--brand-glow-red); }
     .progress-bar-fill::after {
       content: "";
       position: absolute;
@@ -461,16 +510,17 @@
       transform: translateY(-50%);
       width: 12px;
       height: 12px;
-      background: var(--primary);
+      background: var(--brand-purple);
       border-radius: 50%;
       opacity: 0;
       transition: opacity 0.15s ease;
+      box-shadow: 0 0 8px var(--brand-purple);
     }
     .progress-bar-wrap:hover .progress-bar-fill::after { opacity: 1; }
     .player-right { display: flex; align-items: center; justify-content: flex-end; gap: 15px; }
     .volume-container { display: flex; align-items: center; gap: 8px; }
     .volume-slider { -webkit-appearance: none; width: 80px; height: 4px; background: var(--btn-border); border-radius: 2px; outline: none; cursor: pointer; }
-    .volume-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; background: var(--primary); border-radius: 50%; }
+    .volume-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; background: var(--brand-purple); border-radius: 50%; box-shadow: 0 0 4px var(--brand-purple); }
 
     /* YT widget 視窗，初始為標準大小，縮放按鈕固定在容器外可見處 */
     #yt-widget-container {
@@ -572,7 +622,8 @@
     }
     .queue-modal-header {
       padding: 18px 22px;
-      border-bottom: 1px solid var(--dashed-border);
+      border-bottom: 2px solid transparent;
+      border-image: linear-gradient(90deg, var(--brand-red), var(--brand-purple), var(--brand-blue)) 1;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -671,7 +722,7 @@
     footer .info-row { margin-bottom: 6px; }
     footer .disclaimer { font-size: 11px; color: var(--text-light); margin-top: 4px; }
     footer a { color: var(--text-main); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--text-sub); transition: 0.2s; }
-    footer a:hover { color: var(--primary); border-bottom-style: solid; }
+    footer a:hover { color: var(--brand-purple); border-bottom-style: solid; border-bottom-color: var(--brand-purple); }
     #loader { display: none; text-align: center; padding: 50px; font-weight: bold; color: var(--text-sub); }
     .empty-msg { text-align: center; color: var(--text-sub); padding: 40px; font-weight: bold; }
 
@@ -889,7 +940,7 @@
       position: absolute;
       top: -4px;
       right: -4px;
-      background: #e53935;
+      background: linear-gradient(135deg, #e53935, var(--brand-red));
       color: white;
       font-size: 10px;
       font-weight: bold;
@@ -921,7 +972,7 @@
     .notification-item:hover { background: var(--modal-item-hover); }
     .notification-item.unread {
       background: var(--row-current);
-      box-shadow: inset 3px 0 0 var(--primary);
+      box-shadow: inset 3px 0 0 var(--brand-purple);
     }
     .notification-item .n-icon {
       font-size: 22px;
@@ -3301,8 +3352,8 @@
     const baseStyle = 'padding:1px 6px; font-size:11px; font-weight:bold; border-radius:10px; margin-left:5px; display:inline-block; vertical-align:middle;';
     if (r.isShorts) html += `<span style="background:#ffebee; color:#c62828; border:1px solid #ffcdd2; ${baseStyle}">Shorts</span>`;
     if (r.isVideo) html += `<span style="background:#eceff1; color:#37474f; border:1px solid #b0bec5; ${baseStyle}">影片</span>`;
-    if (r.isNG) html += `<span style="background:#fff3e0; color:#e65100; border:1px solid #ffcc80; ${baseStyle}">🎭 NG</span>`;
-    if (r.isReword) html += `<span style="background:#f3e5f5; color:#6a1b9a; border:1px solid #ce93d8; ${baseStyle}">🎤 特殊</span>`;
+    if (r.isNG) html += `<span style="background:#fde0e9; color:#ad2358; border:1px solid #f4a9c2; ${baseStyle}">🎭 NG</span>`;
+    if (r.isReword) html += `<span style="background:#e3eaff; color:#3a4fb3; border:1px solid #a9b9f0; ${baseStyle}">🎤 特殊</span>`;
     return html;
   }
 
