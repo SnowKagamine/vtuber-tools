@@ -295,14 +295,15 @@
     btn.disabled = true;
     btn.innerText = '送出中...';
 
-    // 短參數名避開 Google heuristic 擋人(用 a 不用 action)
+    // 短參數名 + 只送有值的參數,避開 Google heuristic 擋人
     const params = new URLSearchParams();
-    params.set('a', 'feedback');
-    params.set('c', document.getElementById('f-category').value);
-    params.set('t', document.getElementById('f-title').value);
-    params.set('d', document.getElementById('f-content').value);
-    params.set('n', document.getElementById('f-name').value);
-    params.set('co', document.getElementById('f-contact').value);
+    params.set('a', 'fb');  // 用短值 fb 代替 feedback
+    const addIfValue = (key, value) => { if (value && value.trim()) params.set(key, value.trim()); };
+    addIfValue('c', document.getElementById('f-category').value);
+    addIfValue('t', document.getElementById('f-title').value);
+    addIfValue('d', document.getElementById('f-content').value);
+    addIfValue('n', document.getElementById('f-name').value);
+    addIfValue('co', document.getElementById('f-contact').value);
 
     // Image beacon 送出(避開 CORS)
     const img = new Image();
