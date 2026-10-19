@@ -295,9 +295,9 @@
     btn.disabled = true;
     btn.innerText = '送出中...';
 
-    // 短參數名避開 Google heuristic 擋人
+    // 短參數名避開 Google heuristic 擋人(用 a 不用 action)
     const params = new URLSearchParams();
-    params.set('action', 'feedback');
+    params.set('a', 'feedback');
     params.set('c', document.getElementById('f-category').value);
     params.set('t', document.getElementById('f-title').value);
     params.set('d', document.getElementById('f-content').value);
