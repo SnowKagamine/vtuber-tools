@@ -3624,7 +3624,8 @@
     if (cb1) cb1.checked = _includeNGGlobal;
     if (cb2) cb2.checked = _includeNGGlobal;
 
-    setSearchMode('recent');
+    // 智慧預設:有播放歷史 → 最近播放;新使用者 → 歌曲清單
+    setSearchMode(recentPlays.length > 0 ? 'recent' : 'list');
     handleUrlParams();
     registerServiceWorker();
     loadUpdates();
