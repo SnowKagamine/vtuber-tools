@@ -3303,7 +3303,7 @@
     submitLi.style.color = 'var(--text-sub)';
     submitLi.onclick = () => {
       const prefill = buildSubmitUrl(track);
-      window.open(prefill, '_blank', 'noopener');
+      window.location.href = prefill;
       hideContextMenu();
     };
     menu.appendChild(submitLi);
