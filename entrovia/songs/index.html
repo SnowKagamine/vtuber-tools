@@ -2441,7 +2441,7 @@
     document.querySelectorAll('.song-card').forEach(card => card.classList.remove('playing-card'));
     
     if (document.getElementById('search-view').classList.contains('active')) {
-      handleSearch();
+      renderSearchView();
     } else if (document.getElementById('summary-view').classList.contains('active')) {
       processAndRenderSummary();
     } else if (document.getElementById('playlist-view').classList.contains('active')) {
