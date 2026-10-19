@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>安特羅迦 － 網頁音樂播放器</title>
 
   <!-- SEO 基本描述 -->
@@ -139,7 +139,7 @@
       background-position: center;
       background-repeat: no-repeat;
       background-attachment: fixed;
-      padding-bottom: 110px;
+      padding-bottom: calc(110px + env(safe-area-inset-bottom, 0px));
       transition: color 0.3s ease;
     }
     nav {
@@ -521,6 +521,9 @@
       left: 0;
       right: 0;
       height: 90px;
+      /* iOS Safari 底部白條(home indicator)預留空間 */
+      padding-bottom: env(safe-area-inset-bottom, 0);
+      box-sizing: content-box;
       background: var(--player-bg);
       backdrop-filter: blur(15px);
       border-top: 2px solid transparent;
@@ -1279,11 +1282,15 @@
         display: none;  /* 手機隱藏原唱,專注歌名 */
       }
       .player-center { grid-area: center; }
-      .player-controls { gap: 8px; }
-      /* 手機隱藏隨機與循環按鈕,留主要控制 */
-      .player-controls > .player-btn-icon:nth-child(1),
-      .player-controls > .player-btn-icon:nth-child(5) {
-        display: none;
+      .player-controls { gap: 6px; justify-content: center; }
+      .player-controls > .player-btn-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 15px;
+      }
+      .player-controls > .player-btn-icon.btn-main-play {
+        width: 38px;
+        height: 38px;
       }
       .player-right {
         grid-area: right;
@@ -1291,11 +1298,11 @@
         justify-self: end;
       }
       .player-right .volume-container {
-        display: none;  /* 手機用系統音量 */
+        display: none;  /* 手機用系統音量,音量 UI 全隱藏 */
       }
       .playlist-layout { grid-template-columns: 1fr; }
       .results-table th:nth-child(1), .results-table td:nth-child(1) { display: none; }
-      #yt-widget-container { width: 160px; height: 90px; bottom: 95px; }
+      #yt-widget-container { width: 160px; height: 90px; bottom: calc(95px + env(safe-area-inset-bottom, 0px)); }
       #yt-widget-container.minimized { width: 44px; height: 44px; }
       /* 手機:nav 不換行,字體縮小,主題按鈕放入 flex 流 */
       .nav-container { flex-wrap: nowrap; padding: 0 8px; gap: 4px; }
