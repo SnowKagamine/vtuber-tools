@@ -1,146 +1,177 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" xmlns:c2pa="http://c2pa.org/manifest"><metadata><c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYTozYmFlYTM0Yi00ZGY0LTQ2ODMtYWVjZC00M2M2MjZlZjlhOWUAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaI8WlzSMiykT/Jpz5QuWYcIAAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDpmYmExMGY4OC1iYTYyLTQyZWMtODkwZS01NjFjMzc0YjA5Y2FscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNoEVozNk7TU9nBS98JLPwEZwAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFggg/E3WkX+1MEomrSsQ1iym4X+dZHqlAW/QfIsdkhIHSqkZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaPwIJ+yc6Nbzk7U9TJyf7NEAAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRNAAAAAAAAAAAAAAAAAGRoYXNoWCBEc2I7vtfK1uAP5wzQNYREzNeLXIhgf5qCT9hSSfpQU2RuYW1lbmp1bWJmIG1hbmlmZXN0amV4Y2x1c2lvbnOBomVzdGFydBikZmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOjNiYWVhMzRiLTRkZjQtNDY4My1hZWNkLTQzYzYyNmVmOWE5ZS9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOmM5MzZiNzgyLWIyM2MtNDMyZS1hNjBmLWQ4ZTVhMzYzYjdhMnJjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCCD8TdaRf7UwSiatKxDWLKbhf51keqUBb9B8ix2SEgdKqJjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFggvw4BnAfPiYajwGZ+9UFBvbtaw8aTM5uXtv7VSjius5yiY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFggK2tKMgVGIxb8MUmgzdtXxnWPsci/HUh4J1vKfq4jITR0Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQN3kZ/W8mqcMGQXSltWR56VbuNSLTsv4QC0Roj+gewYk0rFpQ3DslMwgAeRV6upq+TgYCWUx5UR+xcRuweYbgGA=</c2pa:manifest></metadata>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" xmlns:c2pa="http://c2pa.org/manifest"><metadata><c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYTpiODc3OTY4YS03ZjMxLTRmYjUtODFmYS0wODI1OGE3ZmY2M2YAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaHCXjqmAyGG8p9EScVUHl8YAAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDo2OTRlZmQ4Ny1kZGM3LTRhYTQtODc3MS05YTQxYjQxMmE4YWVscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNoIubkLWlD0A6B8100IctypAAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFggEv6CtOm5DYzJwE4YZsKqDbTnK7ZdRuYdHgi7A7wwis+kZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaFAuivNYLUkKORZTSDes5TYAAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRNAAAAAAAAAAAAAAAAAGRoYXNoWCCE1AP7wJErzSTIvsn4Jd9Amy3c9eQL+u9J/nb4Y76e9GRuYW1lbmp1bWJmIG1hbmlmZXN0amV4Y2x1c2lvbnOBomVzdGFydBikZmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOmI4Nzc5NjhhLTdmMzEtNGZiNS04MWZhLTA4MjU4YTdmZjYzZi9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOjNmOTcwYWI4LWZlM2MtNGMxMC05NDU0LTQ0ZmI0OWFhM2QwNnJjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCAS/oK06bkNjMnAThhmwqoNtOcrtl1G5h0eCLsDvDCKz6JjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFggy996U535toK1IGyqVr74D8J83XqSZj8/5hDGP46ewzOiY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFggAGVGo1BpSE+n/Td/0Mb9G68J25YY6gxSrTUOyDE85P90Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQDwV2jZyFt3hEoP3NGM05iaxR2ScT2TstJChIDlewVWgAWL85nj+a3OC3zQzDWB2PLlVEMj6hGL5uaSSfFqd1VY=</c2pa:manifest></metadata>
   <defs>
-    <!-- 主背景漸層:中心微亮往外變深 -->
-    <radialGradient id="bgRad" cx="50%" cy="42%" r="80%">
-      <stop offset="0%" stop-color="#2d2142"/>
-      <stop offset="40%" stop-color="#1a1428"/>
-      <stop offset="100%" stop-color="#070512"/>
+    <!-- 左側紅紫光源 -->
+    <radialGradient id="redSource" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#e04680" stop-opacity="0.4"/>
+      <stop offset="40%" stop-color="#c23e73" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#8b2a5c" stop-opacity="0"/>
     </radialGradient>
-
-    <!-- 中央光束:直直的垂直發光帶 -->
-    <linearGradient id="beam" x1="50%" y1="0%" x2="50%" y2="100%">
-      <stop offset="0%" stop-color="#8c7bc9" stop-opacity="0"/>
-      <stop offset="30%" stop-color="#9b85d6" stop-opacity="0.08"/>
-      <stop offset="55%" stop-color="#c3a8ff" stop-opacity="0.14"/>
-      <stop offset="80%" stop-color="#9b85d6" stop-opacity="0.08"/>
-      <stop offset="100%" stop-color="#8c7bc9" stop-opacity="0"/>
+    <!-- 右側藍紫光源 -->
+    <radialGradient id="blueSource" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#5a93ff" stop-opacity="0.4"/>
+      <stop offset="40%" stop-color="#4b7fe0" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#2a3dab" stop-opacity="0"/>
+    </radialGradient>
+    <!-- 中央紫色融合區 -->
+    <radialGradient id="centerFusion" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#c3a8ff" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#8c6fc9" stop-opacity="0"/>
+    </radialGradient>
+    <!-- 底部波形:紅紫→藍紫漸變 -->
+    <linearGradient id="waveRedBlue" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#d8456f" stop-opacity="0.5"/>
+      <stop offset="30%" stop-color="#a85ba3" stop-opacity="0.4"/>
+      <stop offset="50%" stop-color="#8c6fc9" stop-opacity="0.45"/>
+      <stop offset="70%" stop-color="#6a7bd6" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#4b7fe0" stop-opacity="0.5"/>
     </linearGradient>
-
-    <!-- 底部波形漸層 -->
-    <linearGradient id="waveGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#6b4ba3" stop-opacity="0.15"/>
-      <stop offset="100%" stop-color="#2d1b4a" stop-opacity="0.35"/>
+    <linearGradient id="waveDeep" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8b2a5c" stop-opacity="0.4"/>
+      <stop offset="50%" stop-color="#5a2e8f" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#2a3dab" stop-opacity="0.4"/>
     </linearGradient>
-
-    <!-- 星粒子的 glow blur -->
+    <!-- 等化器柱 -->
+    <linearGradient id="barRedT" x1="0" y1="0%" x2="0" y2="100%">
+      <stop offset="0%" stop-color="#d8456f" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#d8456f" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="barBlueT" x1="0" y1="0%" x2="0" y2="100%">
+      <stop offset="0%" stop-color="#5a93ff" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#5a93ff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="barRedB" x1="0" y1="100%" x2="0" y2="0%">
+      <stop offset="0%" stop-color="#d8456f" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#d8456f" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="barBlueB" x1="0" y1="100%" x2="0" y2="0%">
+      <stop offset="0%" stop-color="#5a93ff" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#5a93ff" stop-opacity="0"/>
+    </linearGradient>
+    <!-- 流動聲波曲線漸層 -->
+    <linearGradient id="flowStroke" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#d8456f" stop-opacity="0.35"/>
+      <stop offset="50%" stop-color="#b48aff" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#5a93ff" stop-opacity="0.35"/>
+    </linearGradient>
     <filter id="softGlow" x="-100%" y="-100%" width="300%" height="300%">
-      <feGaussianBlur stdDeviation="1.5"/>
+      <feGaussianBlur stdDeviation="2"/>
     </filter>
-    <filter id="hardGlow" x="-100%" y="-100%" width="300%" height="300%">
-      <feGaussianBlur stdDeviation="4"/>
+    <filter id="bigGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="6"/>
     </filter>
-
-    <!-- 散光粒子 symbol,方便重複使用 -->
-    <symbol id="dust" overflow="visible">
-      <circle r="1" fill="#e8d9ff"/>
-    </symbol>
   </defs>
 
-  <!-- 底色漸層 -->
-  <rect width="1920" height="1080" fill="url(#bgRad)"/>
+  <!-- ===== 大型光源(紅/藍兩極 + 中央融合) ===== -->
+  <circle cx="280" cy="340" r="720" fill="url(#redSource)"/>
+  <circle cx="1640" cy="720" r="720" fill="url(#blueSource)"/>
+  <circle cx="100" cy="900" r="460" fill="url(#redSource)" opacity="0.6"/>
+  <circle cx="1800" cy="200" r="460" fill="url(#blueSource)" opacity="0.6"/>
+  <circle cx="960" cy="540" r="520" fill="url(#centerFusion)"/>
 
-  <!-- 大面積漫射光暈,呼應「寂靜」 -->
-  <circle cx="960" cy="500" r="700" fill="#5c3f8f" opacity="0.08" filter="url(#hardGlow)"/>
-  <circle cx="400" cy="800" r="320" fill="#4a2d7a" opacity="0.07" filter="url(#hardGlow)"/>
-  <circle cx="1540" cy="300" r="260" fill="#5c3f8f" opacity="0.06" filter="url(#hardGlow)"/>
+  <!-- ===== 大型光芒亮點(像音響擴音器) ===== -->
+  <g filter="url(#bigGlow)">
+    <circle cx="340" cy="420" r="20" fill="#f85a8f" opacity="0.5"/>
+    <circle cx="1580" cy="660" r="20" fill="#7aacff" opacity="0.5"/>
+  </g>
 
-  <!-- 中央光束,象徵「秩序中的方向」 -->
-  <rect x="958" y="0" width="4" height="1080" fill="url(#beam)"/>
-  <rect x="946" y="0" width="28" height="1080" fill="url(#beam)" opacity="0.4"/>
+  <!-- ===== 流動聲波曲線:三條從左到右的流動感 ===== -->
+  <path d="M -50,440 Q 320,340 640,460 T 1280,440 T 1980,380"
+        fill="none" stroke="url(#flowStroke)" stroke-width="2.5" opacity="0.6"/>
+  <path d="M -50,560 Q 400,660 760,540 T 1400,620 T 1980,540"
+        fill="none" stroke="url(#flowStroke)" stroke-width="2" opacity="0.5"/>
+  <path d="M -50,640 Q 280,560 580,680 T 1180,660 T 1980,680"
+        fill="none" stroke="url(#flowStroke)" stroke-width="1.5" opacity="0.4"/>
 
-  <!-- 粒子群(隨機散佈,大小不一,呼應「熵」) -->
+  <!-- ===== 底部主視覺:三層紅藍漸融波形 ===== -->
+  <path d="M 0,860 Q 240,830 480,860 T 960,855 T 1440,860 T 1920,855 L 1920,1080 L 0,1080 Z"
+        fill="url(#waveRedBlue)"/>
+  <path d="M 0,920 Q 320,890 640,925 T 1280,920 T 1920,925 L 1920,1080 L 0,1080 Z"
+        fill="url(#waveDeep)" opacity="0.7"/>
+  <path d="M 0,980 Q 480,955 960,985 T 1920,980 L 1920,1080 L 0,1080 Z"
+        fill="url(#waveRedBlue)" opacity="0.5"/>
+
+  <!-- ===== 頂部等化器柱:左紅右藍漸變 ===== -->
+  <g>
+    <rect x="100"  y="0" width="22" height="130" fill="url(#barRedT)"/>
+    <rect x="170"  y="0" width="22" height="80"  fill="url(#barRedT)"/>
+    <rect x="260"  y="0" width="22" height="200" fill="url(#barRedT)"/>
+    <rect x="340"  y="0" width="22" height="120" fill="url(#barRedT)"/>
+    <rect x="420"  y="0" width="22" height="180" fill="url(#barRedT)"/>
+    <rect x="520"  y="0" width="22" height="90"  fill="url(#barRedT)"/>
+    <rect x="620"  y="0" width="22" height="160" fill="url(#barRedT)"/>
+    <rect x="720"  y="0" width="22" height="110" fill="url(#barRedT)"/>
+    <rect x="820"  y="0" width="22" height="170" fill="url(#barRedT)"/>
+    <rect x="1080" y="0" width="22" height="140" fill="url(#barBlueT)"/>
+    <rect x="1180" y="0" width="22" height="200" fill="url(#barBlueT)"/>
+    <rect x="1280" y="0" width="22" height="110" fill="url(#barBlueT)"/>
+    <rect x="1380" y="0" width="22" height="170" fill="url(#barBlueT)"/>
+    <rect x="1480" y="0" width="22" height="90"  fill="url(#barBlueT)"/>
+    <rect x="1560" y="0" width="22" height="180" fill="url(#barBlueT)"/>
+    <rect x="1660" y="0" width="22" height="120" fill="url(#barBlueT)"/>
+    <rect x="1760" y="0" width="22" height="190" fill="url(#barBlueT)"/>
+  </g>
+
+  <!-- ===== 中段紅藍 vs 邊側等化器(讓紅左藍右更明顯) ===== -->
+  <g opacity="0.65">
+    <!-- 左側垂直等化器 -->
+    <rect x="30"  y="420" width="18" height="140" fill="url(#barRedB)"/>
+    <rect x="60"  y="380" width="18" height="200" fill="url(#barRedB)"/>
+    <rect x="30"  y="620" width="18" height="100" fill="url(#barRedB)"/>
+    <!-- 右側垂直等化器 -->
+    <rect x="1872" y="400" width="18" height="180" fill="url(#barBlueB)"/>
+    <rect x="1842" y="460" width="18" height="120" fill="url(#barBlueB)"/>
+    <rect x="1872" y="620" width="18" height="140" fill="url(#barBlueB)"/>
+  </g>
+
+  <!-- ===== 左側紅粒子群(大小散佈) ===== -->
   <g filter="url(#softGlow)">
-    <!-- 近距離的大粒子 -->
-    <circle cx="340" cy="180" r="2.5" fill="#f0e4ff" opacity="0.9"/>
-    <circle cx="780" cy="120" r="2" fill="#e0d1ff" opacity="0.85"/>
-    <circle cx="1420" cy="200" r="2.5" fill="#f0e4ff" opacity="0.9"/>
-    <circle cx="1680" cy="400" r="2" fill="#e0d1ff" opacity="0.8"/>
-    <circle cx="240" cy="520" r="2.5" fill="#f0e4ff" opacity="0.85"/>
-    <circle cx="580" cy="740" r="2" fill="#e0d1ff" opacity="0.85"/>
-    <circle cx="1180" cy="820" r="2.5" fill="#f0e4ff" opacity="0.9"/>
-    <circle cx="1760" cy="880" r="2" fill="#e0d1ff" opacity="0.8"/>
-    
-    <!-- 中距離粒子 -->
-    <circle cx="160" cy="90" r="1.5" fill="#c3a8e8" opacity="0.75"/>
-    <circle cx="520" cy="250" r="1.5" fill="#c3a8e8" opacity="0.7"/>
-    <circle cx="880" cy="340" r="1.5" fill="#c3a8e8" opacity="0.7"/>
-    <circle cx="1120" cy="90" r="1.5" fill="#c3a8e8" opacity="0.75"/>
-    <circle cx="1260" cy="440" r="1.5" fill="#c3a8e8" opacity="0.7"/>
-    <circle cx="1580" cy="600" r="1.5" fill="#c3a8e8" opacity="0.75"/>
-    <circle cx="1850" cy="150" r="1.5" fill="#c3a8e8" opacity="0.7"/>
-    <circle cx="60" cy="340" r="1.5" fill="#c3a8e8" opacity="0.7"/>
-    <circle cx="420" cy="440" r="1.5" fill="#c3a8e8" opacity="0.7"/>
-    <circle cx="700" cy="580" r="1.5" fill="#c3a8e8" opacity="0.75"/>
-    <circle cx="1020" cy="620" r="1.5" fill="#c3a8e8" opacity="0.7"/>
-    <circle cx="1340" cy="700" r="1.5" fill="#c3a8e8" opacity="0.7"/>
-    <circle cx="1620" cy="760" r="1.5" fill="#c3a8e8" opacity="0.75"/>
-    <circle cx="1880" cy="620" r="1.5" fill="#c3a8e8" opacity="0.7"/>
+    <circle cx="180" cy="280" r="5" fill="#f85a8f" opacity="0.65"/>
+    <circle cx="420" cy="380" r="4" fill="#f85a8f" opacity="0.6"/>
+    <circle cx="620" cy="240" r="4" fill="#f85a8f" opacity="0.65"/>
+    <circle cx="320" cy="580" r="5" fill="#f85a8f" opacity="0.6"/>
+    <circle cx="520" cy="660" r="3" fill="#f85a8f" opacity="0.55"/>
+    <circle cx="780" cy="420" r="4" fill="#f85a8f" opacity="0.6"/>
+    <circle cx="840" cy="680" r="5" fill="#f85a8f" opacity="0.65"/>
   </g>
-
-  <!-- 遠距離塵埃(很多很細) -->
   <g opacity="0.5">
-    <circle cx="80" cy="200" r="0.8" fill="#a899c7"/>
-    <circle cx="190" cy="640" r="0.8" fill="#a899c7"/>
-    <circle cx="260" cy="420" r="0.8" fill="#a899c7"/>
-    <circle cx="310" cy="60" r="0.8" fill="#a899c7"/>
-    <circle cx="380" cy="340" r="0.8" fill="#a899c7"/>
-    <circle cx="470" cy="140" r="0.8" fill="#a899c7"/>
-    <circle cx="540" cy="820" r="0.8" fill="#a899c7"/>
-    <circle cx="620" cy="490" r="0.8" fill="#a899c7"/>
-    <circle cx="690" cy="310" r="0.8" fill="#a899c7"/>
-    <circle cx="760" cy="900" r="0.8" fill="#a899c7"/>
-    <circle cx="820" cy="60" r="0.8" fill="#a899c7"/>
-    <circle cx="900" cy="500" r="0.8" fill="#a899c7"/>
-    <circle cx="980" cy="700" r="0.8" fill="#a899c7"/>
-    <circle cx="1060" cy="280" r="0.8" fill="#a899c7"/>
-    <circle cx="1140" cy="520" r="0.8" fill="#a899c7"/>
-    <circle cx="1210" cy="100" r="0.8" fill="#a899c7"/>
-    <circle cx="1280" cy="880" r="0.8" fill="#a899c7"/>
-    <circle cx="1360" cy="350" r="0.8" fill="#a899c7"/>
-    <circle cx="1440" cy="580" r="0.8" fill="#a899c7"/>
-    <circle cx="1510" cy="80" r="0.8" fill="#a899c7"/>
-    <circle cx="1600" cy="440" r="0.8" fill="#a899c7"/>
-    <circle cx="1680" cy="900" r="0.8" fill="#a899c7"/>
-    <circle cx="1740" cy="520" r="0.8" fill="#a899c7"/>
-    <circle cx="1800" cy="280" r="0.8" fill="#a899c7"/>
-    <circle cx="1880" cy="760" r="0.8" fill="#a899c7"/>
-    <circle cx="100" cy="760" r="0.8" fill="#a899c7"/>
-    <circle cx="430" cy="700" r="0.8" fill="#a899c7"/>
-    <circle cx="860" cy="200" r="0.8" fill="#a899c7"/>
-    <circle cx="1300" cy="200" r="0.8" fill="#a899c7"/>
-    <circle cx="1500" cy="320" r="0.8" fill="#a899c7"/>
+    <circle cx="60"  cy="420" r="2" fill="#d8456f"/>
+    <circle cx="140" cy="560" r="2" fill="#d8456f"/>
+    <circle cx="260" cy="180" r="2" fill="#d8456f"/>
+    <circle cx="380" cy="700" r="2" fill="#d8456f"/>
+    <circle cx="480" cy="300" r="2" fill="#d8456f"/>
+    <circle cx="580" cy="500" r="2" fill="#d8456f"/>
+    <circle cx="700" cy="340" r="2" fill="#d8456f"/>
+    <circle cx="820" cy="200" r="2" fill="#d8456f"/>
+    <circle cx="900" cy="580" r="2" fill="#d8456f"/>
   </g>
 
-  <!-- 底部音波波形,呼應音樂播放主題 -->
-  <path d="M 0,780 
-           Q 160,760 320,790 
-           T 640,785
-           T 960,775
-           T 1280,790
-           T 1600,780
-           T 1920,785
-           L 1920,1080 L 0,1080 Z" 
-        fill="url(#waveGrad)"/>
-  
-  <!-- 更淺的第二層波形,錯位疊加增加層次 -->
-  <path d="M 0,850 
-           Q 200,830 400,860 
-           T 800,855
-           T 1200,850
-           T 1600,860
-           T 1920,850
-           L 1920,1080 L 0,1080 Z" 
-        fill="url(#waveGrad)" opacity="0.6"/>
+  <!-- ===== 右側藍粒子群(略整齊,呼應秩序) ===== -->
+  <g filter="url(#softGlow)">
+    <circle cx="1140" cy="260" r="4" fill="#7aacff" opacity="0.6"/>
+    <circle cx="1300" cy="420" r="5" fill="#7aacff" opacity="0.65"/>
+    <circle cx="1460" cy="280" r="4" fill="#7aacff" opacity="0.6"/>
+    <circle cx="1620" cy="440" r="5" fill="#7aacff" opacity="0.65"/>
+    <circle cx="1240" cy="620" r="3" fill="#7aacff" opacity="0.55"/>
+    <circle cx="1400" cy="560" r="4" fill="#7aacff" opacity="0.6"/>
+    <circle cx="1720" cy="580" r="4" fill="#7aacff" opacity="0.65"/>
+  </g>
+  <g opacity="0.5">
+    <circle cx="1080" cy="200" r="2" fill="#4b7fe0"/>
+    <circle cx="1200" cy="500" r="2" fill="#4b7fe0"/>
+    <circle cx="1360" cy="220" r="2" fill="#4b7fe0"/>
+    <circle cx="1480" cy="640" r="2" fill="#4b7fe0"/>
+    <circle cx="1600" cy="200" r="2" fill="#4b7fe0"/>
+    <circle cx="1700" cy="700" r="2" fill="#4b7fe0"/>
+    <circle cx="1800" cy="340" r="2" fill="#4b7fe0"/>
+    <circle cx="1880" cy="520" r="2" fill="#4b7fe0"/>
+    <circle cx="1860" cy="700" r="2" fill="#4b7fe0"/>
+  </g>
 
-  <!-- 右下角的 ≠ 符號,呼應「Para≠dox」設定(極淡,幾乎隱藏) -->
-  <text x="1830" y="1040" font-size="120" font-family="serif" font-weight="100"
-        fill="#8c7bc9" opacity="0.06" text-anchor="end">≠</text>
-
-  <!-- 左上角的小方格陣,象徵「有序中的碎片」-->
-  <g opacity="0.08" stroke="#8c7bc9" stroke-width="0.5" fill="none">
-    <rect x="50" y="50" width="12" height="12"/>
-    <rect x="65" y="65" width="8" height="8"/>
-    <rect x="80" y="55" width="10" height="10"/>
-    <rect x="55" y="75" width="6" height="6"/>
+  <!-- ===== 中央融合區的紫色粒子 ===== -->
+  <g filter="url(#softGlow)">
+    <circle cx="920" cy="320" r="3" fill="#c3a8ff" opacity="0.5"/>
+    <circle cx="980" cy="480" r="3" fill="#c3a8ff" opacity="0.5"/>
+    <circle cx="950" cy="640" r="3" fill="#c3a8ff" opacity="0.5"/>
+    <circle cx="1000" cy="200" r="2.5" fill="#c3a8ff" opacity="0.45"/>
   </g>
 </svg>
